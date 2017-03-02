@@ -31,8 +31,52 @@ public class Genero implements Identificable<Long> {
 	@Column(name = "descripcion")
 	private String descripcion;
 
-	@OneToMany(mappedBy = "programa")
-	private List<Genero> generos = new ArrayList<>();
+	@OneToMany(mappedBy = "genero")
+	private List<Programa> generos = new ArrayList<>();
+	
+	public Genero() {
+		super();
+		
+	}
+
+	public Genero(String nombre, String descripcion, List<Programa> generos) {
+		super();
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.generos = generos;
+	}
+
+	public Genero(Long id, String nombre, String descripcion, List<Programa> generos) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.generos = generos;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public List<Programa> getGeneros() {
+		return generos;
+	}
+
+	public void setGeneros(List<Programa> generos) {
+		this.generos = generos;
+	}
 
 	/**
 	 * @return the id
@@ -50,8 +94,35 @@ public class Genero implements Identificable<Long> {
 		this.id = id;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Genero other = (Genero) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
-
+	@Override
+	public String toString() {
+		return "Genero [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", generos=" + generos
+				+ "]";
+	}
 
 }
