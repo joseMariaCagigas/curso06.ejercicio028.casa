@@ -54,6 +54,11 @@ public class Genero implements Identificable<Long> {
 		this.generos = generos;
 	}
 
+	public Genero(String nombre, String descripcion) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
