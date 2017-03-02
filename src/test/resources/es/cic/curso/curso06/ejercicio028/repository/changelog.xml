@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    
+    <changeSet author="usuario (generated)" id="1400847488681-1">
+        
+        <createTable catalogName="grupo6" tableName="PROGRAMA">
+			<column autoIncrement="true" name="id" type="INT(10)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="nombre" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createTable catalogName="grupo6" tableName="GENERO">
+			<column autoIncrement="true" name="id" type="INT(10)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="nombre" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="descripcion" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createTable catalogName="grupo6" tableName="CATEGORIA">
+			<column autoIncrement="true" name="id" type="INT(10)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="nombre" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="descripcion" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint constraintName="fk_PROGRAMA_id_GENERO"
+			referencedTableName="GENERO" referencedColumnNames="id"
+			baseTableName="PROGRAMA" baseColumnNames="id_GENERO" />
+
+	</changeSet>
+	<changeSet author="usuario (generated)" id="1400847428681-1">
+				<addForeignKeyConstraint constraintName="fk_PROGRAMA_id_CATEGORIA"
+			referencedTableName="CATEGORIA" referencedColumnNames="id"
+			baseTableName="PROGRAMA" baseColumnNames="id_CATEGORIA" />
+	</changeSet>
+</databaseChangeLog>
