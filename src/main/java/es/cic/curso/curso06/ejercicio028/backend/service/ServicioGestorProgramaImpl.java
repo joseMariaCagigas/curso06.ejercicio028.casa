@@ -1,7 +1,11 @@
 package es.cic.curso.curso06.ejercicio028.backend.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +16,8 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CategoriaRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.GeneroRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
+import es.cic.curso.grupo1.ejercicio027.dominio.Tarea;
+import es.cic.curso.grupo1.ejercicio027.service.TareaServiceImpl;
 
 @Service
 @Transactional
@@ -117,6 +123,34 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 		
 		return programaRepository.update(programa);
 	}
+
+	@Override
+	public List<Programa> getProgramas() {
+		return programaRepository.list();
+	}
+
+	@Override
+ 	public synchronized List<Programa> findAll(String filtro){
+ 		List<Programa> lista = new ArrayList<>();
+ 		for(Programa t : getProgramas()){
+ 			try{
+ 				boolean pasoFiltro = (filtro==null||filtro.isEmpty())
+ 						||t.getNombre().toLowerCase().contains(filtro.toLowerCase());
+ 				if(pasoFiltro){
+ 					lista.add(t.clone());
+ 				}
+ 			}catch(CloneNotSupportedException ex) {
+ 				Logger.getLogger(ServicioGestorPrograma.class.getName()).log(null, ex);
+ 			}
+ 		}
+ 		Collections.sort(lista, new Comparator<Programa>() {
+ 
+ 			@Override
+ 			public int compare(Programa o1, Programa o2) {
+ 				return (int) (o2.getId() - o1.getId());
+ 			}});
+ 		return lista;
+	}	
 
 
 }
