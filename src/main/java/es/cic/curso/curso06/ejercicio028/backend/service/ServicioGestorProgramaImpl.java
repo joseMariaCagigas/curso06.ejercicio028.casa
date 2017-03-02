@@ -15,7 +15,7 @@ import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
 
 @Service
 @Transactional
-public class ServicioGestorProgramaIMpl implements ServicioGestorPrograma {
+public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 	
 	@Autowired
 	private ProgramaRepository programaRepository;

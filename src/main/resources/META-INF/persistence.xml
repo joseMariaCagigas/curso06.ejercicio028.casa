@@ -8,7 +8,6 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <!-- Ruta de lo que va en el Dominio
         <class>es.cic.curso.curso06.ejercicio028.dominio.</class> -->
-        <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Dummie</class>
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Programa</class>
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria</class>
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Genero</class>
