@@ -29,10 +29,10 @@ public class Programa implements Identificable<Long> {
 	private String nombre;
 	
 	@Column(name = "duracion")
-	private String duracion;
+	private int duracion;
 	
 	@Column(name = "anio")
-	private String anio;
+	private int anio;
 
 	@JoinColumn(name = "id_categoria")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -47,7 +47,7 @@ public class Programa implements Identificable<Long> {
 
 	}
 
-	public Programa(String nombre, String duracion, String anio, Categoria categoria, Genero genero) {
+	public Programa(String nombre, int duracion, int anio, Categoria categoria, Genero genero) {
 		super();
 		this.nombre = nombre;
 		this.duracion = duracion;
@@ -56,7 +56,7 @@ public class Programa implements Identificable<Long> {
 		this.genero = genero;
 	}
 
-	public Programa(Long id, String nombre, String duracion, String anio, Categoria categoria, Genero genero) {
+	public Programa(Long id, String nombre, int duracion, int anio, Categoria categoria, Genero genero) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -91,19 +91,19 @@ public class Programa implements Identificable<Long> {
 		this.nombre = nombre;
 	}
 
-	public String getDuracion() {
+	public int getDuracion() {
 		return duracion;
 	}
 
-	public void setDuracion(String duracion) {
+	public void setDuracion(int duracion) {
 		this.duracion = duracion;
 	}
 
-	public String getAnio() {
+	public int getAnio() {
 		return anio;
 	}
 
-	public void setAnio(String anio) {
+	public void setAnio(int anio) {
 		this.anio = anio;
 	}
 
