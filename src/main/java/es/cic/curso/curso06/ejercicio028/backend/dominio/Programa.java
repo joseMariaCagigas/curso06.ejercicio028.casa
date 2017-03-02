@@ -5,52 +5,74 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
-@Table(name = "PROGRANA")
+@Table(name = "PROGRAMA")
 public class Programa implements Identificable<Long> {
 	private static final long serialVersionUID = -8760299749061904850L;
 
-	/** Identificador. Rango de valores: <code>[-2^63, 2^63)</code>. */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	/** Ruta del directorio dentro del servidor. */
-	@Column(name = "")
-	private String ruta;
+	@Column(name = "nombre")
+	private String nombre;
+	
+	@Column(name = "duracion")
+	private String duracion;
+	
+	@Column(name = "anio")
+	private String anio;
 
-	/** Lista de ficheros que cuelgan del directorio. */
-	@OneToMany(mappedBy = "directorio")
-	private List<Fichero> sesiones = new ArrayList<>();
+	@JoinColumn(name = "id_categoria")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Categoria categoria;
 
+	@JoinColumn(name = "id_genero")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Genero genero;
+
+	public Programa() {
+		super();
+
+	}
+
+	public Programa(String nombre, String duracion, String anio, Categoria categoria, Genero genero) {
+		super();
+		this.nombre = nombre;
+		this.duracion = duracion;
+		this.anio = anio;
+		this.categoria = categoria;
+		this.genero = genero;
+	}
+
+	public Programa(Long id, String nombre, String duracion, String anio, Categoria categoria, Genero genero) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.duracion = duracion;
+		this.anio = anio;
+		this.categoria = categoria;
+		this.genero = genero;
+	}
+
+	
 	/**
 	 * @return the id
 	 */
 	@Override
 	public Long getId() {
 		return id;
-	}
-
-	/**
-	 * @return the ruta
-	 */
-	public String getRuta() {
-		return ruta;
-	}
-
-	/**
-	 * @return the sesiones
-	 */
-	public List<Fichero> getSesiones() {
-		return sesiones;
 	}
 
 	/**
@@ -61,18 +83,44 @@ public class Programa implements Identificable<Long> {
 		this.id = id;
 	}
 
-	/**
-	 * @param ruta the ruta to set
-	 */
-	public void setRuta(String ruta) {
-		this.ruta = ruta;
+	public String getNombre() {
+		return nombre;
 	}
 
-	/**
-	 * @param sesiones the sesiones to set
-	 */
-	public void setSesiones(List<Fichero> sesiones) {
-		this.sesiones = sesiones;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(String duracion) {
+		this.duracion = duracion;
+	}
+
+	public String getAnio() {
+		return anio;
+	}
+
+	public void setAnio(String anio) {
+		this.anio = anio;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public Genero getGenero() {
+		return genero;
+	}
+
+	public void setGenero(Genero genero) {
+		this.genero = genero;
 	}
 
 	@Override
@@ -102,7 +150,9 @@ public class Programa implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Directorio [id=" + id + ", ruta=" + ruta + "]";
+		return "Programa [id=" + id + ", nombre=" + nombre + ", duracion=" + duracion + ", anio=" + anio
+				+ ", categoria=" + categoria.getId() + ", genero=" + genero.getId() + "]";
 	}
-
+	
+	
 }
