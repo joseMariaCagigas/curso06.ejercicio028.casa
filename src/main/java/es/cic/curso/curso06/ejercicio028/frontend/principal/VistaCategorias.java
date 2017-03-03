@@ -3,6 +3,8 @@ package es.cic.curso.curso06.ejercicio028.frontend.principal;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.web.context.ContextLoader;
+
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
@@ -16,6 +18,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -44,6 +47,8 @@ public class VistaCategorias extends VerticalLayout {
 	public VistaCategorias(){
 		
 		nuevaCategoria = new Categoria();
+		
+		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		//Layout Pantalla
 
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
@@ -122,15 +127,33 @@ public class VistaCategorias extends VerticalLayout {
 		descripcion.setEnabled(false);
 
 
-		
-
-
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
+		aceptar.addClickListener(e -> {
+			
+			if (nombre.getValue().equals("") || descripcion.getValue().equals("") ){
+				Notification.show("Debes indicar un nombre y una descripción para crear una Categoría.");
+			}else{
+				servicioGestorPrograma.aniadirCategoria(nuevaCategoria);
+//				if(!"".equals(version.getValue())) {
+//					 v = Double.parseDouble(version.getValue());
+//				}
+//				fichero = new Fichero(directorioActual, nombre.getValue(), descripcion.getValue(), v);
+//				if(ficheroSeleccionado.getId() > 0){
+//					servicioGestorFicheros.modificaFichero(ficheroSeleccionado.getId(), fichero);
+//				}else{
+//					servicioGestorFicheros.agregaFichero(directorioActual.getId(), fichero);
+//				}
+//				cargarGrid();
+//				verticalPrincipal.setVisible(false);
+//				botonAgregarFichero.setVisible(true);
+//				Notification.show("Fichero \"" + fichero.getNombre() + "\" añadido con éxito.");
+			}
+		});
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
 		cancelar.addClickListener(e-> {

@@ -13,7 +13,7 @@
         
     <context:annotation-config />
     <context:spring-configured />
-    <context:component-scan base-package="es.cic.curso.curso068.ejercicio028"/>
+    <context:component-scan base-package="es.cic.curso.curso06.ejercicio028.backend"/>
 
     <tx:annotation-driven mode="proxy" transaction-manager="transactionManager"/>
  	     

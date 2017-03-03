@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-    <display-name>Curso 06 Ejercicio026 Programación Televisiva</display-name>
+    <display-name>Curso 06 Ejercicio028 Programación Televisiva</display-name>
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>

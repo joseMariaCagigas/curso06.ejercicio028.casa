@@ -1,6 +1,7 @@
 package es.cic.curso.curso06.ejercicio028.frontend.principal;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
@@ -12,22 +13,21 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.Window;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
-
-
 
 public class VistaProgramas extends VerticalLayout {
 
@@ -42,7 +42,7 @@ public class VistaProgramas extends VerticalLayout {
 	private Grid gridProgramas;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
 	private ComboBox genero, categoria;
-	private Programa programa;
+	private Programa programa, programaSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private List<Programa> listaProgramas;
 	
@@ -54,7 +54,7 @@ public class VistaProgramas extends VerticalLayout {
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		//Layout Pantalla
-//		
+	
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		
 		HorizontalLayout layoutUno = label_buscador();
@@ -89,12 +89,20 @@ public class VistaProgramas extends VerticalLayout {
 		layoutTres.setSpacing(true);
 		crear = new Button("Crear");
 		crear.setVisible(true);
-		crear.setEnabled(false);
+		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
+		crear.addClickListener(e-> {
+			activarBotones();
+		});
+		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
+		borrar.addClickListener(e-> {
+			activarBotones();
+		});
+		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
 		actualizar.setEnabled(false);
@@ -114,7 +122,16 @@ public class VistaProgramas extends VerticalLayout {
 		gridProgramas.setColumns("Nombre", "Duración", "Año", "Categoría", "Género");
 		gridProgramas.setSizeFull();
 		gridProgramas.setSelectionMode(SelectionMode.SINGLE);
-		cargaGrid();
+		
+		gridProgramas.addSelectionListener(e -> {
+			programaSeleccionado = null;
+			if (!e.getSelected().isEmpty()) {
+				programaSeleccionado = (Programa) e.getSelected().iterator().next();
+				
+				} else {
+				activarBotonesActualizacion(programaSeleccionado);
+				}
+		});
 		grid.addComponent(gridProgramas);
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
@@ -144,12 +161,12 @@ public class VistaProgramas extends VerticalLayout {
 		aceptar.setVisible(true);
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
-
+		
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
+		cancelar.setEnabled(false);
 		cancelar.addClickListener(e-> {
 			menu.setEnabled(false);
-			
 			
 		});
 		ok.addComponents(aceptar, cancelar);
@@ -160,13 +177,11 @@ public class VistaProgramas extends VerticalLayout {
 	}
 
 
-	private void cargaGrid() {
-		
-		listaProgramas = servicioGestorPrograma.getProgramas();
-
-	//	servicioGestorPrograma = setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));
+	public void cargaGridPrograma() {
+		Collection<Programa> programas = servicioGestorPrograma.listarPrograma();
+		gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class, programas));
 	}
-
+	
 	private HorizontalLayout label_buscador() {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
@@ -178,6 +193,39 @@ public class VistaProgramas extends VerticalLayout {
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
 		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
 		return label_buscador;
+	}
+
+	private void activarBotones() {
+		
+		nombre.setEnabled(true);
+		duracion.setEnabled(true);
+		anio.setEnabled(true);
+		genero.setEnabled(true);
+		categoria.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+	}
+	
+	private void activarBotonesActualizacion(Programa programa){
+		
+		nombre.setEnabled(true);
+		duracion.setEnabled(true);
+		anio.setEnabled(true);
+		genero.setEnabled(true);
+		categoria.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+	}
+	
+	private void desactivarBotones(){
+		
+		nombre.setEnabled(false);
+		duracion.setEnabled(false);
+		anio.setEnabled(false);
+		genero.setEnabled(false);
+		categoria.setEnabled(false);
+		aceptar.setEnabled(false);
+		cancelar.setEnabled(false);
 	}
 	
 }

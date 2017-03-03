@@ -31,6 +31,8 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	
+    	final VerticalLayout layoutUsuario = new VistaUsuario();
+    	final VerticalLayout layoutCanal = new VistaCanal();
         final VerticalLayout layoutProgramas = new VistaProgramas();
         final VerticalLayout layoutCategorias = new VistaCategorias();
         final VerticalLayout layoutGeneros = new VistaGeneros();
@@ -41,6 +43,8 @@ public class MyUI extends UI {
         tab.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
  
+        tab.addTab(layoutUsuario,"Usuarios");
+        tab.addTab(layoutCanal,"Canales");
         tab.addTab(layoutProgramas,"Programas");
         tab.addTab(layoutCategorias,"Categorias");
         tab.addTab(layoutGeneros,"Géneros");
