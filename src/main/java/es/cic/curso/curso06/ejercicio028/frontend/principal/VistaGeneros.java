@@ -28,6 +28,7 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 
+
 public class VistaGeneros extends VerticalLayout {
 
 	/**
@@ -52,6 +53,7 @@ public class VistaGeneros extends VerticalLayout {
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		nuevoGenero = new Genero();
+		
 		//Layout Pantalla
 //		
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
@@ -115,7 +117,6 @@ public class VistaGeneros extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		grid.setSpacing(true);
 		
-		//cargaGrid();
 		
 		gridGeneros = new Grid();
 		gridGeneros.setVisible(true);
@@ -164,7 +165,7 @@ public class VistaGeneros extends VerticalLayout {
 				}else{
 					servicioGestorPrograma.aniadirGenero(nuevoGenero);
 				}
-				cargaGrid();
+				cargaGridGeneros();
 				ocultarElementos();
 				descripcion.clear();
 				nombre.clear();
@@ -177,11 +178,11 @@ public class VistaGeneros extends VerticalLayout {
 			descripcion.clear();
 			nombre.clear();
 			ocultarElementos();
-			cargaGrid();
+			cargaGridGeneros();
 			
 		});
 			
-			
+		cargaGridGeneros();
 
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, descripcion, ok);
@@ -240,13 +241,11 @@ public class VistaGeneros extends VerticalLayout {
 		}
 		Notification.show("Cargados generos de DEMOSTRACIÓN");
 	}
-	cargaGrid();
+	cargaGridGeneros();
 }
-
-	public void cargaGrid() {
-	
-	Collection<Genero> listaGeneros = servicioGestorPrograma.listarGenero();
-	gridGeneros.setContainerDataSource(new BeanItemContainer<>(Genero.class, listaGeneros));
-}
+	public void cargaGridGeneros() {
+		listaGeneros = servicioGestorPrograma.listarGenero();
+		gridGeneros.setContainerDataSource(new BeanItemContainer<>(Genero.class, listaGeneros));
+	}
 
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
@@ -23,6 +25,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 public class VistaCategorias extends VerticalLayout {
@@ -41,6 +44,8 @@ public class VistaCategorias extends VerticalLayout {
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private List<Categoria> listaCategorias;
 	private Image image;
+	public static final int NUM_CATEGORIAS = 5;
+	public static final int NUM_CATEGORIAS_INICIAL = 5;
 	
 	
 	@SuppressWarnings("serial")
@@ -181,6 +186,23 @@ public class VistaCategorias extends VerticalLayout {
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
 		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
 		return label_buscador;
+	}
+	public void enter(ViewChangeEvent event) {
+	if (servicioGestorPrograma.listarCategoria().isEmpty()) {
+		
+		for (int i = 1; i <= NUM_CATEGORIAS; i++) {
+			Categoria categoria = new Categoria();
+			categoria.setNombre("Nombre" + i);
+			categoria.setDescripcion("Descripción" + i);
+			servicioGestorPrograma.aniadirCategoria(categoria);
+		}
+		Notification.show("Cargados categorias de DEMOSTRACIÓN");
+	}
+	cargaGridCategorias();
+}
+	public void cargaGridCategorias() {
+		listaCategorias = servicioGestorPrograma.listarCategoria();
+		gridCategorias.setContainerDataSource(new BeanItemContainer<>(Categoria.class, listaCategorias));
 	}
 	
 }
