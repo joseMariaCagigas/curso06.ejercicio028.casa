@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -21,16 +22,21 @@ import com.vaadin.ui.themes.ValoTheme;
 @Theme("mytheme")
 public class MyUI extends UI {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5532407736552134817L;
 	private TabSheet tab;
 	
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	
-        final HorizontalLayout layoutProgramas = new VistaProgramas();
-        final HorizontalLayout layoutCategorias = new VistaCategorias();
-        final HorizontalLayout layoutGeneros = new VistaGeneros();
+        final VerticalLayout layoutProgramas = new VistaProgramas();
+        final VerticalLayout layoutCategorias = new VistaCategorias();
+        final VerticalLayout layoutGeneros = new VistaGeneros();
         
         tab = new TabSheet();
+        
         tab.setHeight(100.0f, Unit.PERCENTAGE);
         tab.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
