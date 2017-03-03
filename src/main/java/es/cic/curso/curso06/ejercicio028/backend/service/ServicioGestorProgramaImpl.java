@@ -16,8 +16,7 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CategoriaRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.GeneroRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
-import es.cic.curso.grupo1.ejercicio027.dominio.Tarea;
-import es.cic.curso.grupo1.ejercicio027.service.TareaServiceImpl;
+
 
 @Service
 @Transactional
