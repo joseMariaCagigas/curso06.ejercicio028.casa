@@ -46,17 +46,8 @@ public class VistaProgramas extends HorizontalLayout {
 		label = new Label("Lista de Programas");
 		buscador = new TextField();
 		buscador.setInputPrompt("Buscador");
-		buscador.addTextChangeListener(e->
-		gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class,  
-				servicioGestorPrograma.findAll(e.getText())))
- 		);
- 		
-		Button clearFilterBtn = new Button("Reiniciar");
- 		clearFilterBtn.addClickListener(e->{
- 			buscador.clear();
- 			listaProgramas = servicioGestorPrograma.getProgramas();
- 			gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));			
- 		});
+
+		gridProgramas = new Grid();
 		
 		label_buscador.addComponents(label, buscador);
 		HorizontalLayout datos = new HorizontalLayout();
