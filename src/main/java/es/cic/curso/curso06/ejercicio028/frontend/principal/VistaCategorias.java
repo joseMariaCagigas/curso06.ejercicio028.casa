@@ -64,7 +64,7 @@ public class VistaCategorias extends VerticalLayout {
 
 		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
 
-			for (int i = 1; i <= NUM_CATEGORIAS; i++) {
+			for (int i = 1; i <= 5; i++) {
 				Categoria categoria = new Categoria();
 				categoria.setNombre("Nombre" + i);
 				categoria.setDescripcion("Descripción" + i);

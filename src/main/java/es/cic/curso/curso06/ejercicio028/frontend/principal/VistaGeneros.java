@@ -11,10 +11,12 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
@@ -23,6 +25,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
@@ -107,11 +110,26 @@ public class VistaGeneros extends VerticalLayout {
 		borrar.setVisible(true);
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
+		borrar.addClickListener(e -> this.getUI().getUI()
+				.addWindow(creaVentanaConfirmacionBorradoGeneros(generoSeleccionado.getNombre())));
+				
 
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
 		actualizar.setEnabled(false);
 		actualizar.setIcon(FontAwesome.REFRESH);
+		actualizar.addClickListener(e -> {
+			nombre.setValue(generoSeleccionado.getNombre());
+			descripcion.setValue(generoSeleccionado.getDescripcion());
+			nombre.setEnabled(true);
+			descripcion.setEnabled(true);
+			aceptar.setEnabled(true);
+			cancelar.setEnabled(true);
+			crear.setEnabled(false);
+			borrar.setEnabled(false);
+			actualizar.setEnabled(false);
+		});
+		
 		layoutTres.addComponents(crear, borrar, actualizar);
 		return layoutTres;
 	}
@@ -123,8 +141,6 @@ public class VistaGeneros extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		grid.setSpacing(true);
 
-		// cargaGrid();
-
 		gridGeneros = new Grid();
 		gridGeneros.setVisible(true);
 		gridGeneros.setColumns("nombre", "descripcion");
@@ -134,6 +150,7 @@ public class VistaGeneros extends VerticalLayout {
 			generoSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
 				generoSeleccionado = (Genero) e.getSelected().iterator().next();
+				System.out.println(generoSeleccionado.getId());
 				borrar.setEnabled(true);
 				actualizar.setEnabled(true);
 			} else {
@@ -167,8 +184,11 @@ public class VistaGeneros extends VerticalLayout {
 			} else {
 				Genero nuevoGenero = new Genero(nombre.getValue(), descripcion.getValue());
 				if (generoSeleccionado.getId() > 0) {
-					servicioGestorPrograma.modificarGenero(nuevoGenero);
+					generoSeleccionado.setNombre(nombre.getValue());
+					generoSeleccionado.setDescripcion(descripcion.getValue());
+					servicioGestorPrograma.modificarGenero(generoSeleccionado);
 					Notification.show("Género \"" + nuevoGenero.getNombre() + "\" editado con éxito.");
+					
 				} else {
 					servicioGestorPrograma.aniadirGenero(nuevoGenero);
 				}
@@ -184,8 +204,9 @@ public class VistaGeneros extends VerticalLayout {
 		cancelar.addClickListener(e -> {
 			descripcion.clear();
 			nombre.clear();
-			ocultarElementos();
 			cargaGrid();
+			
+			
 
 		});
 
@@ -214,6 +235,8 @@ public class VistaGeneros extends VerticalLayout {
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
+		generoSeleccionado = new Genero();
+		generoSeleccionado.setId((long) 0);
 
 	}
 
@@ -234,7 +257,7 @@ public class VistaGeneros extends VerticalLayout {
 	public void enter(ViewChangeEvent event) {
 		if (servicioGestorPrograma.listarGenero().isEmpty()) {
 
-			for (int i = 1; i <= NUM_GENEROS; i++) {
+			for (int i = 1; i <= 5; i++) {
 				Genero genero = new Genero();
 				genero.setNombre("Nombre" + i);
 				genero.setDescripcion("Descripción" + i);
@@ -246,9 +269,53 @@ public class VistaGeneros extends VerticalLayout {
 	}
 
 	public void cargaGrid() {
-
+		
 		Collection<Genero> listaGeneros = servicioGestorPrograma.listarGenero();
 		gridGeneros.setContainerDataSource(new BeanItemContainer<>(Genero.class, listaGeneros));
+		ocultarElementos();
+	}
+	
+	private Window creaVentanaConfirmacionBorradoGeneros(String nombre) {
+		Window resultado = new Window();
+		resultado.setWidth(350.0F, Unit.PIXELS);
+		resultado.setModal(true);
+		resultado.setClosable(false);
+		resultado.setResizable(false);
+		resultado.setDraggable(false);
+
+		Label label = new Label("¿Está seguro de que desea borrar este Género: <strong>\"" + nombre + "\"</strong>?");
+		label.setContentMode(ContentMode.HTML);
+
+		Button botonAceptar = new Button("Aceptar");
+		botonAceptar.addClickListener(e -> {
+			servicioGestorPrograma.borrarGenero(generoSeleccionado.getId());
+			cargaGrid();
+			resultado.close();
+		});
+
+		Button botonCancelar = new Button("Cancelar");
+		botonCancelar.addClickListener(e -> resultado.close());
+
+		HorizontalLayout layoutBotones = new HorizontalLayout();
+		layoutBotones.setMargin(true);
+		layoutBotones.setSpacing(true);
+		layoutBotones.setWidth(100.0F, Unit.PERCENTAGE);
+		layoutBotones.addComponents(botonAceptar, botonCancelar);
+
+		final FormLayout content = new FormLayout();
+		content.setMargin(true);
+		content.addComponents(label, layoutBotones);
+		resultado.setContent(content);
+		resultado.center();
+		return resultado;
+	
 	}
 
+	public Genero getGeneroSeleccionado() {
+		return generoSeleccionado;
+	}
+
+	public void setGeneroSeleccionado(Genero generoSeleccionado) {
+		this.generoSeleccionado = generoSeleccionado;
+	}
 }
