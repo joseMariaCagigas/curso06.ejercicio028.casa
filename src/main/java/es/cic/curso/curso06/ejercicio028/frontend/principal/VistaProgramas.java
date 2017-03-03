@@ -15,7 +15,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
-import es.cic.curso.grupo1.ejercicio027.dominio.Tarea;
+
 
 public class VistaProgramas extends HorizontalLayout {
 
