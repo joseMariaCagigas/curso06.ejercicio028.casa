@@ -1,17 +1,24 @@
 package es.cic.curso.curso06.ejercicio028.frontend.principal;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinService;
+import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -19,6 +26,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
+
 
 
 public class VistaProgramas extends VerticalLayout {
@@ -43,8 +51,11 @@ public class VistaProgramas extends VerticalLayout {
 	public VistaProgramas(){
 		
 		programa = new Programa();
+		
+		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		//Layout Pantalla
 //		
+		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		
 		HorizontalLayout layoutUno = label_buscador();
 		
@@ -52,9 +63,25 @@ public class VistaProgramas extends VerticalLayout {
 		
 		HorizontalLayout layoutTres = layoutTres();
 
-		addComponents(layoutUno, layoutDos, layoutTres);
+		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 			}
 
+	private HorizontalLayout inicializaLayoutEncabezado() {
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/cic_logo.png"));
+		Image imagen = new Image(null, resource);
+		imagen.setHeight(60.0F, Unit.PIXELS);
+		
+		Label titulo = new Label("<span style=\"font-size: 175%;\">Programación Televisiva</span>");
+		titulo.setContentMode(ContentMode.HTML);
+
+		HorizontalLayout layoutEncabezado = new HorizontalLayout();
+		layoutEncabezado.setMargin(new MarginInfo(true, true, true, true));
+		layoutEncabezado.setSpacing(false);
+		layoutEncabezado.addComponents(imagen, titulo);
+		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
+		return layoutEncabezado;
+	}
 
 	private HorizontalLayout layoutTres() {
 		HorizontalLayout layoutTres = new HorizontalLayout();
@@ -82,12 +109,12 @@ public class VistaProgramas extends VerticalLayout {
 		layoutDos.setMargin(true);
 		layoutDos.setSpacing(true);
 		VerticalLayout grid = new VerticalLayout();
-		grid.setSpacing(true);
 		gridProgramas = new Grid();
 		gridProgramas.setVisible(true);
 		gridProgramas.setColumns("Nombre", "Duración", "Año", "Categoría", "Género");
 		gridProgramas.setSizeFull();
 		gridProgramas.setSelectionMode(SelectionMode.SINGLE);
+		cargaGrid();
 		grid.addComponent(gridProgramas);
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
@@ -110,8 +137,6 @@ public class VistaProgramas extends VerticalLayout {
 		genero = new ComboBox("Género");
 		genero.setVisible(true);
 		genero.setEnabled(false);
-		
-
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
@@ -119,10 +144,14 @@ public class VistaProgramas extends VerticalLayout {
 		aceptar.setVisible(true);
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
+
 		cancelar = new Button("Cancelar");
-		cancelar.setVisible(true);
-		cancelar.setEnabled(false);
 		cancelar.setIcon(FontAwesome.CLOSE);
+		cancelar.addClickListener(e-> {
+			menu.setEnabled(false);
+			
+			
+		});
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
 
@@ -131,10 +160,16 @@ public class VistaProgramas extends VerticalLayout {
 	}
 
 
+	private void cargaGrid() {
+		
+		listaProgramas = servicioGestorPrograma.getProgramas();
+
+	//	servicioGestorPrograma = setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));
+	}
+
 	private HorizontalLayout label_buscador() {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
-		label_buscador.setSpacing(true);
 		label = new Label("Lista de Programas");
 		label.setVisible(true);
 		buscador = new TextField();

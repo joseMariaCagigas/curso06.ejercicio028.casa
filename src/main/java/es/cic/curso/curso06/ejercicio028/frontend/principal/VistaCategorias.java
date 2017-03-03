@@ -1,21 +1,25 @@
 package es.cic.curso.curso06.ejercicio028.frontend.principal;
 
+import java.io.File;
 import java.util.List;
 
+import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Grid.SelectionMode;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 public class VistaCategorias extends VerticalLayout {
@@ -27,12 +31,13 @@ public class VistaCategorias extends VerticalLayout {
 
 	private TextField buscador;
 	private TextField nombre, descripcion;
-	private Label label;
+	private Label label, titulo;
 	private Grid gridCategorias;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
 	private Categoria nuevaCategoria;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private List<Categoria> listaCategorias;
+	private Image image;
 	
 	
 	@SuppressWarnings("serial")
@@ -40,7 +45,8 @@ public class VistaCategorias extends VerticalLayout {
 		
 		nuevaCategoria = new Categoria();
 		//Layout Pantalla
-//		
+
+		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		
 		HorizontalLayout layoutUno = label_buscador();
 		
@@ -48,10 +54,28 @@ public class VistaCategorias extends VerticalLayout {
 		
 		HorizontalLayout layoutTres = layoutTres();
 
-		addComponents(layoutUno, layoutDos, layoutTres);
+		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 			}
 
 
+	private HorizontalLayout inicializaLayoutEncabezado() {
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/cic_logo.png"));
+		Image imagen = new Image(null, resource);
+		imagen.setHeight(60.0F, Unit.PIXELS);
+		
+		Label titulo = new Label("<span style=\"font-size: 175%;\">Programación Televisiva</span>");
+		titulo.setContentMode(ContentMode.HTML);
+
+		HorizontalLayout layoutEncabezado = new HorizontalLayout();
+		layoutEncabezado.setMargin(new MarginInfo(true, true, true, true));
+		layoutEncabezado.setSpacing(false);
+		layoutEncabezado.addComponents(imagen, titulo);
+		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
+		return layoutEncabezado;
+	}
+	
+	
 	private HorizontalLayout layoutTres() {
 		HorizontalLayout layoutTres = new HorizontalLayout();
 		layoutTres.setMargin(true);
@@ -108,9 +132,12 @@ public class VistaCategorias extends VerticalLayout {
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
 		cancelar = new Button("Cancelar");
-		cancelar.setVisible(true);
-		cancelar.setEnabled(false);
 		cancelar.setIcon(FontAwesome.CLOSE);
+		cancelar.addClickListener(e-> {
+			menu.setEnabled(false);
+			
+			
+		});
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, descripcion, ok);
 
