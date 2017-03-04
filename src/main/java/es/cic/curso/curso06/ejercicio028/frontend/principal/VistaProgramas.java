@@ -1,11 +1,13 @@
 package es.cic.curso.curso06.ejercicio028.frontend.principal;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
@@ -33,6 +35,9 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
+
+
+
 public class VistaProgramas extends VerticalLayout {
 
 	/**
@@ -46,9 +51,15 @@ public class VistaProgramas extends VerticalLayout {
 	private Grid gridProgramas;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
 	private ComboBox genero, categoria;
+	private List<String> lisCategorias = new ArrayList<>();
+	List <Genero> listaGeneros = new ArrayList<>();
+	List <Categoria> listaCategorias = new ArrayList<>();
+	private List<String> lisGeneros = new ArrayList<>();
 	private Programa programa, programaSeleccionado;
-	private ServicioGestorPrograma servicioGestorPrograma;
+	private ServicioGestorPrograma servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 	private Collection<Programa> listaProgramas;
+	private Genero generoElegido;
+	private Categoria categoriaElegida;
 	
 	
 	@SuppressWarnings("serial")
@@ -56,9 +67,10 @@ public class VistaProgramas extends VerticalLayout {
 		
 		programa = new Programa();
 		
-		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
-		//Layout Pantalla
-	
+		
+		
+		//servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
+
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		
 		HorizontalLayout layoutUno = label_buscador();
@@ -69,30 +81,10 @@ public class VistaProgramas extends VerticalLayout {
 
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 		
-//		if (servicioGestorPrograma.listarPrograma().isEmpty()) {
-//
-//			for (int i = 1; i <= 5; i++) {
-//				Programa programa = new Programa();
-//				programa.setNombre("Nombre" + i);
-//				programa.setDuracion(120 + i);
-//				programa.setAnio(120 + i);
-//				Categoria categoria = new Categoria();
-//				categoria.setId((long) 1 + i);
-//				categoria.setNombre("categoria1");
-//				programa.setCategoria(categoria);
-//				Genero genero = new Genero();
-//				genero.setId((long) 1 + i);
-//				genero.setNombre("genero1");
-//				programa.setGenero(genero);
-//				
-//				servicioGestorPrograma.aniadirPrograma(programa);
-//			}
-//		}
-//		System.out.println("Cargados programas de DEMOSTRACIÓN");
-//		Notification.show("Cargados pr000000000000000000000000ogramas de DEMOSTRACIÓN");
 		cargaGrid();
 		
 	}
+
 
 	private HorizontalLayout inicializaLayoutEncabezado() {
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
@@ -120,7 +112,7 @@ public class VistaProgramas extends VerticalLayout {
 		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(e-> {
-			activarBotones();
+			crearPrograma();
 		});
 		
 		borrar = new Button("Borrar");
@@ -139,7 +131,6 @@ public class VistaProgramas extends VerticalLayout {
 		return layoutTres;
 	}
 
-
 	private HorizontalLayout layoutDos() {
 		HorizontalLayout layoutDos = new HorizontalLayout();
 		layoutDos.setMargin(true);
@@ -157,10 +148,12 @@ public class VistaProgramas extends VerticalLayout {
 				programaSeleccionado = (Programa) e.getSelected().iterator().next();
 				
 				} else {
-				activarBotonesActualizacion(programaSeleccionado);
+					activarBotones();
 				}
 		});
 		grid.addComponent(gridProgramas);
+		
+
 		
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
@@ -177,12 +170,10 @@ public class VistaProgramas extends VerticalLayout {
 		anio.setInputPrompt("Año");
 		anio.setVisible(true);
 		anio.setEnabled(false);
-		categoria = new ComboBox("Categoría");
-		categoria.setVisible(true);
-		categoria.setEnabled(false);
-		genero = new ComboBox("Género");
-		genero.setVisible(true);
-		genero.setEnabled(false);
+		
+		actualizarCategoria();
+		actualizarGenero();
+	
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
@@ -206,28 +197,69 @@ public class VistaProgramas extends VerticalLayout {
 	}
 
 
-	public void enter(ViewChangeEvent event) {
-		if (servicioGestorPrograma.listarPrograma().isEmpty()) {
+	private void actualizarCategoria() {
+		
+		categoria = new ComboBox("Categoría", lisCategorias);
+		categoria.setNullSelectionAllowed(false);
+		categoria.select(1);
+		categoria.setImmediate(true);
+		categoria.setVisible(true);
+		categoria.setEnabled(false);
+	}
 
-			for (int i = 1; i <= 8; i++) {
-				Programa programa = new Programa();
-				programa.setNombre("Nombre" + i);
-				programa.setDuracion(120 + i);
-				programa.setAnio(120 + i);
-				Categoria categoria = new Categoria();
-				categoria.setNombre("categoria1");
-				programa.setCategoria(categoria);
-				Genero genero = new Genero();
-				genero.setNombre("genero1");
-				programa.setGenero(genero);
-				
-				servicioGestorPrograma.aniadirPrograma(programa);
-			}
-			;
-		}
-		System.out.println("Cargados programas de DEMOSTRACIÓN");
-		Notification.show("Cargados pr000000000000000000000000ogramas de DEMOSTRACIÓN");
-		cargaGrid();
+
+	private void actualizarGenero() {
+		
+		genero = new ComboBox("Género");
+		genero.setNullSelectionAllowed(false);
+		genero.select(1);
+		genero.setImmediate(true);
+		genero.setVisible(true);
+		genero.setEnabled(false);
+		genero.removeAllItems();
+
+		
+	}
+
+	public void crearPrograma() {
+
+		nombre.setEnabled(true);
+		duracion.setEnabled(true);
+		anio.setEnabled(true);
+		genero.setEnabled(true);
+		categoria.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+		crear.setEnabled(false);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		Programa programaSeleccionado = new Programa();
+		programaSeleccionado.setId((long) 0);
+
+	}
+	
+	public void enter(ViewChangeEvent event) {
+//		if (servicioGestorPrograma.listarPrograma().isEmpty()) {
+//
+//			for (int i = 1; i <= 8; i++) {
+//				Programa programa = new Programa();
+//				programa.setNombre("Nombre" + i);
+//				programa.setDuracion(120 + i);
+//				programa.setAnio(120 + i);
+//				Categoria categoria = new Categoria();
+//				categoria.setNombre("categoria1");
+//				programa.setCategoria(categoria);
+//				Genero genero = new Genero();
+//				genero.setNombre("genero1");
+//				programa.setGenero(genero);
+//				
+//				servicioGestorPrograma.aniadirPrograma(programa);
+//			}
+//			;
+//		}
+//		System.out.println("Cargados programas de DEMOSTRACIÓN");
+//		Notification.show("Cargados pr000000000000000000000000ogramas de DEMOSTRACIÓN");
+//		cargaGrid();
 	}
 
 	public void cargaGrid() {
@@ -261,17 +293,6 @@ public class VistaProgramas extends VerticalLayout {
 		cancelar.setEnabled(true);
 	}
 	
-	private void activarBotonesActualizacion(Programa programa){
-		
-		nombre.setEnabled(true);
-		duracion.setEnabled(true);
-		anio.setEnabled(true);
-		genero.setEnabled(true);
-		categoria.setEnabled(true);
-		aceptar.setEnabled(true);
-		cancelar.setEnabled(true);
-	}
-	
 	private void desactivarBotones(){
 		
 		nombre.setEnabled(false);
@@ -283,5 +304,33 @@ public class VistaProgramas extends VerticalLayout {
 		cancelar.setEnabled(false);
 	}
 	
-
+	private void recorrerGeneros() {
+		for(Genero gen :listaGeneros){
+			if(genero.getValue() == gen.getNombre()){
+				generoElegido.setNombre(gen.getNombre());
+				
+			}			
+		}
 	}
+	
+	private void recorrerCategorias() {
+		for(Categoria cat :listaCategorias){
+			if(categoria.getValue() == cat.getNombre()){
+				categoriaElegida.setNombre(cat.getNombre());
+				
+			}			
+		}
+	}
+	
+	public void setPrograma(Programa programa) {
+		this.setVisible(programa != null);
+		this.programa = programa;
+
+		if (programa != null) {
+			BeanFieldGroup.bindFieldsUnbuffered(programa, this);
+		} else {
+			BeanFieldGroup.bindFieldsUnbuffered(new Programa(), this);
+		}
+	}
+	
+}

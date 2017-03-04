@@ -311,6 +311,7 @@ public class VistaGeneros extends VerticalLayout {
 	
 	}
 
+	
 	public Genero getGeneroSeleccionado() {
 		return generoSeleccionado;
 	}

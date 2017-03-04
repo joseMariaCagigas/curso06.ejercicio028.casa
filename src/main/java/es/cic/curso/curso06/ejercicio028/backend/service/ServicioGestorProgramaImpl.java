@@ -134,29 +134,7 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 		return null;
 	}
 
-	//Filtro para pantalla inicio
-//	@Override
-// 	public synchronized List<Programa> findAll(String filtro){
-// 		List<Programa> lista = new ArrayList<>();
-// 		for(Programa t : getProgramas()){
-// 			try{
-// 				boolean pasoFiltro = (filtro==null||filtro.isEmpty())
-// 						||t.getNombre().toLowerCase().contains(filtro.toLowerCase());
-// 				if(pasoFiltro){
-// 					lista.add(t.clone());
-// 				}
-// 			}catch(CloneNotSupportedException ex) {
-// 				Logger.getLogger(ServicioGestorPrograma.class.getName()).log(null, ex);
-// 			}
-// 		}
-// 		Collections.sort(lista, new Comparator<Programa>() {
-// 
-// 			@Override
-// 			public int compare(Programa o1, Programa o2) {
-// 				return (int) (o2.getId() - o1.getId());
-// 			}});
-// 		return lista;
-//	}	
+
 
 
 }
