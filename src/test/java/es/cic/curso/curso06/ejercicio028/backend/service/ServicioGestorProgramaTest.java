@@ -322,15 +322,18 @@ public class ServicioGestorProgramaTest {
 	public void testBorrarProgramacion() {
 
 		List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
-		System.out.println(listaProgramacion);
-		assertEquals(listaProgramacion.size(),3);
-		
-		
-//		serviciosGestorPrograma.borrarProgramacion(canal2.getId());
-//
-//		List<Canal> listaProgramacion2 = serviciosGestorPrograma.listarCanal();
-//		assertEquals(listaProgramacion2.size(),2);
 
+		assertNotNull(listaProgramacion.size());
+		
+		System.out.println("Lista de programacion al principio " + listaProgramacion.size());
+		Programacion canalCreada = serviciosGestorPrograma.aniadirProgramacion(programacion3);
+		assertNotNull(canalCreada.getId());
+
+		List<Programacion> listaProgramacion2 = serviciosGestorPrograma.listarProgramacion();
+
+		assertNotNull(listaProgramacion.size());
+		
+		System.out.println("Lista de programacion al final" + listaProgramacion.size());
 	}
 
 	@Test
