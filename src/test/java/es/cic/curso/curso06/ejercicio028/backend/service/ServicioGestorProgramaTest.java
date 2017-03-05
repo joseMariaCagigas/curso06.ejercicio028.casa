@@ -97,9 +97,17 @@ public class ServicioGestorProgramaTest {
 		usuario2 = new Usuario("andres", "torrija");
 		usuario3 = new Usuario("manuel", "torquemada");
 		
+		entityManager.persist(usuario1);
+		entityManager.persist(usuario2);
+		entityManager.persist(usuario3);
+		
 		programacion1 = new Programacion(canal1, programa1);
 		programacion2 = new Programacion(canal3, programa2);
 		programacion3 = new Programacion(canal3, programa3);
+		
+		entityManager.persist(programacion1);
+		entityManager.persist(programacion2);
+		entityManager.persist(programacion3);
 	}
 
 	@Test
@@ -320,20 +328,15 @@ public class ServicioGestorProgramaTest {
 
 	@Test
 	public void testBorrarProgramacion() {
+	List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
+	assertEquals(3, listaProgramacion.size());
 
-		List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
+	for (Programacion programacion : listaProgramacion) {
+	serviciosGestorPrograma.borrarProgramacion(programacion.getId());
+	}
 
-		assertNotNull(listaProgramacion.size());
-		
-		System.out.println("Lista de programacion al principio " + listaProgramacion.size());
-		Programacion canalCreada = serviciosGestorPrograma.aniadirProgramacion(programacion3);
-		assertNotNull(canalCreada.getId());
-
-		List<Programacion> listaProgramacion2 = serviciosGestorPrograma.listarProgramacion();
-
-		assertNotNull(listaProgramacion.size());
-		
-		System.out.println("Lista de programacion al final" + listaProgramacion.size());
+	List<Programacion> listaProgramacion2 = serviciosGestorPrograma.listarProgramacion();
+	assertEquals(0, listaProgramacion2.size());
 	}
 
 	@Test
