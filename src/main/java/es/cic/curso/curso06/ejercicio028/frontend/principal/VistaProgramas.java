@@ -197,8 +197,8 @@ public class VistaProgramas extends VerticalLayout {
 			} else {
 				try{
 					//Notification.show(genero.getValue().toString());
-//					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
-//					Notification.show(generoElegido.getNombre());
+					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
+					Notification.show(generoElegido.getNombre());
 					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
 							Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
 					if (programaSeleccionado.getId() > 0) {
