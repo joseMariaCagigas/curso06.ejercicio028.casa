@@ -31,33 +31,27 @@ public class Categoria implements Identificable<Long> {
 	@Column(name = "descripcion")
 	private String descripcion;
 
-	@OneToMany(mappedBy = "categoria")
-	private List<Programa> categorias = new ArrayList<>();
 	
 	public Categoria() {
 		super();
 		
 	}
 
-	public Categoria(String nombre, String descripcion, List<Programa> categorias) {
+	public Categoria(String nombre, String descripcion) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.categorias = categorias;
+		
 	}
 
-	public Categoria(Long id, String nombre, String descripcion, List<Programa> categorias) {
+	public Categoria(Long id, String nombre, String descripcion) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.categorias = categorias;
+		
 	}
 
-	public Categoria( String nombre, String descripcion) {
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -75,13 +69,7 @@ public class Categoria implements Identificable<Long> {
 		this.descripcion = descripcion;
 	}
 
-	public List<Programa> getGeneros() {
-		return categorias;
-	}
 
-	public void setGeneros(List<Programa> categorias) {
-		this.categorias = categorias;
-	}
 
 	/**
 	 * @return the id
@@ -126,8 +114,9 @@ public class Categoria implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Genero [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", categorias=" + categorias
-				+ "]";
+		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
 	}
+
+
 
 }

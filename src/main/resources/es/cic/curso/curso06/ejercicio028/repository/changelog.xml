@@ -19,7 +19,7 @@
 				<constraints primaryKey="true" nullable="false" />
 			</column>
 			<column name="nombre" type="VARCHAR(100)"/>	
-			<column name="tiempo_max" type="INT(10)"/>	
+			<column name="tiempo_maximo" type="INT(10)"/>	
 			<column name="id_usuario" type="INT(10)"/>	
 		</createTable>
 				
