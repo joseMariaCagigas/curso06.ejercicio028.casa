@@ -191,12 +191,13 @@ public class VistaGeneros extends VerticalLayout {
 					
 				} else {
 					servicioGestorPrograma.aniadirGenero(nuevoGenero);
+					Notification.show("Género \"" + nuevoGenero.getNombre() + "\" añadido con éxito.");
 				}
 				cargaGrid();
 				ocultarElementos();
 				descripcion.clear();
 				nombre.clear();
-				Notification.show("Género \"" + nuevoGenero.getNombre() + "\" añadido con éxito.");
+				
 			}
 		});
 		cancelar = new Button("Cancelar");
