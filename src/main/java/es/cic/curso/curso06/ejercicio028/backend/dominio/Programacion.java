@@ -13,7 +13,7 @@ import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
 @Table(name = "CANAL_PROGRAMA")
-public class CanalPrograma implements Identificable<Long> {
+public class Programacion implements Identificable<Long> {
 	private static final long serialVersionUID = -1834404426900148883L;
 
 	@Id
@@ -31,20 +31,20 @@ public class CanalPrograma implements Identificable<Long> {
 	
 	
 
-	public CanalPrograma() {
+	public Programacion() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 
-	public CanalPrograma(Canal canal, Programa programa) {
+	public Programacion(Canal canal, Programa programa) {
 		super();
 		this.canal = canal;
 		this.programa = programa;
 	}
 
 
-	public CanalPrograma(Long id, Canal canal, Programa programa) {
+	public Programacion(Long id, Canal canal, Programa programa) {
 		super();
 		this.id = id;
 		this.canal = canal;
@@ -107,7 +107,7 @@ public class CanalPrograma implements Identificable<Long> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CanalPrograma other = (CanalPrograma) obj;
+		Programacion other = (Programacion) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

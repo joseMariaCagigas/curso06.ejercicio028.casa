@@ -59,6 +59,14 @@ public class Usuario implements Identificable<Long> {
 
 
 
+	public Usuario(String nombre, String apellidos) {
+		
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+	}
+
+
+
 	/**
 	 * @return the id
 	 */

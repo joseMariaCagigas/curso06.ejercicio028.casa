@@ -31,8 +31,9 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	
-    	final VerticalLayout layoutUsuario = new VistaUsuario();
-    	final VerticalLayout layoutCanal = new VistaCanal();
+    	final VerticalLayout layoutUsuario = new VistaUsuarios();
+    	final VerticalLayout layoutCanal = new VistaCanales();
+        final VerticalLayout layoutProgramacion = new VistaProgramacion();
         final VerticalLayout layoutProgramas = new VistaProgramas();
         final VerticalLayout layoutCategorias = new VistaCategorias();
         final VerticalLayout layoutGeneros = new VistaGeneros();
@@ -45,6 +46,7 @@ public class MyUI extends UI {
  
         tab.addTab(layoutUsuario,"Usuarios");
         tab.addTab(layoutCanal,"Canales");
+        tab.addTab(layoutProgramacion,"Programacion");
         tab.addTab(layoutProgramas,"Programas");
         tab.addTab(layoutCategorias,"Categorias");
         tab.addTab(layoutGeneros,"Géneros");

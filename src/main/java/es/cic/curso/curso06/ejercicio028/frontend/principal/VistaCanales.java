@@ -38,7 +38,7 @@ import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 
 
-public class VistaProgramas extends VerticalLayout {
+public class VistaCanales extends VerticalLayout {
 
 	/**
 	 * 
@@ -63,7 +63,7 @@ public class VistaProgramas extends VerticalLayout {
 	
 	
 	@SuppressWarnings("serial")
-	public VistaProgramas(){
+	public VistaCanales(){
 		
 		programa = new Programa();
 		
@@ -358,7 +358,7 @@ public class VistaProgramas extends VerticalLayout {
 	private HorizontalLayout label_buscador() {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
-		label = new Label("Lista de Programas");
+		label = new Label("Lista de Canales");
 		label.setVisible(true);
 		buscador = new TextField();
 		buscador.setInputPrompt("Buscador");

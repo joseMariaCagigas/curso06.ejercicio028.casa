@@ -23,7 +23,7 @@
 			<column name="id_usuario" type="INT(10)"/>	
 		</createTable>
 				
-			<createTable catalogName="curso06" tableName="CANAL_PROGRAMA">
+			<createTable catalogName="curso06" tableName="PROGRAMACION">
 			<column autoIncrement="true" name="id" type="INT(10)">
 				<constraints primaryKey="true" nullable="false" />
 			</column>
@@ -75,13 +75,13 @@
 			referencedTableName="USUARIO" referencedColumnNames="id"
 			baseTableName="CANAL" baseColumnNames="id_USUARIO" />
 			
-<!-- 		<addForeignKeyConstraint constraintName="fk_CANAL_PROGRAMA_id_PROGRAMA" -->
+<!-- 		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_PROGRAMA" -->
 <!-- 			referencedTableName="PROGRAMA" referencedColumnNames="id" -->
-<!-- 			baseTableName="CANAL_PROGRAMA" baseColumnNames="id_PROGRAMA" /> -->
+<!-- 			baseTableName="PROGRAMACION" baseColumnNames="id_PROGRAMA" /> -->
 			
-<!-- 		<addForeignKeyConstraint constraintName="fk_CANAL_PROGRAMA_id_CANAL" -->
+<!-- 		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_CANAL" -->
 <!-- 			referencedTableName="CANAL" referencedColumnNames="id" -->
-<!-- 			baseTableName="CANAL_PROGRAMA" baseColumnNames="id_CANAL" /> -->
+<!-- 			baseTableName="PROGRAMACION" baseColumnNames="id_CANAL" /> -->
 			
 			
 	</changeSet>

@@ -13,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CategoriaRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.GeneroRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
+import es.cic.curso.curso06.ejercicio028.backend.repository.UsuarioRepository;
 
 
 @Service
@@ -30,6 +32,9 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 	
 	@Autowired
 	private GeneroRepository generoRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Override
 	public Categoria aniadirCategoria(Categoria categoria) {
@@ -123,15 +128,35 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 		return programaRepository.update(programa);
 	}
 
+
 	@Override
-	public List<Programa> getProgramas() {
-		return programaRepository.list();
+	public Usuario aniadirUsuario(Usuario usuario) {
+
+		return usuarioRepository.add(usuario);
 	}
 
 	@Override
-	public List<Programa> findAll(String filtro) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Usuario> listarUsuario() {
+		
+		return usuarioRepository.list();
+	}
+
+	@Override
+	public Usuario obtenerUsuario(Long id) {
+		return usuarioRepository.read(id);
+	}
+
+	@Override
+	public void borrarUsuario(Long id) {
+		Usuario usuarioABorrar = obtenerUsuario(id);
+		usuarioRepository.delete( usuarioABorrar);
+		
+	}
+
+	@Override
+	public Usuario modificarUsuario(Usuario usuario) {
+		
+		return usuarioRepository.update(usuario);
 	}
 
 

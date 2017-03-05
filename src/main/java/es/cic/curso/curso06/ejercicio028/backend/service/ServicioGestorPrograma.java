@@ -5,6 +5,7 @@ import java.util.List;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 
 
 public interface ServicioGestorPrograma {
@@ -39,10 +40,15 @@ public interface ServicioGestorPrograma {
 
 	Programa modificarPrograma(Programa programa);
 
-	List<Programa> getProgramas();
+	Usuario aniadirUsuario(Usuario usuario);
 
-	List<Programa> findAll(String filtro);
+	List<Usuario> listarUsuario();
 
+	Usuario obtenerUsuario(Long id);
+
+	void borrarUsuario(Long id);
+
+	Usuario modificarUsuario(Usuario usuario);
 	
 
 }
