@@ -112,6 +112,7 @@ public class VistaProgramas extends VerticalLayout {
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
 			crearPrograma();
+			
 		});
 		
 		borrar = new Button("Borrar");
@@ -130,7 +131,7 @@ public class VistaProgramas extends VerticalLayout {
 			duracion.setValue(String.valueOf(programaSeleccionado.getDuracion()));
 			anio.setValue(String.valueOf(programaSeleccionado.getAnio()));
 			categoria.setValue(programaSeleccionado.getCategoria());
-			genero.setValue(programaSeleccionado.getGenero());
+			//genero.setValue(programaSeleccionado.getGenero());
 			activarMenu();
 		});
 		
@@ -182,12 +183,6 @@ public class VistaProgramas extends VerticalLayout {
 			anio.setVisible(true);
 			anio.setEnabled(false);
 			
-			actualizarCategoria();
-			actualizarGenero();
-	
-		
-
-	
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
@@ -201,15 +196,20 @@ public class VistaProgramas extends VerticalLayout {
 				Notification.show("Debes rellenar todos los campos.");
 			} else {
 				try{
-					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
+					//Notification.show(genero.getValue().toString());
+					generoElegido = servicioGestorPrograma.obtenerGenero((long)genero.getValue());
+					Notification.show(generoElegido.getNombre());
+					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
+							Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
 					if (programaSeleccionado.getId() > 0) {
 						programaSeleccionado.setNombre(nombre.getValue());
 						programaSeleccionado.setDuracion(Integer.parseInt(duracion.getValue()));
 						programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
 						programaSeleccionado.setCategoria(categoriaElegida);
-						programaSeleccionado.setGenero(generoElegido);
+//						generoElegido = servicioGestorPrograma.obtenerGenero((long)genero.getValue());
+						//programaSeleccionado.setGenero(generoElegido);
 						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
-						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
+						//Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
 					} else {
 						servicioGestorPrograma.aniadirPrograma(nuevoPrograma);
 					}
@@ -217,8 +217,8 @@ public class VistaProgramas extends VerticalLayout {
 					menu.setEnabled(false);
 					crear.setEnabled(true);
 					limpiarMenu();
-					Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
-					
+					//Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
+					//
 					
 				
 				}catch(NumberFormatException ex){
@@ -238,6 +238,9 @@ public class VistaProgramas extends VerticalLayout {
 			cargaGrid();
 			
 		});
+		categoria = new ComboBox();
+		genero = new ComboBox();
+		actualizarGenero();
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
 
@@ -278,26 +281,45 @@ public class VistaProgramas extends VerticalLayout {
 	
 	private void actualizarCategoria() {
 		
+		List <Categoria> listaCategorias = new ArrayList<>();
+		
+		listaCategorias = servicioGestorPrograma.listarCategoria();
+		
 		categoria = new ComboBox("Categoría");
 		categoria.setInputPrompt("Categoría");
 		categoria.setNullSelectionAllowed(false);
+		for(int i = 0; i < listaCategorias.size(); i++){
+			categoria.addItem(listaCategorias.get(i).getNombre());
+		}
 		categoria.select(1);
 		categoria.setImmediate(true);
 		categoria.setVisible(true);
 		categoria.setEnabled(false);
+		
 	}
 
 
 	private void actualizarGenero() {
 		
-		genero = new ComboBox("Género");
+		List <Genero> listaGeneros = new ArrayList<>();
+		
+		listaGeneros = servicioGestorPrograma.listarGenero();
+		
+	//	genero.removeAllItems();
 		genero.setInputPrompt("Género");
 		genero.setNullSelectionAllowed(false);
+		for(int i = 0; i < listaGeneros.size(); i++){
+			genero.addItem(listaGeneros.get(i).getId());
+			genero.setItemCaption(listaGeneros.get(i).getId(), listaGeneros.get(i).getNombre());
+		}
 		genero.select(1);
 		genero.setImmediate(true);
 		genero.setVisible(true);
-		genero.setEnabled(false);
-		genero.removeAllItems();
+		
+		//genero.setEnabled(false);
+		
+
+		Notification.show(Integer.toString(listaGeneros.size()));
 
 		
 	}
@@ -314,6 +336,7 @@ public class VistaProgramas extends VerticalLayout {
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
+		actualizarGenero();
 		programaSeleccionado = new Programa();
 		programaSeleccionado.setId((long) 0);
 

@@ -34,11 +34,11 @@ public class Programa implements Identificable<Long> {
 	@Column(name = "anio")
 	private int anio;
 
-	@JoinColumn(name = "id_categoria")
+	@JoinColumn(name = "id_CATEGORIA")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Categoria categoria;
 
-	@JoinColumn(name = "id_genero")
+	@JoinColumn(name = "id_GENERO")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Genero genero;
 
