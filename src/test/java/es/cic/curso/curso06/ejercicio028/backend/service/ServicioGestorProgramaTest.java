@@ -322,6 +322,7 @@ public class ServicioGestorProgramaTest {
 	public void testBorrarProgramacion() {
 
 		List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
+		System.out.println(listaProgramacion);
 		assertEquals(listaProgramacion.size(),3);
 		
 		
