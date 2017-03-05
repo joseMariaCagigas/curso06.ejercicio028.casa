@@ -69,7 +69,7 @@ public class VistaGeneros extends VerticalLayout {
 
 			for (int i = 1; i <= NUM_GENEROS; i++) {
 				Genero genero = new Genero();
-				genero.setNombre("Nombre" + i);
+				genero.setNombre("Género" + i);
 				genero.setDescripcion("Descripción" + i);
 				servicioGestorPrograma.aniadirGenero(genero);
 			}

@@ -26,15 +26,28 @@ public class ProgramaRepositoryImpl extends AbstractRepositoryImpl<Long, Program
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Programa> listyByGenre(Long idGenero) {
-		List<Programa> resultado;
+	public List<Programa> listyByGenreGenero(Long idGenero) {
+		List<Programa> resultado1;
 		try {
-			resultado = entityManager.createNativeQuery("SELECT * FROM PROGRAMA WHERE id_genero = ?", getClassDeT())
+			resultado1 = entityManager.createNativeQuery("SELECT * FROM PROGRAMA WHERE id_genero = ?", getClassDeT())
 					.setParameter(1, idGenero).getResultList();
 		} catch (Exception e) {
 			return null;
 		}
-		return resultado;
+		return resultado1;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Programa> listyByGenreCategoria(Long idCategoria) {
+		List<Programa> resultado2;
+		try {
+			resultado2 = entityManager.createNativeQuery("SELECT * FROM PROGRAMA WHERE id_categoria = ?", getClassDeT())
+					.setParameter(1, idCategoria).getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+		return resultado2;
 	}
 
 }
