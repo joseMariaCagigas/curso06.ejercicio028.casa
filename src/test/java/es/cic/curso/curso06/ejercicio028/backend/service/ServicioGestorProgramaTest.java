@@ -96,6 +96,10 @@ public class ServicioGestorProgramaTest {
 		usuario1 = new Usuario("manuel", "torrija");
 		usuario2 = new Usuario("andres", "torrija");
 		usuario3 = new Usuario("manuel", "torquemada");
+		
+		programacion1 = new Programacion(canal1, programa1);
+		programacion2 = new Programacion(canal3, programa2);
+		programacion3 = new Programacion(canal3, programa3);
 	}
 
 	@Test
@@ -293,4 +297,45 @@ public class ServicioGestorProgramaTest {
 		assertEquals(programa2.getNombre(), "Los 40 Tv");
 	}
 
+	@Test
+	public void testAniadirProgramacion() {
+		Programacion canalCreada = serviciosGestorPrograma.aniadirProgramacion(programacion3);
+		assertNotNull(canalCreada.getId());
+	}
+
+	@Test
+	public void testListarProgramacion() {
+		Programacion programacionCreada = serviciosGestorPrograma.aniadirProgramacion(programacion3);
+		List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
+		for (Programacion p : listaProgramacion) {
+			assertNotNull(p.getId());
+		}
+	}
+
+	@Test
+	public void testObtenerProgramacion() {
+		Programacion programacionCreada = serviciosGestorPrograma.aniadirProgramacion(programacion3);
+		assertNotNull(programacionCreada.getId());
+	}
+
+	@Test
+	public void testBorrarProgramacion() {
+
+		List<Programacion> listaProgramacion = serviciosGestorPrograma.listarProgramacion();
+		assertEquals(listaProgramacion.size(),3);
+		
+		
+//		serviciosGestorPrograma.borrarProgramacion(canal2.getId());
+//
+//		List<Canal> listaProgramacion2 = serviciosGestorPrograma.listarCanal();
+//		assertEquals(listaProgramacion2.size(),2);
+
+	}
+
+	@Test
+	public void testModificarProgramacion() {
+		programacion2.setCanal(canal1);
+		serviciosGestorPrograma.modificarCanal(canal1);
+		assertEquals(programacion2.getCanal(), canal1);
+	}
 }

@@ -6,6 +6,7 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 
 
@@ -60,6 +61,16 @@ public interface ServicioGestorPrograma {
 	void borrarCanal(Long id);
 
 	Canal modificarCanal(Canal canal);
+	
+	Programacion aniadirProgramacion(Programacion programacion);
+
+	List<Programacion> listarProgramacion();
+
+	Programacion obtenerProgramacion(Long id);
+
+	void borrarProgramacion(Long id);
+
+	Programacion modificarProgramacion(Programacion programacion);
 	
 
 }

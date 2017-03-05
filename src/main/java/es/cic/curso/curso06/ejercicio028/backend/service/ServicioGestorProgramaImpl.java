@@ -14,11 +14,13 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CanalRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CategoriaRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.GeneroRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
+import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramacionRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.UsuarioRepository;
 
 
@@ -40,6 +42,9 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 	
 	@Autowired
 	private CanalRepository canalRepository;
+	
+	@Autowired
+	private ProgramacionRepository programacionRepository;
 
 	@Override
 	public Categoria aniadirCategoria(Categoria categoria) {
@@ -194,6 +199,38 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 		
 		return canalRepository.update(canal);
 	}
+
+	@Override
+	public Programacion aniadirProgramacion(Programacion programacion) {
+		
+		return programacionRepository.add(programacion);
+	}
+
+	@Override
+	public List<Programacion> listarProgramacion() {
+		
+		return programacionRepository.list();
+	}
+
+	@Override
+	public Programacion obtenerProgramacion(Long id) {
+		
+		return programacionRepository.read(id);
+	}
+
+	@Override
+	public void borrarProgramacion(Long id) {
+		Programacion programacionABorrar = obtenerProgramacion(id);
+		programacionRepository.delete( programacionABorrar);
+
+	}
+
+	@Override
+	public Programacion modificarProgramacion(Programacion programacion) {
+		
+		return programacionRepository.update(programacion);
+	}
+
 
 
 }
