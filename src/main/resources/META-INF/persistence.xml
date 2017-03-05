@@ -11,6 +11,8 @@
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Programa</class>
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria</class>
         <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Genero</class>
+        <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario</class>
+        <class>es.cic.curso.curso06.ejercicio028.backend.dominio.Canal</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
