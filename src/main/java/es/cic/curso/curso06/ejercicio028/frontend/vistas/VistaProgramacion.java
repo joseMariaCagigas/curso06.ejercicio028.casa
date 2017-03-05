@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.frontend.principal;
+package es.cic.curso.curso06.ejercicio028.frontend.vistas;
 
 import com.vaadin.ui.VerticalLayout;
 

@@ -1,7 +1,8 @@
-package es.cic.curso.curso06.ejercicio028.frontend.principal;
+package es.cic.curso.curso06.ejercicio028.frontend.vistas;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
@@ -10,6 +11,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -25,52 +27,49 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
-public class VistaCategorias extends VerticalLayout {
+public class VistaUsuarios extends VerticalLayout {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5366004381410718812L;
+
 	private TextField buscador;
-	private TextField nombre, descripcion;
+	private TextField nombre, apellidos;
 	private Label label;
-	private Grid gridCategorias;
+	private Grid gridUsuarios;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
-	private Categoria nuevoCategoria, categoriaSeleccionado;
+	private Usuario nuevoUsuario, usuarioSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
-	private Collection<Categoria> listaCategorias;
-	public static final int NUM_CATEGORIAS = 5;
-	public static final int NUM_CATEGORIAS_INICIAL = 5;
+	private Collection<Usuario> listaUsuarios;
+	public static final int NUM_USUARIOS = 5;
+	public static final int NUM_USUARIOS_INICIAL = 5;
 
 	@SuppressWarnings("serial")
-	public VistaCategorias() {
+	public VistaUsuarios() {
 
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
-		nuevoCategoria = new Categoria();
+		nuevoUsuario = new Usuario();
 		// Layout Pantalla
 		//
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
-
 		HorizontalLayout layoutUno = label_buscador();
-
 		HorizontalLayout layoutDos = layoutDos();
-
 		HorizontalLayout layoutTres = layoutTres();
-
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
+		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
 
-			for (int i = 1; i <= NUM_CATEGORIAS; i++) {
-				Categoria categoria = new Categoria();
-				categoria.setNombre("N_Categorias" + i);
-				categoria.setDescripcion("D_Categorias" + i);
-				servicioGestorPrograma.aniadirCategoria(categoria);
+			for (int i = 1; i <= NUM_USUARIOS; i++) {
+				Usuario usuario = new Usuario();
+				usuario.setNombre("N_Usuario" + i);
+				usuario.setApellidos("A_ Usuario" + i);
+				servicioGestorPrograma.aniadirUsuario(usuario);
 			}
-			Notification.show("Cargados categorias de DEMOSTRACIÓN");
+			Notification.show("Cargados usuarios de DEMOSTRACIÓN");
 		}
 		cargaGrid();
 	}
@@ -80,12 +79,12 @@ public class VistaCategorias extends VerticalLayout {
 		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/cic_logo.png"));
 		Image imagen = new Image(null, resource);
 		imagen.setHeight(60.0F, Unit.PIXELS);
-
+		
 		Label titulo = new Label("<span style=\"font-size: 175%;\">Programación Televisiva</span>");
 		titulo.setContentMode(ContentMode.HTML);
 
 		HorizontalLayout layoutEncabezado = new HorizontalLayout();
-		layoutEncabezado.setMargin(new MarginInfo(true, true, true, true));
+		layoutEncabezado.setMargin(new MarginInfo(true, true, false, true));
 		layoutEncabezado.setSpacing(false);
 		layoutEncabezado.addComponents(imagen, titulo);
 		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
@@ -101,14 +100,14 @@ public class VistaCategorias extends VerticalLayout {
 		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(e -> {
-			crearCategoria();
+			crearUsuario();
 		});
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(e -> this.getUI().getUI()
-				.addWindow(creaVentanaConfirmacionBorradoCategorias(categoriaSeleccionado.getNombre())));
+				.addWindow(creaVentanaConfirmacionBorradoUsuarios(usuarioSeleccionado.getNombre())));
 				
 
 		actualizar = new Button("Actualizar");
@@ -116,10 +115,10 @@ public class VistaCategorias extends VerticalLayout {
 		actualizar.setEnabled(false);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(e -> {
-			nombre.setValue(categoriaSeleccionado.getNombre());
-			descripcion.setValue(categoriaSeleccionado.getDescripcion());
+			nombre.setValue(usuarioSeleccionado.getNombre());
+			apellidos.setValue(usuarioSeleccionado.getApellidos());
 			nombre.setEnabled(true);
-			descripcion.setEnabled(true);
+			apellidos.setEnabled(true);
 			aceptar.setEnabled(true);
 			cancelar.setEnabled(true);
 			crear.setEnabled(false);
@@ -138,16 +137,16 @@ public class VistaCategorias extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		grid.setSpacing(true);
 
-		gridCategorias = new Grid();
-		gridCategorias.setVisible(true);
-		gridCategorias.setColumns("nombre", "descripcion");
-		gridCategorias.setSizeFull();
-		gridCategorias.setSelectionMode(SelectionMode.SINGLE);
-		gridCategorias.addSelectionListener(e -> {
-			categoriaSeleccionado = null;
+		gridUsuarios = new Grid();
+		gridUsuarios.setVisible(true);
+		gridUsuarios.setColumns("nombre", "apellidos");
+		gridUsuarios.setSizeFull();
+		gridUsuarios.setSelectionMode(SelectionMode.SINGLE);
+		gridUsuarios.addSelectionListener(e -> {
+			usuarioSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
-				categoriaSeleccionado = (Categoria) e.getSelected().iterator().next();
-				System.out.println(categoriaSeleccionado.getId());
+				usuarioSeleccionado = (Usuario) e.getSelected().iterator().next();
+				System.out.println(usuarioSeleccionado.getId());
 				borrar.setEnabled(true);
 				actualizar.setEnabled(true);
 			} else {
@@ -156,7 +155,7 @@ public class VistaCategorias extends VerticalLayout {
 			}
 		});
 
-		grid.addComponent(gridCategorias);
+		grid.addComponent(gridUsuarios);
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
 		menu.setSpacing(true);
@@ -164,10 +163,10 @@ public class VistaCategorias extends VerticalLayout {
 		nombre.setInputPrompt("Nombre");
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
-		descripcion = new TextField("Descripción");
-		descripcion.setInputPrompt("Descripción");
-		descripcion.setVisible(true);
-		descripcion.setEnabled(false);
+		apellidos = new TextField("Apellidos");
+		apellidos.setInputPrompt("Apellidos");
+		apellidos.setVisible(true);
+		apellidos.setEnabled(false);
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
@@ -176,23 +175,23 @@ public class VistaCategorias extends VerticalLayout {
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
-			if ("".equals(nombre.getValue()) || "".equals(descripcion.getValue())) {
+			if ("".equals(nombre.getValue()) || "".equals(apellidos.getValue())) {
 				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.");
 			} else {
-				Categoria nuevoCategoria = new Categoria(nombre.getValue(), descripcion.getValue());
-				if (categoriaSeleccionado.getId() > 0) {
-					categoriaSeleccionado.setNombre(nombre.getValue());
-					categoriaSeleccionado.setDescripcion(descripcion.getValue());
-					servicioGestorPrograma.modificarCategoria(categoriaSeleccionado);
-					Notification.show("Género \"" + nuevoCategoria.getNombre() + "\" editado con éxito.");
+				Usuario nuevoUsuario = new Usuario(nombre.getValue(), apellidos.getValue());
+				if (usuarioSeleccionado.getId() > 0) {
+					usuarioSeleccionado.setNombre(nombre.getValue());
+					usuarioSeleccionado.setApellidos(apellidos.getValue());
+					servicioGestorPrograma.modificarUsuario(usuarioSeleccionado);
+					Notification.show("Usuario \"" + nuevoUsuario.getNombre() + "\" editado con éxito.");
 					
 				} else {
-					servicioGestorPrograma.aniadirCategoria(nuevoCategoria);
-					Notification.show("Género \"" + nuevoCategoria.getNombre() + "\" añadido con éxito.");
+					servicioGestorPrograma.aniadirUsuario(nuevoUsuario);
+					Notification.show("Usuario \"" + nuevoUsuario.getNombre() + "\" añadido con éxito.");
 				}
 				cargaGrid();
 				ocultarElementos();
-				descripcion.clear();
+				apellidos.clear();
 				nombre.clear();
 				
 			}
@@ -200,7 +199,7 @@ public class VistaCategorias extends VerticalLayout {
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
 		cancelar.addClickListener(e -> {
-			descripcion.clear();
+			apellidos.clear();
 			nombre.clear();
 			cargaGrid();
 			
@@ -209,7 +208,7 @@ public class VistaCategorias extends VerticalLayout {
 		});
 
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, descripcion, ok);
+		menu.addComponents(nombre, apellidos, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
@@ -219,22 +218,22 @@ public class VistaCategorias extends VerticalLayout {
 		cancelar.setEnabled(false);
 		aceptar.setEnabled(false);
 		nombre.setEnabled(false);
-		descripcion.setEnabled(false);
+		apellidos.setEnabled(false);
 		crear.setEnabled(true);
 
 	}
 
-	public void crearCategoria() {
+	public void crearUsuario() {
 
 		nombre.setEnabled(true);
-		descripcion.setEnabled(true);
+		apellidos.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
-		categoriaSeleccionado = new Categoria();
-		categoriaSeleccionado.setId((long) 0);
+		usuarioSeleccionado = new Usuario();
+		usuarioSeleccionado.setId((long) 0);
 
 	}
 
@@ -242,7 +241,7 @@ public class VistaCategorias extends VerticalLayout {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
 		label_buscador.setSpacing(true);
-		label = new Label("Lista de Categorias");
+		label = new Label("Lista de Usuarios");
 		label.setVisible(true);
 		buscador = new TextField();
 		buscador.setInputPrompt("Buscador");
@@ -253,27 +252,27 @@ public class VistaCategorias extends VerticalLayout {
 	}
 
 	public void enter(ViewChangeEvent event) {
-		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
+		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
 
 			for (int i = 1; i <= 5; i++) {
-				Categoria categoria = new Categoria();
-				categoria.setNombre("Nombre" + i);
-				categoria.setDescripcion("Descripción" + i);
-				servicioGestorPrograma.aniadirCategoria(categoria);
+				Usuario usuario = new Usuario();
+				usuario.setNombre("Nombre" + i);
+				usuario.setApellidos("Descripción" + i);
+				servicioGestorPrograma.aniadirUsuario(usuario);
 			}
-			Notification.show("Cargados categorias de DEMOSTRACIÓN");
+			Notification.show("Cargados usuarios de DEMOSTRACIÓN");
 		}
 		cargaGrid();
 	}
 
 	public void cargaGrid() {
 		
-		Collection<Categoria> listaCategorias = servicioGestorPrograma.listarCategoria();
-		gridCategorias.setContainerDataSource(new BeanItemContainer<>(Categoria.class, listaCategorias));
+		Collection<Usuario> listaUsuarios = servicioGestorPrograma.listarUsuario();
+		gridUsuarios.setContainerDataSource(new BeanItemContainer<>(Usuario.class, listaUsuarios));
 		ocultarElementos();
 	}
 	
-	private Window creaVentanaConfirmacionBorradoCategorias(String nombre) {
+	private Window creaVentanaConfirmacionBorradoUsuarios(String nombre) {
 		Window resultado = new Window();
 		resultado.setWidth(350.0F, Unit.PIXELS);
 		resultado.setModal(true);
@@ -286,7 +285,7 @@ public class VistaCategorias extends VerticalLayout {
 
 		Button botonAceptar = new Button("Aceptar");
 		botonAceptar.addClickListener(e -> {
-			servicioGestorPrograma.borrarCategoria(categoriaSeleccionado.getId());
+			servicioGestorPrograma.borrarUsuario(usuarioSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
 		});
@@ -310,11 +309,11 @@ public class VistaCategorias extends VerticalLayout {
 	}
 
 	
-	public Categoria getCategoriaSeleccionado() {
-		return categoriaSeleccionado;
+	public Usuario getUsuarioSeleccionado() {
+		return usuarioSeleccionado;
 	}
 
-	public void setCategoriaSeleccionado(Categoria categoriaSeleccionado) {
-		this.categoriaSeleccionado = categoriaSeleccionado;
+	public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
+		this.usuarioSeleccionado = usuarioSeleccionado;
 	}
 }

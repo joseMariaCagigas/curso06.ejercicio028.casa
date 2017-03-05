@@ -1,8 +1,7 @@
-package es.cic.curso.curso06.ejercicio028.frontend.principal;
+package es.cic.curso.curso06.ejercicio028.frontend.vistas;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
@@ -27,53 +26,48 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
-public class VistaGeneros extends VerticalLayout {
+public class VistaCategorias extends VerticalLayout {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5366004381410718812L;
-
 	private TextField buscador;
 	private TextField nombre, descripcion;
 	private Label label;
-	private Grid gridGeneros;
+	private Grid gridCategorias;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
-	private Genero nuevoGenero, generoSeleccionado;
+	private Categoria nuevoCategoria, categoriaSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
-	private Collection<Genero> listaGeneros;
-	public static final int NUM_GENEROS = 5;
-	public static final int NUM_GENEROS_INICIAL = 5;
+	private Collection<Categoria> listaCategorias;
+	public static final int NUM_CATEGORIAS = 5;
+	public static final int NUM_CATEGORIAS_INICIAL = 5;
 
 	@SuppressWarnings("serial")
-	public VistaGeneros() {
+	public VistaCategorias() {
 
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
-		nuevoGenero = new Genero();
+		nuevoCategoria = new Categoria();
 		// Layout Pantalla
 		//
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
-
 		HorizontalLayout layoutUno = label_buscador();
-
 		HorizontalLayout layoutDos = layoutDos();
-
 		HorizontalLayout layoutTres = layoutTres();
-
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		if (servicioGestorPrograma.listarGenero().isEmpty()) {
+		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
 
-			for (int i = 1; i <= NUM_GENEROS; i++) {
-				Genero genero = new Genero();
-				genero.setNombre("N_Género" + i);
-				genero.setDescripcion("D_Género" + i);
-				servicioGestorPrograma.aniadirGenero(genero);
+			for (int i = 1; i <= NUM_CATEGORIAS; i++) {
+				Categoria categoria = new Categoria();
+				categoria.setNombre("N_Categorias" + i);
+				categoria.setDescripcion("D_Categorias" + i);
+				servicioGestorPrograma.aniadirCategoria(categoria);
 			}
-			Notification.show("Cargados generos de DEMOSTRACIÓN");
+			Notification.show("Cargados categorias de DEMOSTRACIÓN");
 		}
 		cargaGrid();
 	}
@@ -83,12 +77,12 @@ public class VistaGeneros extends VerticalLayout {
 		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/cic_logo.png"));
 		Image imagen = new Image(null, resource);
 		imagen.setHeight(60.0F, Unit.PIXELS);
-
+		
 		Label titulo = new Label("<span style=\"font-size: 175%;\">Programación Televisiva</span>");
 		titulo.setContentMode(ContentMode.HTML);
 
 		HorizontalLayout layoutEncabezado = new HorizontalLayout();
-		layoutEncabezado.setMargin(new MarginInfo(true, true, true, true));
+		layoutEncabezado.setMargin(new MarginInfo(true, true, false, true));
 		layoutEncabezado.setSpacing(false);
 		layoutEncabezado.addComponents(imagen, titulo);
 		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
@@ -104,14 +98,14 @@ public class VistaGeneros extends VerticalLayout {
 		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(e -> {
-			crearGenero();
+			crearCategoria();
 		});
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(e -> this.getUI().getUI()
-				.addWindow(creaVentanaConfirmacionBorradoGeneros(generoSeleccionado.getNombre())));
+				.addWindow(creaVentanaConfirmacionBorradoCategorias(categoriaSeleccionado.getNombre())));
 				
 
 		actualizar = new Button("Actualizar");
@@ -119,8 +113,8 @@ public class VistaGeneros extends VerticalLayout {
 		actualizar.setEnabled(false);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(e -> {
-			nombre.setValue(generoSeleccionado.getNombre());
-			descripcion.setValue(generoSeleccionado.getDescripcion());
+			nombre.setValue(categoriaSeleccionado.getNombre());
+			descripcion.setValue(categoriaSeleccionado.getDescripcion());
 			nombre.setEnabled(true);
 			descripcion.setEnabled(true);
 			aceptar.setEnabled(true);
@@ -141,16 +135,16 @@ public class VistaGeneros extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		grid.setSpacing(true);
 
-		gridGeneros = new Grid();
-		gridGeneros.setVisible(true);
-		gridGeneros.setColumns("nombre", "descripcion");
-		gridGeneros.setSizeFull();
-		gridGeneros.setSelectionMode(SelectionMode.SINGLE);
-		gridGeneros.addSelectionListener(e -> {
-			generoSeleccionado = null;
+		gridCategorias = new Grid();
+		gridCategorias.setVisible(true);
+		gridCategorias.setColumns("nombre", "descripcion");
+		gridCategorias.setSizeFull();
+		gridCategorias.setSelectionMode(SelectionMode.SINGLE);
+		gridCategorias.addSelectionListener(e -> {
+			categoriaSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
-				generoSeleccionado = (Genero) e.getSelected().iterator().next();
-				System.out.println(generoSeleccionado.getId());
+				categoriaSeleccionado = (Categoria) e.getSelected().iterator().next();
+				System.out.println(categoriaSeleccionado.getId());
 				borrar.setEnabled(true);
 				actualizar.setEnabled(true);
 			} else {
@@ -159,7 +153,7 @@ public class VistaGeneros extends VerticalLayout {
 			}
 		});
 
-		grid.addComponent(gridGeneros);
+		grid.addComponent(gridCategorias);
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
 		menu.setSpacing(true);
@@ -182,16 +176,16 @@ public class VistaGeneros extends VerticalLayout {
 			if ("".equals(nombre.getValue()) || "".equals(descripcion.getValue())) {
 				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.");
 			} else {
-				Genero nuevoGenero = new Genero(nombre.getValue(), descripcion.getValue());
-				if (generoSeleccionado.getId() > 0) {
-					generoSeleccionado.setNombre(nombre.getValue());
-					generoSeleccionado.setDescripcion(descripcion.getValue());
-					servicioGestorPrograma.modificarGenero(generoSeleccionado);
-					Notification.show("Género \"" + nuevoGenero.getNombre() + "\" editado con éxito.");
+				Categoria nuevoCategoria = new Categoria(nombre.getValue(), descripcion.getValue());
+				if (categoriaSeleccionado.getId() > 0) {
+					categoriaSeleccionado.setNombre(nombre.getValue());
+					categoriaSeleccionado.setDescripcion(descripcion.getValue());
+					servicioGestorPrograma.modificarCategoria(categoriaSeleccionado);
+					Notification.show("Género \"" + nuevoCategoria.getNombre() + "\" editado con éxito.");
 					
 				} else {
-					servicioGestorPrograma.aniadirGenero(nuevoGenero);
-					Notification.show("Género \"" + nuevoGenero.getNombre() + "\" añadido con éxito.");
+					servicioGestorPrograma.aniadirCategoria(nuevoCategoria);
+					Notification.show("Género \"" + nuevoCategoria.getNombre() + "\" añadido con éxito.");
 				}
 				cargaGrid();
 				ocultarElementos();
@@ -227,7 +221,7 @@ public class VistaGeneros extends VerticalLayout {
 
 	}
 
-	public void crearGenero() {
+	public void crearCategoria() {
 
 		nombre.setEnabled(true);
 		descripcion.setEnabled(true);
@@ -236,8 +230,8 @@ public class VistaGeneros extends VerticalLayout {
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
-		generoSeleccionado = new Genero();
-		generoSeleccionado.setId((long) 0);
+		categoriaSeleccionado = new Categoria();
+		categoriaSeleccionado.setId((long) 0);
 
 	}
 
@@ -245,7 +239,7 @@ public class VistaGeneros extends VerticalLayout {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
 		label_buscador.setSpacing(true);
-		label = new Label("Lista de Generos");
+		label = new Label("Lista de Categorias");
 		label.setVisible(true);
 		buscador = new TextField();
 		buscador.setInputPrompt("Buscador");
@@ -256,27 +250,27 @@ public class VistaGeneros extends VerticalLayout {
 	}
 
 	public void enter(ViewChangeEvent event) {
-		if (servicioGestorPrograma.listarGenero().isEmpty()) {
+		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
 
 			for (int i = 1; i <= 5; i++) {
-				Genero genero = new Genero();
-				genero.setNombre("Nombre" + i);
-				genero.setDescripcion("Descripción" + i);
-				servicioGestorPrograma.aniadirGenero(genero);
+				Categoria categoria = new Categoria();
+				categoria.setNombre("Nombre" + i);
+				categoria.setDescripcion("Descripción" + i);
+				servicioGestorPrograma.aniadirCategoria(categoria);
 			}
-			Notification.show("Cargados generos de DEMOSTRACIÓN");
+			Notification.show("Cargados categorias de DEMOSTRACIÓN");
 		}
 		cargaGrid();
 	}
 
 	public void cargaGrid() {
 		
-		Collection<Genero> listaGeneros = servicioGestorPrograma.listarGenero();
-		gridGeneros.setContainerDataSource(new BeanItemContainer<>(Genero.class, listaGeneros));
+		Collection<Categoria> listaCategorias = servicioGestorPrograma.listarCategoria();
+		gridCategorias.setContainerDataSource(new BeanItemContainer<>(Categoria.class, listaCategorias));
 		ocultarElementos();
 	}
 	
-	private Window creaVentanaConfirmacionBorradoGeneros(String nombre) {
+	private Window creaVentanaConfirmacionBorradoCategorias(String nombre) {
 		Window resultado = new Window();
 		resultado.setWidth(350.0F, Unit.PIXELS);
 		resultado.setModal(true);
@@ -289,7 +283,7 @@ public class VistaGeneros extends VerticalLayout {
 
 		Button botonAceptar = new Button("Aceptar");
 		botonAceptar.addClickListener(e -> {
-			servicioGestorPrograma.borrarGenero(generoSeleccionado.getId());
+			servicioGestorPrograma.borrarCategoria(categoriaSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
 		});
@@ -313,11 +307,11 @@ public class VistaGeneros extends VerticalLayout {
 	}
 
 	
-	public Genero getGeneroSeleccionado() {
-		return generoSeleccionado;
+	public Categoria getCategoriaSeleccionado() {
+		return categoriaSeleccionado;
 	}
 
-	public void setGeneroSeleccionado(Genero generoSeleccionado) {
-		this.generoSeleccionado = generoSeleccionado;
+	public void setCategoriaSeleccionado(Categoria categoriaSeleccionado) {
+		this.categoriaSeleccionado = categoriaSeleccionado;
 	}
 }

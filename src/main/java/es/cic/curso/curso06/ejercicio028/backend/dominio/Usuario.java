@@ -27,10 +27,6 @@ public class Usuario implements Identificable<Long> {
 
 	@Column(name = "apellidos")
 	private String apellidos;
-
-	@OneToMany(mappedBy = "usuario")
-	private List<Canal> usuarios = new ArrayList<>();
-	
 	
 	
 	public Usuario() {
@@ -40,30 +36,25 @@ public class Usuario implements Identificable<Long> {
 	
 	
 
-	public Usuario(String nombre, String apellidos, List<Canal> usuarios) {
+	public Usuario(String nombre, String apellidos) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-		this.usuarios = usuarios;
+;
 	}
 
 
 
-	public Usuario(Long id, String nombre, String apellidos, List<Canal> usuarios) {
+	public Usuario(Long id, String nombre, String apellidos) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-		this.usuarios = usuarios;
+
 	}
 
 
 
-	public Usuario(String nombre, String apellidos) {
-		
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-	}
 
 
 
@@ -109,16 +100,6 @@ public class Usuario implements Identificable<Long> {
 
 
 
-	public List<Canal> getUsuarios() {
-		return usuarios;
-	}
-
-
-
-	public void setUsuarios(List<Canal> usuarios) {
-		this.usuarios = usuarios;
-	}
-
 
 
 	@Override
@@ -152,7 +133,6 @@ public class Usuario implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", usuarios=" + usuarios
-				+ "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos +"]";
 	}
 	}
