@@ -27,78 +27,90 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 @Transactional
 public class CanalRepositoryImplTest {
 
-	public static final int NUMERO_ELEMENTOS = 100;
+	public static final int NUMERO = 100;
 
 	@Autowired
-	private CanalRepository sut;
+	private CanalRepository canalRepository;
 
 	@PersistenceContext
 	protected EntityManager em;
 
-	private Usuario generaElementoPrueba() {
-		Usuario elemento = new Usuario();
-		elemento.setNombre("borriquito");
-		elemento.setApellidos("como tu");
-		em.persist(elemento);
+	private Canal generaCanal() {
+		Usuario usuario = new Usuario();
+		usuario.setNombre("MANNUEL");
+		usuario.setApellidos("GAFFOTAS");
+		em.persist(usuario);
 		em.flush();
+		
+		Canal elemento = new Canal();
+		elemento.setNombre("Inicial");
+		elemento.setTiempo_maximo(100);
+		elemento.setUsuario(usuario);
+		
+		canalRepository. add(elemento);
 		return elemento;
+
 	}
 
 	@Test
 	public void testCreate() {
 		Canal elemento  = new Canal();
 		elemento.setNombre("medicamento");
-		System.out.println(elemento);
-		sut.add(elemento);
+		canalRepository.add(elemento);
 		assertNotNull(elemento.getId());
 	}
 
-//	@Test
-//	public void testRead() {
-//		Canal elemento1 = generaElementoPrueba();
-//		Canal elemento2 = sut.read(elemento1.getId());
-//
-//		assertTrue(elemento1.getId().equals(elemento2.getId()));
-//
-//		try {
-//			@SuppressWarnings("unused")
-//			TipoMedicamento elemento3 = sut.read(Long.MIN_VALUE);
-//			fail("No deberían existir elementos con el ID pasado");
-//		} catch (PersistenceException pe) {
-//
-//		}
-//	}
-//
-//	@Test
-//	public void testUpdate() {
-//		TipoMedicamento original = generaElementoPrueba();
-//		TipoMedicamento clon = original.clone();
-//
-//		original.setNombre("Modificado");
-//		sut.update(original);
-//
-//		TipoMedicamento modificado = sut.read(original.getId());
-//		assertTrue(original.getNombre().equals(modificado.getNombre()));
-//		assertFalse(clon.getNombre().equals(modificado.getNombre()));
-//	}
-//
-//	@Test
-//	public void testDelete() {
-//		TipoMedicamento elemento = generaElementoPrueba();
-//		sut.delete(elemento.getId());
-//
-//		TipoMedicamento resultado = sut.read(elemento.getId());
-//		assertNull(resultado);
-//	}
+	@Test
+	public void testRead() {
+		Canal elemento1 = generaCanal();
+		Canal elemento2 = canalRepository.read(elemento1.getId());
+
+		assertTrue(elemento1.getId().equals(elemento2.getId()));
+
+		try {
+			@SuppressWarnings("unused")
+			Canal elemento3 = canalRepository.read(Long.MIN_VALUE);
+			fail("No deberían existir elementos con el ID pasado");
+		} catch (PersistenceException pe) {
+
+		}
+	}
+
+	@Test
+	public void testUpdate() {
+		Canal original = generaCanal();
+		Canal clon = new Canal();
+		clon.setId(original.getId());
+		clon.setNombre(original.getNombre());
+		clon.setTiempo_maximo(original.getTiempo_maximo());
+		clon.setUsuario(original.getUsuario());
+
+		original.setNombre("No Principal");
+		original.setTiempo_maximo(65);
+		canalRepository.update(original);
+
+		Canal modificado = canalRepository.read(original.getId());
+		assertEquals(original.getNombre(), modificado.getNombre());
+		assertNotEquals(clon.getTiempo_maximo(), modificado.getTiempo_maximo());
+	}
+
+	@Test
+	public void testDelete() {
+		Canal elemento = generaCanal();
+		canalRepository.delete(elemento.getId());
+
+		Canal resultado = canalRepository.read(elemento.getId());
+		assertNull(resultado);
+	}
 
 	@Test
 	public void testList() {
-		for (int i = 0; i < NUMERO_ELEMENTOS; i++) {
-			generaElementoPrueba();
+		for (int i = 0; i < NUMERO; i++) {
+			generaCanal();
 		}
 
-		List<Canal> lista = sut.list();
-		assertEquals(NUMERO_ELEMENTOS, lista.size());
+		List<Canal> lista = canalRepository.list();
+		assertEquals(NUMERO, lista.size());
 	}
 
 }

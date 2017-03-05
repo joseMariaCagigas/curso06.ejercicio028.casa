@@ -66,8 +66,8 @@ public class VistaCategorias extends VerticalLayout {
 
 			for (int i = 1; i <= NUM_CATEGORIAS; i++) {
 				Categoria categoria = new Categoria();
-				categoria.setNombre("Categoria" + i);
-				categoria.setDescripcion("Descripción" + i);
+				categoria.setNombre("N_Categorias" + i);
+				categoria.setDescripcion("D_Categorias" + i);
 				servicioGestorPrograma.aniadirCategoria(categoria);
 			}
 			Notification.show("Cargados categorias de DEMOSTRACIÓN");

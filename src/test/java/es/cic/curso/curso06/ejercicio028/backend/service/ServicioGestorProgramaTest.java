@@ -19,9 +19,12 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 
 
 
@@ -37,19 +40,18 @@ public class ServicioGestorProgramaTest {
 	@Autowired
 	private ServicioGestorPrograma serviciosGestorPrograma;
 	
-	private Categoria categoria1;
-	private Categoria categoria2;
-	private Categoria categoria3;
+	private Categoria categoria1, categoria2, categoria3;
+
+	private Genero genero1, genero2, genero3;
+
+	private Programa programa1, programa2, programa3;
+
+	private Canal canal1, canal2, canal3;
+
+	private Usuario usuario1, usuario2, usuario3;
 	
-	private Genero genero1;
-	private Genero genero2;
-	private Genero genero3;
-	
-	private Programa programa1;
-	private Programa programa2;
-	private Programa programa3;
-	
-	
+	private Programacion programacion1, programacion2, programacion3;
+
 	@Before
 	public void setUp() throws Exception {
 		inicializaBaseDeDatos();
@@ -83,6 +85,17 @@ public class ServicioGestorProgramaTest {
 		entityManager.persist(genero2);
 		entityManager.persist(genero3);
 		
+		canal1 = new Canal("Despertador", 100, usuario1);
+		canal2 = new Canal("Despertador", 80, usuario2);
+		canal3 = new Canal("Despertador", 100, usuario3);
+		
+		entityManager.persist(canal1);
+		entityManager.persist(canal2);
+		entityManager.persist(canal3);
+		
+		usuario1 = new Usuario("manuel", "torrija");
+		usuario2 = new Usuario("andres", "torrija");
+		usuario3 = new Usuario("manuel", "torquemada");
 	}
 
 	@Test
@@ -146,11 +159,11 @@ public class ServicioGestorProgramaTest {
 
 	@Test
 	public void testBorrarGenero() {
-		Categoria categoriaABorrar = new Categoria("categoría_1","nueva categoría");
-		serviciosGestorPrograma.aniadirCategoria(categoriaABorrar);
-		serviciosGestorPrograma.borrarCategoria(categoriaABorrar.getId());
-		List<Categoria> listaCategoria = serviciosGestorPrograma.listarCategoria();
-		assertEquals(listaCategoria.size(), 3);
+		Genero generoABorrar = new Genero("genero_1","nueva genero");
+		serviciosGestorPrograma.aniadirGenero(generoABorrar);
+		serviciosGestorPrograma.borrarGenero(generoABorrar.getId());
+		List<Genero> listaGenero = serviciosGestorPrograma.listarGenero();
+		assertEquals(listaGenero.size(), 3);
 	}
 
 	@Test
@@ -198,5 +211,86 @@ public class ServicioGestorProgramaTest {
 		assertEquals(programa2.getNombre(), "Los 40 Tv");
 	}
 
+	@Test
+	public void testAniadirUsuario() {
+		Usuario usuarioCreada = serviciosGestorPrograma.aniadirUsuario(usuario2);
+		assertNotNull(usuario2.getId());
+	}
+
+	@Test
+	public void testListarUsuario() {
+		Usuario usuarioCreada = serviciosGestorPrograma.aniadirUsuario(usuario2);
+		List<Usuario> listaUsuario = serviciosGestorPrograma.listarUsuario();
+		for (Usuario u : listaUsuario) {
+			assertNotNull(u.getId());
+		}
+
+	}
+	
+	@Test
+	public void testObtenerUsuario() {
+		Usuario usuarioCreada = serviciosGestorPrograma.aniadirUsuario(usuario2);
+		assertNotNull(usuarioCreada.getId());
+	}
+
+	@Test
+	public void testBorrarUsuario() {
+		Usuario usuarioABorrar = new Usuario("categoría_1","nueva categoría");
+		serviciosGestorPrograma.aniadirUsuario(usuarioABorrar);
+		serviciosGestorPrograma.borrarUsuario(usuarioABorrar.getId());
+		List<Categoria> listaUsuario = serviciosGestorPrograma.listarCategoria();
+		assertEquals(listaUsuario.size(), 3);
+	}
+
+	@Test
+	public void testModificarUsuario() {
+		usuario2.setNombre("Porno Vainilla");
+		serviciosGestorPrograma.modificarUsuario(usuario2);
+		assertEquals(usuario2.getNombre(), "Porno Vainilla");
+	}
+	
+
+	@Test
+	public void testAniadirCanal() {
+		Canal canalCreada = serviciosGestorPrograma.aniadirCanal(canal2);
+		assertNotNull(canalCreada.getId());
+	}
+
+	@Test
+	public void testListarCanal() {
+		Canal canalCreada = serviciosGestorPrograma.aniadirCanal(canal2);
+		List<Canal> listaCanales = serviciosGestorPrograma.listarCanal();
+		for (Canal u : listaCanales) {
+			assertNotNull(u.getId());
+		}
+	}
+
+	@Test
+	public void testObtenerCanal() {
+		Canal canalCreada = serviciosGestorPrograma.aniadirCanal(canal2);
+		assertNotNull(canalCreada.getId());
+	}
+
+	@Test
+	public void testBorrarCanal() {
+
+		List<Canal> listaCanal = serviciosGestorPrograma.listarCanal();
+		System.out.println(listaCanal.size());
+		assertEquals(listaCanal.size(),3);
+		
+		serviciosGestorPrograma.borrarCanal(canal2.getId());
+
+		List<Canal> listaCanal2 = serviciosGestorPrograma.listarCanal();
+		System.out.println(listaCanal2.size());
+		assertEquals(listaCanal2.size(),2);
+
+	}
+
+	@Test
+	public void testModificarCanal() {
+		programa2.setNombre("Los 40 Tv");
+		serviciosGestorPrograma.modificarCanal(canal2);
+		assertEquals(programa2.getNombre(), "Los 40 Tv");
+	}
 
 }

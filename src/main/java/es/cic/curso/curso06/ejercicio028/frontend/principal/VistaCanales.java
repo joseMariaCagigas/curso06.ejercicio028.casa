@@ -30,9 +30,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 
@@ -46,26 +48,23 @@ public class VistaCanales extends VerticalLayout {
 	private static final long serialVersionUID = 7445902879676064023L;
 
 	private TextField buscador;
-	private TextField nombre, duracion, anio;
+	private TextField nombre, tiempo;
 	private Label label;
-	private Grid gridProgramas;
+	private Grid gridCanales;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
-	private ComboBox genero, categoria;
-	private List<String> lisCategorias = new ArrayList<>();
-	List <Genero> listaGeneros = new ArrayList<>();
-	List <Categoria> listaCategorias = new ArrayList<>();
-	private List<String> lisGeneros = new ArrayList<>();
-	private Programa programa, programaSeleccionado;
+	private ComboBox usuario;
+	List <Usuario> listaUsuarios = new ArrayList<>();
+	private List<String> lisUsuarios = new ArrayList<>();
+	private Canal canal, canalSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
-	private Collection<Programa> listaProgramas;
-	private Genero generoElegido;
-	private Categoria categoriaElegida;
+	private Collection<Canal> listaCanales;
+	private Usuario usuarioElegido;
 	
 	
 	@SuppressWarnings("serial")
 	public VistaCanales(){
 		
-		programa = new Programa();
+		canal = new Canal();
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		
@@ -111,7 +110,7 @@ public class VistaCanales extends VerticalLayout {
 		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
-			crearPrograma();
+			crearCanal();
 			
 		});
 		
@@ -120,18 +119,16 @@ public class VistaCanales extends VerticalLayout {
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(b -> this.getUI().getUI()
-				.addWindow(creaVentanaConfirmacionBorradoProgramas(programaSeleccionado.getNombre())));
+				.addWindow(creaVentanaConfirmacionBorradoCanales(canalSeleccionado.getNombre())));
 		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
 		actualizar.setEnabled(false);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
-			nombre.setValue(programaSeleccionado.getNombre());
-			duracion.setValue(String.valueOf(programaSeleccionado.getDuracion()));
-			anio.setValue(String.valueOf(programaSeleccionado.getAnio()));
-			categoria.setValue(programaSeleccionado.getCategoria());
-			//genero.setValue(programaSeleccionado.getGenero());
+			nombre.setValue(canalSeleccionado.getNombre());
+			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempo_maximo()));
+			usuario.setValue(canalSeleccionado.getUsuario());
 			activarMenu();
 		});
 		
@@ -144,15 +141,15 @@ public class VistaCanales extends VerticalLayout {
 		layoutDos.setMargin(true);
 		layoutDos.setSpacing(true);
 		VerticalLayout grid = new VerticalLayout();
-		gridProgramas = new Grid();
-		gridProgramas.setVisible(true);
-		gridProgramas.setColumns("nombre", "duracion", "anio", "categoria" ,"genero");
-		gridProgramas.setSizeFull();
-		gridProgramas.setSelectionMode(SelectionMode.SINGLE);	
-		gridProgramas.addSelectionListener(e -> {
-			programaSeleccionado = null;
+		gridCanales = new Grid();
+		gridCanales.setVisible(true);
+		gridCanales.setColumns("nombre", "tiempo_maximo", "usuario");
+		gridCanales.setSizeFull();
+		gridCanales.setSelectionMode(SelectionMode.SINGLE);	
+		gridCanales.addSelectionListener(e -> {
+			canalSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
-				programaSeleccionado = (Programa) e.getSelected().iterator().next();
+				canalSeleccionado = (Canal) e.getSelected().iterator().next();
 				crear.setEnabled(false);
 				borrar.setEnabled(true);
 				actualizar.setEnabled(true);
@@ -162,7 +159,7 @@ public class VistaCanales extends VerticalLayout {
 					actualizar.setEnabled(false);
 				}
 		});
-		grid.addComponent(gridProgramas);
+		grid.addComponent(gridCanales);
 		
 
 		
@@ -174,14 +171,10 @@ public class VistaCanales extends VerticalLayout {
 			nombre.setInputPrompt("Nombre");
 			nombre.setVisible(true);
 			nombre.setEnabled(false);
-			duracion = new TextField("Duración");
-			duracion.setInputPrompt("Duración");
-			duracion.setVisible(true);
-			duracion.setEnabled(false);
-			anio = new TextField("Año");
-			anio.setInputPrompt("Año");
-			anio.setVisible(true);
-			anio.setEnabled(false);
+			tiempo = new TextField("Tiempo");
+			tiempo.setInputPrompt("Tiempo");
+			tiempo.setVisible(true);
+			tiempo.setEnabled(false);
 			
 
 		HorizontalLayout ok = new HorizontalLayout();
@@ -192,44 +185,35 @@ public class VistaCanales extends VerticalLayout {
 		aceptar.setEnabled(false);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
-			if ("".equals(nombre.getValue()) || "".equals(duracion.getValue()) || "".equals(anio.getValue())|| "".equals(categoria.getValue()) || "".equals(genero.getValue())) {
-				Notification.show("Debes rellenar todos los campos.");
+			if ("".equals(nombre.getValue()) || "".equals(tiempo.getValue()) || "".equals(usuario.getValue())) {
+				Notification.show("Debes rellenar todos los campos, si no existe tu usuario debes crearlo primero.");
 			} else {
-				try{
-					//Notification.show(genero.getValue().toString());
-//					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
-//					Notification.show(generoElegido.getNombre());
-					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
-							Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
-					if (programaSeleccionado.getId() > 0) {
-						programaSeleccionado.setNombre(nombre.getValue());
-						programaSeleccionado.setDuracion(Integer.parseInt(duracion.getValue()));
-						programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
-						//programaSeleccionado.setCategoria(categoriaElegida);
-						Notification.show("aDSDSAFDGh fh"+ genero.getValue().toString());
-						generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
-						programaSeleccionado.setGenero(generoElegido);
-						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
-						//Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
-					} else {
-						servicioGestorPrograma.aniadirPrograma(nuevoPrograma);
-					}
-					cargaGrid();
-					menu.setEnabled(false);
-					crear.setEnabled(true);
+				try{	usuarioElegido = servicioGestorPrograma.obtenerUsuario((Long)usuario.getValue());
+				
+
+				Canal nuevoCanal = new Canal(nombre.getValue(), Integer.parseInt(tiempo.getValue()), usuarioElegido);
+				if (canalSeleccionado.getId() > 0) {
+					canalSeleccionado.setNombre(nombre.getValue());
+					canalSeleccionado.setTiempo_maximo(Integer.parseInt(tiempo.getValue()));
+					usuarioElegido = servicioGestorPrograma.obtenerUsuario(Long.parseLong(usuario.getValue().toString()));
+					canalSeleccionado.setUsuario(usuarioElegido);
+					servicioGestorPrograma.modificarCanal(canalSeleccionado);
 					limpiarMenu();
-					//Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
-					//
-					
+					Notification.show("Canal \"" + nuevoCanal.getNombre() + "\" editado con éxito.");
+				} else {
+					servicioGestorPrograma.aniadirCanal(nuevoCanal);
+					Notification.show("Canal \"" + nuevoCanal.getNombre() + "\" añadido con éxito.");
+					limpiarMenu();
+				}
+				cargaGrid();
+				menu.setEnabled(false);
+				crear.setEnabled(true);
 				
-				}catch(NumberFormatException ex){
-					Notification.show("En numeros pon numeros");
-				
-					
-				
-				}	
-			}
-		});
+			}catch(NumberFormatException ex){
+				Notification.show("En numeros pon numeros");
+			}	
+		}
+	});
 		
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
@@ -239,31 +223,27 @@ public class VistaCanales extends VerticalLayout {
 			cargaGrid();
 			
 		});
-		categoria = new ComboBox();
-		genero = new ComboBox();
-		actualizarGenero();
+		usuario = new ComboBox();
+
+		actualizarUsuario();
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
+		menu.addComponents(nombre, tiempo, usuario, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
 	}
 	private void limpiarMenu() {
 		
-					duracion.clear();
+					tiempo.clear();
 					nombre.clear();
-					anio.clear();
-					genero.clear();
-					categoria.clear();
+					usuario.clear();
 	}
 
 	private void activarMenu(){
 		
-		duracion.setEnabled(true);
+		tiempo.setEnabled(true);
 		nombre.setEnabled(true);
-		anio.setEnabled(true);
-		genero.setEnabled(true);
-		categoria.setEnabled(true);
+		usuario.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
 		
@@ -272,74 +252,43 @@ public class VistaCanales extends VerticalLayout {
 	private void desactivarMenu(){
 		
 		nombre.setEnabled(false);
-		duracion.setEnabled(false);
-		anio.setEnabled(false);
-		genero.setEnabled(false);
-		categoria.setEnabled(false);
+		tiempo.setEnabled(false);;
+		usuario.setEnabled(false);
 		aceptar.setEnabled(false);
 		cancelar.setEnabled(false);
 	}
-	
-	private void actualizarCategoria() {
+
+	private void actualizarUsuario() {
 		
-		List <Categoria> listaCategorias = new ArrayList<>();
+		List <Usuario> listaUsuarios = new ArrayList<>();
 		
-		listaCategorias = servicioGestorPrograma.listarCategoria();
-		
-		categoria = new ComboBox("Categoría");
-		categoria.setInputPrompt("Categoría");
-		categoria.setNullSelectionAllowed(false);
-		for(int i = 0; i < listaCategorias.size(); i++){
-			categoria.addItem(listaCategorias.get(i).getNombre());
+		listaUsuarios = servicioGestorPrograma.listarUsuario();
+
+		usuario.setInputPrompt("Usuario");
+		usuario.setNullSelectionAllowed(false);
+		for(int i = 0; i < listaUsuarios.size(); i++){
+			usuario.addItem(listaUsuarios.get(i).getId());
+			usuario.setItemCaption(listaUsuarios.get(i).getId(), listaUsuarios.get(i).getNombre());
 		}
-		categoria.select(1);
-		categoria.setImmediate(true);
-		categoria.setVisible(true);
-		categoria.setEnabled(false);
-		
+		usuario.select(1);
+		usuario.setImmediate(true);
+		usuario.setVisible(true);
+
 	}
 
-
-	private void actualizarGenero() {
-		
-		List <Genero> listaGeneros = new ArrayList<>();
-		
-		listaGeneros = servicioGestorPrograma.listarGenero();
-		
-	//	genero.removeAllItems();
-		genero.setInputPrompt("Género");
-		genero.setNullSelectionAllowed(false);
-		for(int i = 0; i < listaGeneros.size(); i++){
-			genero.addItem(listaGeneros.get(i).getId());
-			genero.setItemCaption(listaGeneros.get(i).getId(), listaGeneros.get(i).getNombre());
-		}
-		genero.select(1);
-		genero.setImmediate(true);
-		genero.setVisible(true);
-		
-		//genero.setEnabled(false);
-		
-
-		Notification.show(Integer.toString(listaGeneros.size()));
-
-		
-	}
-
-	public void crearPrograma() {
+	public void crearCanal() {
 
 		nombre.setEnabled(true);
-		duracion.setEnabled(true);
-		anio.setEnabled(true);
-		genero.setEnabled(true);
-		categoria.setEnabled(true);
+		tiempo.setEnabled(true);
+		usuario.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
-		actualizarGenero();
-		programaSeleccionado = new Programa();
-		programaSeleccionado.setId((long) 0);
+		actualizarUsuario();
+		canalSeleccionado = new Canal();
+		canalSeleccionado.setId((long) 0);
 
 	}
 	
@@ -349,8 +298,8 @@ public class VistaCanales extends VerticalLayout {
 
 	public void cargaGrid() {
 		
-		Collection<Programa> listaProgramas = servicioGestorPrograma.listarPrograma();
-		gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));
+		Collection<Canal> listaCanales = servicioGestorPrograma.listarCanal();
+		gridCanales.setContainerDataSource(new BeanItemContainer<>(Canal.class, listaCanales));
 		crear.setEnabled(true);
 
 	}
@@ -368,36 +317,27 @@ public class VistaCanales extends VerticalLayout {
 		return label_buscador;
 	}
 
-	private void recorrerGeneros() {
-		for(Genero gen :listaGeneros){
-			if(genero.getValue() == gen.getNombre()){
-				generoElegido.setNombre(gen.getNombre());
+	private void recorrerUsuarios() {
+		for(Usuario usu :listaUsuarios){
+			if(usuario.getValue() == usu.getNombre()){
+				usuarioElegido.setNombre(usu.getNombre());
 				
 			}			
 		}
 	}
 	
-	private void recorrerCategorias() {
-		for(Categoria cat :listaCategorias){
-			if(categoria.getValue() == cat.getNombre()){
-				categoriaElegida.setNombre(cat.getNombre());
-				
-			}			
-		}
-	}
-	
-	public void setPrograma(Programa programa) {
-		this.setVisible(programa != null);
-		this.programa = programa;
+	public void setCanal(Canal canal) {
+		this.setVisible(canal != null);
+		this.canal = canal;
 
-		if (programa != null) {
-			BeanFieldGroup.bindFieldsUnbuffered(programa, this);
+		if (canal != null) {
+			BeanFieldGroup.bindFieldsUnbuffered(canal, this);
 		} else {
-			BeanFieldGroup.bindFieldsUnbuffered(new Programa(), this);
+			BeanFieldGroup.bindFieldsUnbuffered(new Canal(), this);
 		}
 	}
 
-	private Window creaVentanaConfirmacionBorradoProgramas(String nombre) {
+	private Window creaVentanaConfirmacionBorradoCanales(String nombre) {
 		Window resultado = new Window();
 		resultado.setWidth(350.0F, Unit.PIXELS);
 		resultado.setModal(true);
@@ -405,12 +345,12 @@ public class VistaCanales extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Programa: <strong>\"" + nombre + "\"</strong>?");
+		Label label = new Label("¿Está seguro de que desea borrar este Canal: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
 		botonAceptar.addClickListener(e -> {
-			servicioGestorPrograma.borrarPrograma(programaSeleccionado.getId());
+			servicioGestorPrograma.borrarCanal(canalSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
 		});
@@ -433,13 +373,13 @@ public class VistaCanales extends VerticalLayout {
 	
 	}
 
-	public Programa getProgramaSeleccionado() {
-		return programaSeleccionado;
+	public Canal getCanalSeleccionado() {
+		return canalSeleccionado;
 	}
 
 
-	public void setProgramaSeleccionado(Programa programaSeleccionado) {
-		this.programaSeleccionado = programaSeleccionado;
+	public void CanalSeleccionado(Canal canalSeleccionado) {
+		this.canalSeleccionado = canalSeleccionado;
 	}
 	
 }

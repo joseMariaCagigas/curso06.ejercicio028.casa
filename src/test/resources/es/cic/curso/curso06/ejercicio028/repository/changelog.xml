@@ -75,13 +75,13 @@
 			referencedTableName="USUARIO" referencedColumnNames="id"
 			baseTableName="CANAL" baseColumnNames="id_USUARIO" />
 			
-<!-- 		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_PROGRAMA" -->
-<!-- 			referencedTableName="PROGRAMA" referencedColumnNames="id" -->
-<!-- 			baseTableName="PROGRAMACION" baseColumnNames="id_PROGRAMA" /> -->
+		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_PROGRAMA"
+			referencedTableName="PROGRAMA" referencedColumnNames="id"
+			baseTableName="PROGRAMACION" baseColumnNames="id_PROGRAMA" />
 			
-<!-- 		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_CANAL" -->
-<!-- 			referencedTableName="CANAL" referencedColumnNames="id" -->
-<!-- 			baseTableName="PROGRAMACION" baseColumnNames="id_CANAL" /> -->
+		<addForeignKeyConstraint constraintName="fk_PROGRAMACION_id_CANAL"
+			referencedTableName="CANAL" referencedColumnNames="id"
+			baseTableName="PROGRAMACION" baseColumnNames="id_CANAL" />
 			
 			
 	</changeSet>

@@ -131,7 +131,7 @@ public class VistaProgramas extends VerticalLayout {
 			duracion.setValue(String.valueOf(programaSeleccionado.getDuracion()));
 			anio.setValue(String.valueOf(programaSeleccionado.getAnio()));
 			categoria.setValue(programaSeleccionado.getCategoria());
-			//genero.setValue(programaSeleccionado.getGenero());
+			genero.setValue(programaSeleccionado.getGenero());
 			activarMenu();
 		});
 		
@@ -146,7 +146,7 @@ public class VistaProgramas extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		gridProgramas = new Grid();
 		gridProgramas.setVisible(true);
-		gridProgramas.setColumns("nombre", "duracion", "anio", "categoria" ,"genero");
+		gridProgramas.setColumns("nombre", "duracion", "anio", "genero", "categoria" );
 		gridProgramas.setSizeFull();
 		gridProgramas.setSelectionMode(SelectionMode.SINGLE);	
 		gridProgramas.addSelectionListener(e -> {
@@ -210,23 +210,19 @@ public class VistaProgramas extends VerticalLayout {
 						categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)genero.getValue());
 						programaSeleccionado.setCategoria(categoriaElegida);
 						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
+						limpiarMenu();
 						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
 					} else {
 						servicioGestorPrograma.aniadirPrograma(nuevoPrograma);
+						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
+						limpiarMenu();
 					}
 					cargaGrid();
 					menu.setEnabled(false);
 					crear.setEnabled(true);
-					limpiarMenu();
-					Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
 					
-					
-				
 				}catch(NumberFormatException ex){
 					Notification.show("En numeros pon numeros");
-				
-					
-				
 				}	
 			}
 		});
@@ -239,10 +235,11 @@ public class VistaProgramas extends VerticalLayout {
 			cargaGrid();
 			
 		});
-		categoria = new ComboBox();
-		actualizarCategoria();
+
 		genero = new ComboBox();
 		actualizarGenero();
+		categoria = new ComboBox();
+		actualizarCategoria();
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
 
@@ -331,6 +328,7 @@ public class VistaProgramas extends VerticalLayout {
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
 		actualizarGenero();
+		actualizarCategoria();
 		programaSeleccionado = new Programa();
 		programaSeleccionado.setId((long) 0);
 

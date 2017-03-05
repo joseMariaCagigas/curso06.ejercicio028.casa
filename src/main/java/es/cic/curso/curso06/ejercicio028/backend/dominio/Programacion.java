@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
-@Table(name = "CANAL_PROGRAMA")
+@Table(name = "PROGRAMACION")
 public class Programacion implements Identificable<Long> {
 	private static final long serialVersionUID = -1834404426900148883L;
 

@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
+import es.cic.curso.curso06.ejercicio028.backend.repository.CanalRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.CategoriaRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.GeneroRepository;
 import es.cic.curso.curso06.ejercicio028.backend.repository.ProgramaRepository;
@@ -35,6 +37,9 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private CanalRepository canalRepository;
 
 	@Override
 	public Categoria aniadirCategoria(Categoria categoria) {
@@ -160,6 +165,35 @@ public class ServicioGestorProgramaImpl implements ServicioGestorPrograma {
 	}
 
 
+	@Override
+	public Canal aniadirCanal(Canal canal) {
+
+		return canalRepository.add(canal);
+	}
+
+	@Override
+	public List<Canal> listarCanal() {
+		
+		return canalRepository.list();
+	}
+
+	@Override
+	public Canal obtenerCanal(Long id) {
+		return canalRepository.read(id);
+	}
+
+	@Override
+	public void borrarCanal(Long id) {
+		Canal canalABorrar = obtenerCanal(id);
+		canalRepository.delete( canalABorrar);
+		
+	}
+
+	@Override
+	public Canal modificarCanal(Canal canal) {
+		
+		return canalRepository.update(canal);
+	}
 
 
 }

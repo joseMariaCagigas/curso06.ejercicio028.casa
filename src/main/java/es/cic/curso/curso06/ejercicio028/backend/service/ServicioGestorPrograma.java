@@ -2,6 +2,7 @@ package es.cic.curso.curso06.ejercicio028.backend.service;
 
 import java.util.List;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
@@ -49,6 +50,16 @@ public interface ServicioGestorPrograma {
 	void borrarUsuario(Long id);
 
 	Usuario modificarUsuario(Usuario usuario);
+	
+	Canal aniadirCanal(Canal canal);
+
+	List<Canal> listarCanal();
+
+	Canal obtenerCanal(Long id);
+
+	void borrarCanal(Long id);
+
+	Canal modificarCanal(Canal canal);
 	
 
 }

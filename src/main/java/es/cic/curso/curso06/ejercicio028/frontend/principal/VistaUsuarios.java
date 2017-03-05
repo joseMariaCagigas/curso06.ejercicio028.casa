@@ -69,8 +69,8 @@ public class VistaUsuarios extends VerticalLayout {
 
 			for (int i = 1; i <= NUM_USUARIOS; i++) {
 				Usuario usuario = new Usuario();
-				usuario.setNombre("Nombre" + i);
-				usuario.setApellidos("Apellidos" + i);
+				usuario.setNombre("N_Usuario" + i);
+				usuario.setApellidos("A_ Usuario" + i);
 				servicioGestorPrograma.aniadirUsuario(usuario);
 			}
 			Notification.show("Cargados usuarios de DEMOSTRACIÓN");
