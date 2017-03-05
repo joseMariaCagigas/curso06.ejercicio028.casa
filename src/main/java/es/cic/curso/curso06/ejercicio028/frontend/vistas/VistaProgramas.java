@@ -158,8 +158,6 @@ public class VistaProgramas extends VerticalLayout {
 		});
 		grid.addComponent(gridProgramas);
 		
-
-		
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
 		menu.setSpacing(true);
@@ -191,8 +189,7 @@ public class VistaProgramas extends VerticalLayout {
 			} else {
 				try{
 					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
-					
-
+					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)genero.getValue());
 					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
 							Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
 					if (programaSeleccionado.getId() > 0) {
@@ -242,11 +239,11 @@ public class VistaProgramas extends VerticalLayout {
 	}
 	private void limpiarMenu() {
 		
-					duracion.clear();
-					nombre.clear();
-					anio.clear();
-					genero.clear();
-					categoria.clear();
+		duracion.clear();
+		nombre.clear();
+		anio.clear();
+		genero.clear();
+		categoria.clear();
 	}
 
 	private void activarMenu(){
@@ -258,7 +255,6 @@ public class VistaProgramas extends VerticalLayout {
 		categoria.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
-		
 	}
 
 	private void desactivarMenu(){
@@ -289,7 +285,6 @@ public class VistaProgramas extends VerticalLayout {
 		categoria.setVisible(true);
 
 	}
-
 
 	private void actualizarGenero() {
 		
@@ -356,8 +351,7 @@ public class VistaProgramas extends VerticalLayout {
 	private void recorrerGeneros() {
 		for(Genero gen :listaGeneros){
 			if(genero.getValue() == gen.getNombre()){
-				generoElegido.setNombre(gen.getNombre());
-				
+				generoElegido.setNombre(gen.getNombre());	
 			}			
 		}
 	}
@@ -365,8 +359,7 @@ public class VistaProgramas extends VerticalLayout {
 	private void recorrerCategorias() {
 		for(Categoria cat :listaCategorias){
 			if(categoria.getValue() == cat.getNombre()){
-				categoriaElegida.setNombre(cat.getNombre());
-				
+				categoriaElegida.setNombre(cat.getNombre());		
 			}			
 		}
 	}

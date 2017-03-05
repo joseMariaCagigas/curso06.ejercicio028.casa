@@ -120,10 +120,10 @@ public class VistaCanales extends VerticalLayout {
 		actualizar.setEnabled(false);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
+			activarMenu();
 			nombre.setValue(canalSeleccionado.getNombre());
 			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempo_maximo()));
 			usuario.setValue(canalSeleccionado.getUsuario());
-			activarMenu();
 		});
 		
 		layoutTres.addComponents(crear, borrar, actualizar);
@@ -137,7 +137,7 @@ public class VistaCanales extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		gridCanales = new Grid();
 		gridCanales.setVisible(true);
-		gridCanales.setColumns("nombre", "tiempo_maximo", "usuario");
+		gridCanales.setColumns("nombre", "usuario", "tiempo_maximo");
 		gridCanales.setSizeFull();
 		gridCanales.setSelectionMode(SelectionMode.SINGLE);	
 		gridCanales.addSelectionListener(e -> {
@@ -230,9 +230,9 @@ public class VistaCanales extends VerticalLayout {
 	}
 	private void limpiarMenu() {
 		
-					tiempo.clear();
-					nombre.clear();
-					usuario.clear();
+		tiempo.clear();
+		nombre.clear();
+		usuario.clear();
 	}
 
 	private void activarMenu(){
