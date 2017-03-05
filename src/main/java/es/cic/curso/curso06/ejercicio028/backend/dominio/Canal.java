@@ -29,7 +29,7 @@ public class Canal implements Identificable<Long> {
 	private int tiempo_maximo;
 	
 	@JoinColumn(name = "id_usuario")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
 	
 	
