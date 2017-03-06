@@ -114,7 +114,7 @@ public class Categoria implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "nombre";
+		return nombre;
 	}
 
 

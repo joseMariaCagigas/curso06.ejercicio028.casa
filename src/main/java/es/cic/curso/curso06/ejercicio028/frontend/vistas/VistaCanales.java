@@ -47,7 +47,6 @@ public class VistaCanales extends VerticalLayout {
 	 */
 	private static final long serialVersionUID = 7445902879676064023L;
 
-	private TextField buscador;
 	private TextField nombre, tiempo;
 	private Label label;
 	private Grid gridCanales;
@@ -110,20 +109,19 @@ public class VistaCanales extends VerticalLayout {
 		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
-		borrar.setEnabled(false);
+		borrar.setEnabled(true);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(b -> this.getUI().getUI()
 				.addWindow(creaVentanaConfirmacionBorradoCanales(canalSeleccionado.getNombre())));
 		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
-		actualizar.setEnabled(false);
+		actualizar.setEnabled(true);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
-			activarMenu();
 			nombre.setValue(canalSeleccionado.getNombre());
 			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempo_maximo()));
-			usuario.setValue(canalSeleccionado.getUsuario());
+			usuario.setValue(canalSeleccionado.getUsuario().getId());
 		});
 		
 		layoutTres.addComponents(crear, borrar, actualizar);
@@ -144,13 +142,13 @@ public class VistaCanales extends VerticalLayout {
 			canalSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
 				canalSeleccionado = (Canal) e.getSelected().iterator().next();
-				crear.setEnabled(false);
+				crear.setEnabled(true);
 				borrar.setEnabled(true);
 				actualizar.setEnabled(true);
 				} else {
 					crear.setEnabled(true);
-					borrar.setEnabled(false);
-					actualizar.setEnabled(false);
+					borrar.setEnabled(true);
+					actualizar.setEnabled(true);
 				}
 		});
 		grid.addComponent(gridCanales);
@@ -164,12 +162,12 @@ public class VistaCanales extends VerticalLayout {
 			nombre = new TextField("Nombre");
 			nombre.setInputPrompt("Nombre");
 			nombre.setVisible(true);
-			nombre.setEnabled(false);
+			nombre.setEnabled(true);
 			nombre.setWidth(250.0F, Unit.PIXELS);
 			tiempo = new TextField("Tiempo");
 			tiempo.setInputPrompt("Tiempo");
 			tiempo.setVisible(true);
-			tiempo.setEnabled(false);
+			tiempo.setEnabled(true);
 			tiempo.setWidth(250.0F, Unit.PIXELS);
 			
 			
@@ -179,7 +177,7 @@ public class VistaCanales extends VerticalLayout {
 		
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
-		aceptar.setEnabled(false);
+		aceptar.setEnabled(true);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(tiempo.getValue()) || "".equals(usuario.getValue())) {
@@ -203,7 +201,7 @@ public class VistaCanales extends VerticalLayout {
 					limpiarMenu();
 				}
 				cargaGrid();
-				menu.setEnabled(false);
+				menu.setEnabled(true);
 				crear.setEnabled(true);
 				
 			}catch(NumberFormatException ex){
@@ -214,9 +212,8 @@ public class VistaCanales extends VerticalLayout {
 		
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
-		cancelar.setEnabled(false);
+		cancelar.setEnabled(true);
 		cancelar.addClickListener(e-> {
-			desactivarMenu();
 			limpiarMenu();
 			cargaGrid();
 			
@@ -236,25 +233,6 @@ public class VistaCanales extends VerticalLayout {
 		tiempo.clear();
 		nombre.clear();
 		usuario.clear();
-	}
-
-	private void activarMenu(){
-		
-		tiempo.setEnabled(true);
-		nombre.setEnabled(true);
-		usuario.setEnabled(true);
-		aceptar.setEnabled(true);
-		cancelar.setEnabled(true);
-		
-	}
-
-	private void desactivarMenu(){
-		
-		nombre.setEnabled(false);
-		tiempo.setEnabled(false);;
-		usuario.setEnabled(false);
-		aceptar.setEnabled(false);
-		cancelar.setEnabled(false);
 	}
 
 	private void actualizarUsuario() {
@@ -282,9 +260,9 @@ public class VistaCanales extends VerticalLayout {
 		usuario.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
-		crear.setEnabled(false);
-		borrar.setEnabled(false);
-		actualizar.setEnabled(false);
+		crear.setEnabled(true);
+		borrar.setEnabled(true);
+		actualizar.setEnabled(true);
 		actualizarUsuario();
 		canalSeleccionado = new Canal();
 		canalSeleccionado.setId((long) 0);
@@ -300,7 +278,6 @@ public class VistaCanales extends VerticalLayout {
 		Collection<Canal> listaCanales = servicioGestorPrograma.listarCanal();
 		gridCanales.setContainerDataSource(new BeanItemContainer<>(Canal.class, listaCanales));
 		crear.setEnabled(true);
-
 	}
 	
 	private HorizontalLayout label_buscador() {
@@ -308,22 +285,8 @@ public class VistaCanales extends VerticalLayout {
 		label_buscador.setMargin(true);
 		label = new Label("Lista de Canales");
 		label.setVisible(true);
-		buscador = new TextField();
-		buscador.setWidth(250.0F, Unit.PIXELS);
-		buscador.setInputPrompt("Buscador");
-		label_buscador.addComponents(label, buscador);
-		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
-		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
+		label_buscador.addComponents(label);
 		return label_buscador;
-	}
-
-	private void recorrerUsuarios() {
-		for(Usuario usu :listaUsuarios){
-			if(usuario.getValue() == usu.getNombre()){
-				usuarioElegido.setNombre(usu.getNombre());
-				
-			}			
-		}
 	}
 	
 	public void setCanal(Canal canal) {

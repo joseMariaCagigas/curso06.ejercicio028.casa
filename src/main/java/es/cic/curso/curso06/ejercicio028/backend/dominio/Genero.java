@@ -115,7 +115,7 @@ public class Genero  implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "nombre";
+		return nombre;
 	}
 
 }
