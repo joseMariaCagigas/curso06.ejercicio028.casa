@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.frontend.vistas;
+package es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
@@ -35,7 +35,7 @@ public class VistaCategorias extends VerticalLayout {
 	 * 
 	 */
 	private static final long serialVersionUID = 5366004381410718812L;
-	private TextField buscador;
+
 	private TextField nombre, descripcion;
 	private Label label;
 	private Grid gridCategorias;
@@ -43,8 +43,6 @@ public class VistaCategorias extends VerticalLayout {
 	private Categoria nuevoCategoria, categoriaSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Collection<Categoria> listaCategorias;
-	public static final int NUM_CATEGORIAS = 5;
-	public static final int NUM_CATEGORIAS_INICIAL = 5;
 
 	@SuppressWarnings("serial")
 	public VistaCategorias() {
@@ -243,12 +241,7 @@ public class VistaCategorias extends VerticalLayout {
 		label_buscador.setSpacing(true);
 		label = new Label("Lista de Categorias");
 		label.setVisible(true);
-		buscador = new TextField();
-		buscador.setWidth(250.0F, Unit.PIXELS);
-		buscador.setInputPrompt("Buscador");
-		label_buscador.addComponents(label, buscador);
-		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
-		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
+		label_buscador.addComponents(label);
 		return label_buscador;
 	}
 
@@ -289,6 +282,8 @@ public class VistaCategorias extends VerticalLayout {
 			servicioGestorPrograma.borrarCategoria(categoriaSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
+			borrar.setEnabled(false);
+			actualizar.setEnabled(false);
 		});
 
 		Button botonCancelar = new Button("Cancelar");
