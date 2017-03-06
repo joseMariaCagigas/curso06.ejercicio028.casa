@@ -1,74 +1,55 @@
 package es.cic.curso.curso06.ejercicio028.backend.dominio;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
-@Table(name = "CATEGORIA")
-public class Categoria implements Identificable<Long> {
-	private static final long serialVersionUID = -8800715225024553533L;
+@Table(name = "PROGRAMACION")
+public class Programacion implements Identificable<Long> {
+	private static final long serialVersionUID = -1834404426900148883L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "nombre")
-	private String nombre;
 
-	@Column(name = "descripcion")
-	private String descripcion;
+	@JoinColumn(name = "id_canal")
+	@OneToOne(fetch = FetchType.LAZY)
+	private Canal canal;
 
+	@JoinColumn(name = "id_programa")
+	@OneToOne(fetch = FetchType.LAZY)
+	private Programa programa;
 	
-	public Categoria() {
+	
+
+	public Programacion() {
 		super();
-		
+		// TODO Auto-generated constructor stub
 	}
 
-	public Categoria(String nombre, String descripcion) {
+
+	public Programacion(Canal canal, Programa programa) {
 		super();
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		
+		this.canal = canal;
+		this.programa = programa;
 	}
 
-	public Categoria(Long id, String nombre, String descripcion) {
+
+	public Programacion(Long id, Canal canal, Programa programa) {
 		super();
 		this.id = id;
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		
+		this.canal = canal;
+		this.programa = programa;
 	}
-
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
 
 
 	/**
@@ -79,6 +60,7 @@ public class Categoria implements Identificable<Long> {
 		return id;
 	}
 
+
 	/**
 	 * @param id the id to set
 	 */
@@ -86,6 +68,27 @@ public class Categoria implements Identificable<Long> {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+	public Canal getCanal() {
+		return canal;
+	}
+
+
+	public void setCanal(Canal canal) {
+		this.canal = canal;
+	}
+
+
+	public Programa getPrograma() {
+		return programa;
+	}
+
+
+	public void setPrograma(Programa programa) {
+		this.programa = programa;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -95,6 +98,7 @@ public class Categoria implements Identificable<Long> {
 		return result;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -103,7 +107,7 @@ public class Categoria implements Identificable<Long> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Programacion other = (Programacion) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -112,11 +116,9 @@ public class Categoria implements Identificable<Long> {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+		return "CanalPrograma [id=" + id + ", canal=" + canal.getId() + ", programa=" + programa.getId() + "]";
 	}
-
-
-
 }

@@ -1,8 +1,5 @@
 package es.cic.curso.curso06.ejercicio028.backend.dominio;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,15 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
-@Table(name = "CATEGORIA")
-public class Categoria implements Identificable<Long> {
-	private static final long serialVersionUID = -8800715225024553533L;
+@Table(name = "CANAL")
+public class Canal implements Identificable<Long> {
+	
+	private static final long serialVersionUID = -8760299749061904850L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,49 +24,35 @@ public class Categoria implements Identificable<Long> {
 
 	@Column(name = "nombre")
 	private String nombre;
-
-	@Column(name = "descripcion")
-	private String descripcion;
-
 	
-	public Categoria() {
+	@Column(name = "tiempo_maximo")
+	private int tiempo_maximo;
+	
+	@JoinColumn(name = "id_usuario")
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario usuario;
+	
+	
+	
+	public Canal() {
 		super();
-		
+		// TODO Auto-generated constructor stub
 	}
 
-	public Categoria(String nombre, String descripcion) {
+	public Canal(String nombre, int tiempo_maximo, Usuario usuario) {
 		super();
 		this.nombre = nombre;
-		this.descripcion = descripcion;
-		
+		this.tiempo_maximo = tiempo_maximo;
+		this.usuario = usuario;
 	}
 
-	public Categoria(Long id, String nombre, String descripcion) {
+	public Canal(Long id, String nombre, int tiempo_maximo, Usuario usuario) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-		this.descripcion = descripcion;
-		
+		this.tiempo_maximo = tiempo_maximo;
+		this.usuario = usuario;
 	}
-
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-
 
 	/**
 	 * @return the id
@@ -85,6 +68,30 @@ public class Categoria implements Identificable<Long> {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public int getTiempo_maximo() {
+		return tiempo_maximo;
+	}
+
+	public void setTiempo_maximo(int tiempo_maximo) {
+		this.tiempo_maximo = tiempo_maximo;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
@@ -103,7 +110,7 @@ public class Categoria implements Identificable<Long> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Canal other = (Canal) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -114,9 +121,7 @@ public class Categoria implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+		return "Canal [id=" + id + ", nombre=" + nombre + ", tiempo_maximo=" + tiempo_maximo + ", usuario=" + usuario.getId()
+				+ "]";
 	}
-
-
-
 }

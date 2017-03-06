@@ -12,6 +12,13 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaCanales;
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaCategorias;
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaGeneros;
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaProgramacion;
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaProgramas;
+import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaUsuarios;
+
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
  * (or tab) or some part of a html page where a Vaadin application is embedded.
@@ -31,6 +38,9 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
     	
+    	final VerticalLayout layoutUsuario = new VistaUsuarios();
+    	final VerticalLayout layoutCanal = new VistaCanales();
+        final VerticalLayout layoutProgramacion = new VistaProgramacion();
         final VerticalLayout layoutProgramas = new VistaProgramas();
         final VerticalLayout layoutCategorias = new VistaCategorias();
         final VerticalLayout layoutGeneros = new VistaGeneros();
@@ -41,6 +51,9 @@ public class MyUI extends UI {
         tab.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
  
+        tab.addTab(layoutUsuario,"Usuarios");
+        tab.addTab(layoutCanal,"Canales");
+        tab.addTab(layoutProgramacion,"Programacion");
         tab.addTab(layoutProgramas,"Programas");
         tab.addTab(layoutCategorias,"Categorias");
         tab.addTab(layoutGeneros,"Géneros");

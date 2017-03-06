@@ -18,7 +18,7 @@ import es.cic.curso.curso06.ejercicio028.backend.repository.Identificable;
 
 @Entity
 @Table(name = "GENERO")
-public class Genero implements Identificable<Long> {
+public class Genero  implements Identificable<Long> {
 	private static final long serialVersionUID = -8800715225024553533L;
 
 	@Id
@@ -31,33 +31,27 @@ public class Genero implements Identificable<Long> {
 	@Column(name = "descripcion")
 	private String descripcion;
 
-	@OneToMany(mappedBy = "genero")
-	private List<Programa> generos = new ArrayList<>();
 	
-	public Genero() {
+	public Genero () {
 		super();
 		
 	}
 
-	public Genero(String nombre, String descripcion, List<Programa> generos) {
-		super();
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		this.generos = generos;
-	}
 
-	public Genero(Long id, String nombre, String descripcion, List<Programa> generos) {
+	public Genero(Long id, String nombre, String descripcion) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.generos = generos;
 	}
 
+
 	public Genero(String nombre, String descripcion) {
+		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}
+
 
 	public String getNombre() {
 		return nombre;
@@ -75,13 +69,6 @@ public class Genero implements Identificable<Long> {
 		this.descripcion = descripcion;
 	}
 
-	public List<Programa> getGeneros() {
-		return generos;
-	}
-
-	public void setGeneros(List<Programa> generos) {
-		this.generos = generos;
-	}
 
 	/**
 	 * @return the id
@@ -99,6 +86,7 @@ public class Genero implements Identificable<Long> {
 		this.id = id;
 	}
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -115,7 +103,7 @@ public class Genero implements Identificable<Long> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Genero other = (Genero) obj;
+		Genero  other = (Genero ) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -124,10 +112,10 @@ public class Genero implements Identificable<Long> {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Genero [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", generos=" + generos
-				+ "]";
+		return "Genero [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
 	}
 
 }

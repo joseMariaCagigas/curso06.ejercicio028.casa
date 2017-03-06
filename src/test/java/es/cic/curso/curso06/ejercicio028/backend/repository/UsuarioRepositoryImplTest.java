@@ -6,16 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:es/cic/curso/curso06/ejercicio028/applicationContext.xml" })
 
-public class CategoriaRepositoryImplTest extends AbstractRepositoryImplTest<Long, Categoria>{
+public class UsuarioRepositoryImplTest extends AbstractRepositoryImplTest<Long, Usuario>{
 
 
 	 @Autowired
-	    private CategoriaRepository sut;
+	    private UsuarioRepository sut;
 
 	    @Before
 	    @Override
@@ -24,22 +24,22 @@ public class CategoriaRepositoryImplTest extends AbstractRepositoryImplTest<Long
 	    }
 
 	    @Override
-	    public Categoria getInstanceDeTParaNuevo() {
+	    public Usuario getInstanceDeTParaNuevo() {
 	    	
-	    	Categoria op = new Categoria();
+	    	Usuario op = new Usuario();
 	        
-	        op.setDescripcion("categoria");
+	        op.setApellidos("categoria");
 	      
 	        
 	        return op;
 	    }
 
 	    @Override
-	    public Categoria getInstanceDeTParaLectura() {
+	    public Usuario getInstanceDeTParaLectura() {
 	    	
-	    	Categoria op = new Categoria();
+	    	Usuario op = new Usuario();
 	        
-	        op.setDescripcion("categoria");
+	        op.setApellidos("categoria");
 	      
 
 	        return op;
@@ -51,26 +51,26 @@ public class CategoriaRepositoryImplTest extends AbstractRepositoryImplTest<Long
 	    }
 
 	    @Override
-	    public Categoria getInstanceDeTParaModificar(Long clave) {
-	    	Categoria op = getInstanceDeTParaLectura();
+	    public Usuario getInstanceDeTParaModificar(Long clave) {
+	    	Usuario op = getInstanceDeTParaLectura();
 	        op.setId(clave);
-	        op.setDescripcion("operacion");
+	        op.setApellidos("operacion");
 	       
 	        return op;
 	    }
 
 	    @Override
-	    public IRepository<Long, Categoria> getRepository() {
+	    public IRepository<Long, Usuario> getRepository() {
 	        return sut;
 	    }
 
 	    @Override
-	    public boolean sonDatosIguales(Categoria t1, Categoria t2) {
+	    public boolean sonDatosIguales(Usuario t1, Usuario t2) {
 	        if (t1 == null || t2 == null) {
 	            throw new UnsupportedOperationException("No puedo comparar nulos");
 	        }
 	        
-			if (!t1.getDescripcion().equals(t2.getDescripcion())) {
+			if (!t1.getApellidos().equals(t2.getApellidos())) {
 				return false;
 			}
 			

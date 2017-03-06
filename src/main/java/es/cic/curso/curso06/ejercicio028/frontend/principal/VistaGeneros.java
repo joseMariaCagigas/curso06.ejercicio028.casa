@@ -23,7 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
-import es.cic.curso.grupo6.ejercicio027.modelo.Fichero;
+
 
 public class VistaGeneros extends VerticalLayout {
 

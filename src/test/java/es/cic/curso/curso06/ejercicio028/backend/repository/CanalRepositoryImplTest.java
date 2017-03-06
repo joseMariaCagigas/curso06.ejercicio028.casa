@@ -1,11 +1,6 @@
 package es.cic.curso.curso06.ejercicio028.backend.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -23,65 +18,58 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:es/cic/curso/curso06/ejercicio028/applicationContext.xml" })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @Transactional
-public class ProgramaRepositoryImplTest {
+public class CanalRepositoryImplTest {
 
 	public static final int NUMERO = 100;
 
 	@Autowired
-	private ProgramaRepository programaRepository;
+	private CanalRepository canalRepository;
 
 	@PersistenceContext
 	protected EntityManager em;
 
-	private Programa generaPrograma() {
-		Categoria categoria = new Categoria();
-		categoria.setNombre("CATEGORIA");
-		categoria.setDescripcion("DESCRIPCION");
-		em.persist(categoria);
-		
-		Genero genero = new Genero();
-		genero.setNombre("GENERO");
-		genero.setDescripcion("DESCRIPCION");
-		em.persist(genero);
-		
+	private Canal generaCanal() {
+		Usuario usuario = new Usuario();
+		usuario.setNombre("MANNUEL");
+		usuario.setApellidos("GAFFOTAS");
+		em.persist(usuario);
 		em.flush();
 		
-		Programa elemento = new Programa();
+		Canal elemento = new Canal();
 		elemento.setNombre("Inicial");
-		elemento.setDuracion(100);
-		elemento.setCategoria(categoria);
-		elemento.setGenero(genero);
+		elemento.setTiempo_maximo(100);
+		elemento.setUsuario(usuario);
 		
-		programaRepository.add(elemento);
+		canalRepository. add(elemento);
 		return elemento;
 
 	}
 
 	@Test
 	public void testCreate() {
-		Programa elemento  = new Programa();
+		Canal elemento  = new Canal();
 		elemento.setNombre("medicamento");
-		programaRepository.add(elemento);
+		canalRepository.add(elemento);
 		assertNotNull(elemento.getId());
 	}
 
 	@Test
 	public void testRead() {
-		Programa elemento1 = generaPrograma();
-		Programa elemento2 = programaRepository.read(elemento1.getId());
+		Canal elemento1 = generaCanal();
+		Canal elemento2 = canalRepository.read(elemento1.getId());
 
 		assertTrue(elemento1.getId().equals(elemento2.getId()));
 
 		try {
 			@SuppressWarnings("unused")
-			Programa elemento3 = programaRepository.read(Long.MIN_VALUE);
+			Canal elemento3 = canalRepository.read(Long.MIN_VALUE);
 			fail("No deberían existir elementos con el ID pasado");
 		} catch (PersistenceException pe) {
 
@@ -90,41 +78,39 @@ public class ProgramaRepositoryImplTest {
 
 	@Test
 	public void testUpdate() {
-		Programa original = generaPrograma();
-		Programa clon = new Programa();
+		Canal original = generaCanal();
+		Canal clon = new Canal();
 		clon.setId(original.getId());
 		clon.setNombre(original.getNombre());
-		clon.setDuracion(original.getDuracion());
-		clon.setCategoria(original.getCategoria());
-		clon.setGenero(original.getGenero());
+		clon.setTiempo_maximo(original.getTiempo_maximo());
+		clon.setUsuario(original.getUsuario());
 
 		original.setNombre("No Principal");
-		original.setDuracion(65);
-		programaRepository.update(original);
+		original.setTiempo_maximo(65);
+		canalRepository.update(original);
 
-		Programa modificado = programaRepository.read(original.getId());
+		Canal modificado = canalRepository.read(original.getId());
 		assertEquals(original.getNombre(), modificado.getNombre());
-		assertNotEquals(clon.getDuracion(), modificado.getDuracion());
+		assertNotEquals(clon.getTiempo_maximo(), modificado.getTiempo_maximo());
 	}
 
 	@Test
 	public void testDelete() {
-		Programa elemento = generaPrograma();
-		programaRepository.delete(elemento.getId());
+		Canal elemento = generaCanal();
+		canalRepository.delete(elemento.getId());
 
-		Programa resultado = programaRepository.read(elemento.getId());
+		Canal resultado = canalRepository.read(elemento.getId());
 		assertNull(resultado);
 	}
 
 	@Test
 	public void testList() {
 		for (int i = 0; i < NUMERO; i++) {
-			generaPrograma();
+			generaCanal();
 		}
 
-		List<Programa> lista = programaRepository.list();
+		List<Canal> lista = canalRepository.list();
 		assertEquals(NUMERO, lista.size());
 	}
 
 }
-
