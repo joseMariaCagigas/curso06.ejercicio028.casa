@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas;
+package es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;

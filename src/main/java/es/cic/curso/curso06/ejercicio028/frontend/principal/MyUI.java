@@ -12,12 +12,12 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas.VistaCategorias;
-import es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas.VistaGeneros;
-import es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas.VistaUsuarios;
 import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaCanales;
 import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaProgramacion;
 import es.cic.curso.curso06.ejercicio028.frontend.vistas.VistaProgramas;
+import es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas.VistaCategorias;
+import es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas.VistaGeneros;
+import es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas.VistaUsuarios;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 

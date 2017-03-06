@@ -73,6 +73,8 @@ public class VistaCanales extends VerticalLayout {
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 		
+;
+		cargaDatos();
 		cargaGrid();
 		
 	}
@@ -103,25 +105,31 @@ public class VistaCanales extends VerticalLayout {
 		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
-			crearCanal();
-			
+			crearCanal();			
 		});
 		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
 		borrar.setEnabled(true);
 		borrar.setIcon(FontAwesome.ERASER);
-		borrar.addClickListener(b -> this.getUI().getUI()
-				.addWindow(creaVentanaConfirmacionBorradoCanales(canalSeleccionado.getNombre())));
+		borrar.addClickListener(b -> {
+			borrar_actualizar();
+			this.getUI().getUI()
+			.addWindow(creaVentanaConfirmacionBorradoCanales(canalSeleccionado.getNombre()));
+		});
+				
+		
 		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
 		actualizar.setEnabled(true);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
+			borrar_actualizar();
 			nombre.setValue(canalSeleccionado.getNombre());
 			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempo_maximo()));
 			usuario.setValue(canalSeleccionado.getUsuario().getId());
+			
 		});
 		
 		layoutTres.addComponents(crear, borrar, actualizar);
@@ -183,10 +191,9 @@ public class VistaCanales extends VerticalLayout {
 			if ("".equals(nombre.getValue()) || "".equals(tiempo.getValue()) || "".equals(usuario.getValue())) {
 				Notification.show("Debes rellenar todos los campos, si no existe tu usuario debes crearlo primero.");
 			} else {
-				try{	usuarioElegido = servicioGestorPrograma.obtenerUsuario((Long)usuario.getValue());
-				
-
-				Canal nuevoCanal = new Canal(nombre.getValue(), Integer.parseInt(tiempo.getValue()), usuarioElegido);
+				try{	
+					usuarioElegido = servicioGestorPrograma.obtenerUsuario((Long)usuario.getValue());
+					Canal nuevoCanal = new Canal(nombre.getValue(), Integer.parseInt(tiempo.getValue()), usuarioElegido);
 				if (canalSeleccionado.getId() > 0) {
 					canalSeleccionado.setNombre(nombre.getValue());
 					canalSeleccionado.setTiempo_maximo(Integer.parseInt(tiempo.getValue()));
@@ -216,8 +223,8 @@ public class VistaCanales extends VerticalLayout {
 		cancelar.addClickListener(e-> {
 			limpiarMenu();
 			cargaGrid();
-			
 		});
+		
 		usuario = new ComboBox();
 		usuario.setWidth(250.0F, Unit.PIXELS);
 		Label label_usuario = new Label("Usuario");
@@ -229,9 +236,8 @@ public class VistaCanales extends VerticalLayout {
 		return layoutDos;
 	}
 	private void limpiarMenu() {
-		
-		tiempo.clear();
 		nombre.clear();
+		tiempo.clear();
 		usuario.clear();
 	}
 
@@ -253,6 +259,17 @@ public class VistaCanales extends VerticalLayout {
 
 	}
 
+	public void borrar_actualizar(){
+		nombre.setEnabled(true);
+		tiempo.setEnabled(true);
+		usuario.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+		crear.setEnabled(false);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		actualizarUsuario();
+	}
 	public void crearCanal() {
 
 		nombre.setEnabled(true);
@@ -308,7 +325,7 @@ public class VistaCanales extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Canal: <strong>\"" + nombre + "\"</strong>?");
+		Label label = new Label("¿Está seguro de que desea borrar este Canal, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -336,6 +353,7 @@ public class VistaCanales extends VerticalLayout {
 	
 	}
 
+
 	public Canal getCanalSeleccionado() {
 		return canalSeleccionado;
 	}
@@ -345,4 +363,20 @@ public class VistaCanales extends VerticalLayout {
 		this.canalSeleccionado = canalSeleccionado;
 	}
 	
+	private void cargaDatos() {
+		if (servicioGestorPrograma.listarCanal().isEmpty()) {
+			
+		}
+			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
+			servicioGestorPrograma.aniadirUsuario(usuario1);
+			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
+			servicioGestorPrograma.aniadirUsuario(usuario2);
+			
+			Canal canal1 = new Canal("Cana1", 600, usuario1);
+			servicioGestorPrograma.aniadirCanal(canal1);
+			Canal canal2 = new Canal("Cana2", 500, usuario2);
+			servicioGestorPrograma.aniadirCanal(canal2);
+			Canal canal3 = new Canal("Cana3", 300, usuario1);
+			servicioGestorPrograma.aniadirCanal(canal3);
+	}
 }

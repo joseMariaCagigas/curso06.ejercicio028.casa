@@ -29,9 +29,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 
@@ -74,6 +76,7 @@ public class VistaProgramas extends VerticalLayout {
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);	
+		cargaDatos();
 		cargaGrid();	
 	}
 
@@ -189,7 +192,7 @@ public class VistaProgramas extends VerticalLayout {
 			} else {
 				try{
 					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
-					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)genero.getValue());
+					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)categoria.getValue());
 					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
 						Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
 					if (programaSeleccionado.getId() > 0) {
@@ -198,7 +201,7 @@ public class VistaProgramas extends VerticalLayout {
 						programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
 						generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
 						programaSeleccionado.setGenero(generoElegido);
-						categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)genero.getValue());
+						categoriaElegida = servicioGestorPrograma.obtenerCategoria(Long.parseLong(categoria.getValue().toString()));
 						programaSeleccionado.setCategoria(categoriaElegida);
 						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
 						limpiarMenu();
@@ -221,21 +224,20 @@ public class VistaProgramas extends VerticalLayout {
 		cancelar.setIcon(FontAwesome.CLOSE);
 		cancelar.setEnabled(true);
 		cancelar.addClickListener(e-> {
-			menu.setEnabled(true);
+			limpiarMenu();
 			cargaGrid();	
 		});
+		
 		genero = new ComboBox();
 		genero.setWidth(250.0F, Unit.PIXELS);
-		genero.setEnabled(true);
-		label_genero = new Label("Usuario");
+		Label label_genero = new Label("Género");
 		actualizarGenero();
 		categoria = new ComboBox();
 		categoria.setWidth(250.0F, Unit.PIXELS);
-		categoria.setEnabled(true);
-		label_categoria = new Label("Usuario");
+		Label label_categoria = new Label("Categoría");;
 		actualizarCategoria();
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
+		menu.addComponents(nombre, duracion, anio,label_genero, genero,label_categoria, categoria, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
@@ -244,22 +246,27 @@ public class VistaProgramas extends VerticalLayout {
 		duracion.clear();
 		nombre.clear();
 		anio.clear();
-		actualizarGenero();
-		actualizarCategoria();
+		genero.clear();
+		categoria.clear();
+		
 	}
 	
 	private void actualizarCategoria() {
+		
 		List <Categoria> listaCategorias = new ArrayList<>();
+		
 		listaCategorias = servicioGestorPrograma.listarCategoria();
+
 		categoria.setInputPrompt("Categoría");
 		categoria.setNullSelectionAllowed(false);
 		for(int i = 0; i < listaCategorias.size(); i++){
-			categoria.addItem(listaCategorias.get(i).getId());
-			categoria.setItemCaption(listaCategorias.get(i).getId(), listaCategorias.get(i).getNombre());
+			genero.addItem(listaCategorias.get(i).getId());
+			genero.setItemCaption(listaCategorias.get(i).getId(), listaCategorias.get(i).getNombre());
 		}
-		categoria.select(0);
+		categoria.select(1);
 		categoria.setImmediate(true);
 		categoria.setVisible(true);
+
 	}
 	private void actualizarGenero() {
 		
@@ -273,13 +280,24 @@ public class VistaProgramas extends VerticalLayout {
 			genero.addItem(listaGeneros.get(i).getId());
 			genero.setItemCaption(listaGeneros.get(i).getId(), listaGeneros.get(i).getNombre());
 		}
-		genero.select(0);
+		genero.select(1);
 		genero.setImmediate(true);
 		genero.setVisible(true);
-	}
-	
-	
 
+	}
+
+	public void borrar_actualizar(){
+		nombre.setEnabled(true);
+		duracion.setEnabled(true);
+		anio.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+		crear.setEnabled(false);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		actualizarGenero();
+		actualizarCategoria();
+	}
 	public void crearPrograma() {
 		nombre.setEnabled(true);
 		duracion.setEnabled(true);
@@ -332,7 +350,7 @@ public class VistaProgramas extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Programa: <strong>\"" + nombre + "\"</strong>?");
+		Label label = new Label("¿Está seguro de que desea borrar este Programa, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -367,4 +385,19 @@ public class VistaProgramas extends VerticalLayout {
 		this.programaSeleccionado = programaSeleccionado;
 	}
 	
+	private void cargaDatos() {
+		if (servicioGestorPrograma.listarPrograma().isEmpty()) {
+			
+		}
+			Categoria categoria1 = new Categoria("categoria1", "categoria1");
+			servicioGestorPrograma.aniadirCategoria(categoria1);
+			Genero genero2 = new Genero("genero22", "genero2");
+			servicioGestorPrograma.aniadirGenero(genero2);
+		
+			Programa programa1 = new Programa("Programa_1", 60, 2016, categoria1, genero2);
+			servicioGestorPrograma.aniadirPrograma(programa1);
+			Programa programa2 = new Programa("Programa_2", 60, 2015, categoria1, genero2);
+			servicioGestorPrograma.aniadirPrograma(programa2);
+
+	}
 }

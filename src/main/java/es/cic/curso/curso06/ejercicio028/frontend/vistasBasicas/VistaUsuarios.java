@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas;
+package es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
@@ -58,16 +58,7 @@ public class VistaUsuarios extends VerticalLayout {
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
-			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
-			servicioGestorPrograma.aniadirUsuario(usuario1);
-			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
-			servicioGestorPrograma.aniadirUsuario(usuario2);
-			Usuario usuario3 = new Usuario("Ana", "Caida del Árbol");
-			servicioGestorPrograma.aniadirUsuario(usuario3);
-			Usuario usuario4 = new Usuario("Gustavo", "Torre Mocho");
-			servicioGestorPrograma.aniadirUsuario(usuario4);
-	}
+		cargaDatos();
 		cargaGrid();
 	}
 
@@ -302,5 +293,18 @@ public class VistaUsuarios extends VerticalLayout {
 
 	public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
 		this.usuarioSeleccionado = usuarioSeleccionado;
+	}
+	
+	private void cargaDatos() {
+		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
+			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
+			servicioGestorPrograma.aniadirUsuario(usuario1);
+			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
+			servicioGestorPrograma.aniadirUsuario(usuario2);
+			Usuario usuario3 = new Usuario("Ana", "Caida del Árbol");
+			servicioGestorPrograma.aniadirUsuario(usuario3);
+			Usuario usuario4 = new Usuario("Gustavo", "Torre Mocho");
+			servicioGestorPrograma.aniadirUsuario(usuario4);
+	}
 	}
 }
