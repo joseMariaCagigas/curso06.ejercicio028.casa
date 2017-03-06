@@ -121,7 +121,6 @@ public class Canal implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Canal [id=" + id + ", nombre=" + nombre + ", tiempo_maximo=" + tiempo_maximo + ", usuario=" + usuario.getId()
-				+ "]";
+		return nombre;
 	}
 }

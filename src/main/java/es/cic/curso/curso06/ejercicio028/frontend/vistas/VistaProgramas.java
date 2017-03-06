@@ -261,8 +261,8 @@ public class VistaProgramas extends VerticalLayout {
 		categoria.setInputPrompt("Categoría");
 		categoria.setNullSelectionAllowed(false);
 		for(int i = 0; i < listaCategorias.size(); i++){
-			genero.addItem(listaCategorias.get(i).getId());
-			genero.setItemCaption(listaCategorias.get(i).getId(), listaCategorias.get(i).getNombre());
+			categoria.addItem(listaCategorias.get(i).getId());
+			categoria.setItemCaption(listaCategorias.get(i).getId(), listaCategorias.get(i).getNombre());
 		}
 		categoria.select(1);
 		categoria.setImmediate(true);

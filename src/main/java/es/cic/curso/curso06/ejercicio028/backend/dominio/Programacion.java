@@ -22,11 +22,11 @@ public class Programacion implements Identificable<Long> {
 
 
 	@JoinColumn(name = "id_canal")
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Canal canal;
 
 	@JoinColumn(name = "id_programa")
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Programa programa;
 	
 	

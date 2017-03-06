@@ -150,8 +150,7 @@ public class Programa implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Programa [id=" + id + ", nombre=" + nombre + ", duracion=" + duracion + ", anio=" + anio
-				+ ", categoria=" + categoria.getId() + ", genero=" + genero.getId() + "]";
+		return nombre;
 	}
 	
 	

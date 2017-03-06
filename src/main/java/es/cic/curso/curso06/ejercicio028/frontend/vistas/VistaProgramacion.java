@@ -45,7 +45,6 @@ public class VistaProgramacion extends VerticalLayout{
 	 */
 	private static final long serialVersionUID = 7445902879676064023L;
 
-	private TextField buscador;
 	private Label label;
 	private Grid gridProgramacion;
 	private Button crear, borrar, actualizar, insertar, validar , aceptar, cancelar, mostrar;
@@ -126,12 +125,11 @@ public class VistaProgramacion extends VerticalLayout{
 //			genero.setValue(programaSeleccionado.getGenero());
 //			activarMenu();
 		});
-		
-		insertar = new Button("Insertar");
+
 		validar = new Button ("Validar");
 		mostrar = new Button ("Mostrar");
 		
-		layoutTres.addComponents(crear, borrar, actualizar, insertar, validar, mostrar);
+		layoutTres.addComponents(crear, borrar, actualizar, validar, mostrar);
 		return layoutTres;
 	}
 
@@ -266,7 +264,7 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		listaProgramas = servicioGestorPrograma.listarPrograma();
 
-		programa.setInputPrompt("Categoría");
+		programa.setInputPrompt("Programa");
 		programa.setNullSelectionAllowed(false);
 		for(int i = 0; i < listaProgramas.size(); i++){
 			programa.addItem(listaProgramas.get(i).getId());
@@ -284,7 +282,7 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		listaCanales = servicioGestorPrograma.listarCanal();
 
-		canal.setInputPrompt("Género");
+		canal.setInputPrompt("Canal");
 		canal.setNullSelectionAllowed(false);
 		for(int i = 0; i < listaCanales.size(); i++){
 			canal.addItem(listaCanales.get(i).getId());
@@ -329,12 +327,9 @@ public class VistaProgramacion extends VerticalLayout{
 		label_buscador.setMargin(true);
 		label = new Label("Lista de Programas");
 		label.setVisible(true);
-		buscador = new TextField();
-		buscador.setWidth(250.0F, Unit.PIXELS);
-		buscador.setInputPrompt("Buscador");
-		label_buscador.addComponents(label, buscador);
-		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
-		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
+
+		label_buscador.addComponents(label);
+
 		return label_buscador;
 	}
 	
@@ -362,7 +357,7 @@ public class VistaProgramacion extends VerticalLayout{
 
 		Button botonAceptar = new Button("Aceptar");
 		botonAceptar.addClickListener(e -> {
-			servicioGestorPrograma.borrarPrograma(programacionSeleccionado.getId());
+			servicioGestorPrograma.borrarProgramacion(programacionSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
 		});
