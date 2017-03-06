@@ -3,6 +3,8 @@ package es.cic.curso.curso06.ejercicio028.frontend.principal;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.web.context.ContextLoader;
+
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
@@ -21,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
+import es.cic.curso.grupo6.ejercicio027.modelo.Fichero;
 
 public class VistaGeneros extends VerticalLayout {
 
@@ -34,7 +37,7 @@ public class VistaGeneros extends VerticalLayout {
 	private Label label;
 	private Grid gridGeneros;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
-	private Genero nuevoGenero;
+	private Genero nuevoGenero, generoSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private List<Genero> listaGeneros;
 	
@@ -42,11 +45,10 @@ public class VistaGeneros extends VerticalLayout {
 	@SuppressWarnings("serial")
 	public VistaGeneros(){
 		
+		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		nuevoGenero = new Genero();
 		//Layout Pantalla
 //		
-		
-
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		
 		HorizontalLayout layoutUno = label_buscador();
@@ -81,12 +83,14 @@ public class VistaGeneros extends VerticalLayout {
 		layoutTres.setSpacing(true);
 		crear = new Button("Crear");
 		crear.setVisible(true);
-		crear.setEnabled(false);
+		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
 		borrar.setEnabled(false);
 		borrar.setIcon(FontAwesome.ERASER);
+//		borrar.addClickListener(e -> this.getUI().getUI()
+//				.addWindow(creaVentanaConfirmacionBorradoGeneros(generoSeleccionado.getNombre())));
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
 		actualizar.setEnabled(false);
@@ -107,6 +111,18 @@ public class VistaGeneros extends VerticalLayout {
 		gridGeneros.setColumns("Nombre", "Descripción");
 		gridGeneros.setSizeFull();
 		gridGeneros.setSelectionMode(SelectionMode.SINGLE);
+		gridGeneros.addSelectionListener(e -> {
+			generoSeleccionado = null;
+			if (!e.getSelected().isEmpty()) {
+				generoSeleccionado = (Genero) e.getSelected().iterator().next();
+				
+			} else {
+//				nom.setVisible(false);
+//				botonActualizarFichero.setVisible(false);
+//				botonAgregarFichero.setVisible(true);
+			}
+		});
+		
 		grid.addComponent(gridGeneros);
 		VerticalLayout menu = new VerticalLayout();
 		menu.setMargin(true);
