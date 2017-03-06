@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.frontend.vistas;
+package es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
@@ -38,7 +38,6 @@ public class VistaUsuarios extends VerticalLayout {
 	 */
 	private static final long serialVersionUID = 5366004381410718812L;
 
-	private TextField buscador;
 	private TextField nombre, apellidos;
 	private Label label;
 	private Grid gridUsuarios;
@@ -46,16 +45,13 @@ public class VistaUsuarios extends VerticalLayout {
 	private Usuario nuevoUsuario, usuarioSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Collection<Usuario> listaUsuarios;
-	public static final int NUM_USUARIOS = 5;
-	public static final int NUM_USUARIOS_INICIAL = 5;
 
 	@SuppressWarnings("serial")
 	public VistaUsuarios() {
 
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		nuevoUsuario = new Usuario();
-		// Layout Pantalla
-		//
+
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		HorizontalLayout layoutUno = label_buscador();
 		HorizontalLayout layoutDos = layoutDos();
@@ -173,7 +169,6 @@ public class VistaUsuarios extends VerticalLayout {
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
-		//ok.setWidth(100.0F, Unit.PERCENTAGE);
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
 		aceptar.setEnabled(false);
@@ -247,26 +242,11 @@ public class VistaUsuarios extends VerticalLayout {
 		label_buscador.setSpacing(true);
 		label = new Label("Lista de Usuarios");
 		label.setVisible(true);
-		buscador = new TextField();
-		buscador.setWidth(250.0F, Unit.PIXELS);
-		buscador.setInputPrompt("Buscador");
-		label_buscador.addComponents(label, buscador);
-		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
-		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
+		label_buscador.addComponents(label);
 		return label_buscador;
 	}
 
 	public void enter(ViewChangeEvent event) {
-		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
-
-			for (int i = 1; i <= 5; i++) {
-				Usuario usuario = new Usuario();
-				usuario.setNombre("Nombre" + i);
-				usuario.setApellidos("Descripción" + i);
-				servicioGestorPrograma.aniadirUsuario(usuario);
-			}
-	
-		}
 		cargaGrid();
 	}
 
@@ -293,6 +273,8 @@ public class VistaUsuarios extends VerticalLayout {
 			servicioGestorPrograma.borrarUsuario(usuarioSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
+			borrar.setEnabled(false);
+			actualizar.setEnabled(false);
 		});
 
 		Button botonCancelar = new Button("Cancelar");
