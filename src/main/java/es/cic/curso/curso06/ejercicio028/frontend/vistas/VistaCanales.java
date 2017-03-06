@@ -34,6 +34,7 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
@@ -50,7 +51,7 @@ public class VistaCanales extends VerticalLayout {
 	private TextField nombre, tiempo;
 	private Label label;
 	private Grid gridCanales;
-	private Button crear, borrar, actualizar, aceptar, cancelar;
+	private Button crear, borrar,borrarProgramacion, actualizar, aceptar, cancelar;
 	private ComboBox usuario;
 	List <Usuario> listaUsuarios = new ArrayList<>();
 	private List<String> lisUsuarios = new ArrayList<>();
@@ -115,7 +116,18 @@ public class VistaCanales extends VerticalLayout {
 			.addWindow(creaVentanaConfirmacionBorradoCanales(canalSeleccionado.getNombre()));
 		});
 				
-		
+		borrarProgramacion = new Button("Borrar Contenido");
+		borrarProgramacion.setVisible(true);
+		borrarProgramacion.setEnabled(true);
+		borrarProgramacion.setIcon(FontAwesome.ERASER);
+		borrarProgramacion.addClickListener(b -> {
+			List<Programacion> programas = servicioGestorPrograma.listarProgramacion();
+			for (int i = 0; i< programas.size(); i++){
+				if(programas.get(i).getCanal().getId() == canalSeleccionado.getId()){
+					servicioGestorPrograma.borrarProgramacion(programas.get(i).getId());;
+				}
+			}
+		});
 		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
@@ -129,7 +141,7 @@ public class VistaCanales extends VerticalLayout {
 			
 		});
 		
-		layoutTres.addComponents(crear, borrar, actualizar);
+		layoutTres.addComponents(crear, borrar, borrarProgramacion, actualizar);
 		return layoutTres;
 	}
 
