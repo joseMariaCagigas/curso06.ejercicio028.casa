@@ -163,13 +163,16 @@ public class VistaUsuarios extends VerticalLayout {
 		nombre.setInputPrompt("Nombre");
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
+		nombre.setWidth(250.0F, Unit.PIXELS);
 		apellidos = new TextField("Apellidos");
 		apellidos.setInputPrompt("Apellidos");
 		apellidos.setVisible(true);
 		apellidos.setEnabled(false);
+		apellidos.setWidth(250.0F, Unit.PIXELS);
 
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
+		//ok.setWidth(100.0F, Unit.PERCENTAGE);
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
 		aceptar.setEnabled(false);
@@ -244,6 +247,7 @@ public class VistaUsuarios extends VerticalLayout {
 		label = new Label("Lista de Usuarios");
 		label.setVisible(true);
 		buscador = new TextField();
+		buscador.setWidth(250.0F, Unit.PIXELS);
 		buscador.setInputPrompt("Buscador");
 		label_buscador.addComponents(label, buscador);
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
@@ -260,7 +264,7 @@ public class VistaUsuarios extends VerticalLayout {
 				usuario.setApellidos("Descripción" + i);
 				servicioGestorPrograma.aniadirUsuario(usuario);
 			}
-			Notification.show("Cargados usuarios de DEMOSTRACIÓN");
+	
 		}
 		cargaGrid();
 	}

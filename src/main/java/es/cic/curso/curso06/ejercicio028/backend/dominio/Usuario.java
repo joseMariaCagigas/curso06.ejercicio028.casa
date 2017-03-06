@@ -133,6 +133,8 @@ public class Usuario implements Identificable<Long> {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos +"]";
+		return nombre;
 	}
+
+
 	}

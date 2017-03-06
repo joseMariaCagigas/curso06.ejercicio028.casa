@@ -165,10 +165,12 @@ public class VistaCanales extends VerticalLayout {
 			nombre.setInputPrompt("Nombre");
 			nombre.setVisible(true);
 			nombre.setEnabled(false);
+			nombre.setWidth(250.0F, Unit.PIXELS);
 			tiempo = new TextField("Tiempo");
 			tiempo.setInputPrompt("Tiempo");
 			tiempo.setVisible(true);
 			tiempo.setEnabled(false);
+			tiempo.setWidth(250.0F, Unit.PIXELS);
 			
 			
 
@@ -220,6 +222,7 @@ public class VistaCanales extends VerticalLayout {
 			
 		});
 		usuario = new ComboBox();
+		usuario.setWidth(250.0F, Unit.PIXELS);
 		Label label_usuario = new Label("Usuario");
 		actualizarUsuario();
 		ok.addComponents(aceptar, cancelar);
@@ -306,6 +309,7 @@ public class VistaCanales extends VerticalLayout {
 		label = new Label("Lista de Canales");
 		label.setVisible(true);
 		buscador = new TextField();
+		buscador.setWidth(250.0F, Unit.PIXELS);
 		buscador.setInputPrompt("Buscador");
 		label_buscador.addComponents(label, buscador);
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);

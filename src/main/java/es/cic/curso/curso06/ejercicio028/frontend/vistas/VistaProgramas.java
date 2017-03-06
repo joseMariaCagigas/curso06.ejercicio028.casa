@@ -60,6 +60,10 @@ public class VistaProgramas extends VerticalLayout {
 	private Collection<Programa> listaProgramas;
 	private Genero generoElegido;
 	private Categoria categoriaElegida;
+
+	private Label label_genero;
+
+	private Label label_categoria;
 	
 	
 	@SuppressWarnings("serial")
@@ -164,14 +168,17 @@ public class VistaProgramas extends VerticalLayout {
 		
 			nombre = new TextField("Nombre");
 			nombre.setInputPrompt("Nombre");
+			nombre.setWidth(250.0F, Unit.PIXELS);
 			nombre.setVisible(true);
 			nombre.setEnabled(false);
 			duracion = new TextField("Duración");
 			duracion.setInputPrompt("Duración");
+			duracion.setWidth(250.0F, Unit.PIXELS);
 			duracion.setVisible(true);
 			duracion.setEnabled(false);
 			anio = new TextField("Año");
 			anio.setInputPrompt("Año");
+			anio.setWidth(250.0F, Unit.PIXELS);
 			anio.setVisible(true);
 			anio.setEnabled(false);
 			
@@ -228,8 +235,12 @@ public class VistaProgramas extends VerticalLayout {
 		});
 
 		genero = new ComboBox();
+		genero.setWidth(250.0F, Unit.PIXELS);
+		label_genero = new Label("Usuario");
 		actualizarGenero();
 		categoria = new ComboBox();
+		categoria.setWidth(250.0F, Unit.PIXELS);
+		label_categoria = new Label("Usuario");
 		actualizarCategoria();
 		ok.addComponents(aceptar, cancelar);
 		menu.addComponents(nombre, duracion, anio, genero, categoria, ok);
@@ -341,6 +352,7 @@ public class VistaProgramas extends VerticalLayout {
 		label = new Label("Lista de Programas");
 		label.setVisible(true);
 		buscador = new TextField();
+		buscador.setWidth(250.0F, Unit.PIXELS);
 		buscador.setInputPrompt("Buscador");
 		label_buscador.addComponents(label, buscador);
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);

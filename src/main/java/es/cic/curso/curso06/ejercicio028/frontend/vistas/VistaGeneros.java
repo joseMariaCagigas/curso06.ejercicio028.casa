@@ -161,10 +161,12 @@ public class VistaGeneros extends VerticalLayout {
 		menu.setSpacing(true);
 		nombre = new TextField("Nombre");
 		nombre.setInputPrompt("Nombre");
+		nombre.setWidth(250.0F, Unit.PIXELS);
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
 		descripcion = new TextField("Descripción");
 		descripcion.setInputPrompt("Descripción");
+		descripcion.setWidth(250.0F, Unit.PIXELS);
 		descripcion.setVisible(true);
 		descripcion.setEnabled(false);
 
@@ -244,6 +246,7 @@ public class VistaGeneros extends VerticalLayout {
 		label = new Label("Lista de Generos");
 		label.setVisible(true);
 		buscador = new TextField();
+		buscador.setWidth(250.0F, Unit.PIXELS);
 		buscador.setInputPrompt("Buscador");
 		label_buscador.addComponents(label, buscador);
 		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
