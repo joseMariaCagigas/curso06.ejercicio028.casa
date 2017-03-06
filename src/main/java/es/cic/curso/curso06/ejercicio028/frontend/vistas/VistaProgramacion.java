@@ -48,7 +48,7 @@ public class VistaProgramacion extends VerticalLayout{
 	private TextField buscador;
 	private Label label;
 	private Grid gridProgramacion;
-	private Button crear, borrar, actualizar, insertar, validar , aceptar, cancelar;
+	private Button crear, borrar, actualizar, insertar, validar , aceptar, cancelar, mostrar;
 	private ComboBox canal, programa;
 	private List<String> lisProgramacion = new ArrayList<>();
 	List <Genero> listaProgramacion = new ArrayList<>();
@@ -127,10 +127,11 @@ public class VistaProgramacion extends VerticalLayout{
 //			activarMenu();
 		});
 		
-		insertar = new Button("Insertar Programa");
-		validar = new Button ("Validar tiempo");
+		insertar = new Button("Insertar");
+		validar = new Button ("Validar");
+		mostrar = new Button ("Mostrar");
 		
-		layoutTres.addComponents(crear, borrar, actualizar, insertar, validar);
+		layoutTres.addComponents(crear, borrar, actualizar, insertar, validar, mostrar);
 		return layoutTres;
 	}
 
@@ -148,13 +149,9 @@ public class VistaProgramacion extends VerticalLayout{
 			programacionSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
 				programacionSeleccionado = (Programacion) e.getSelected().iterator().next();
-				crear.setEnabled(false);
-				borrar.setEnabled(true);
-				actualizar.setEnabled(true);
+				mostrarBarraInferior();
 				} else {
-					crear.setEnabled(true);
-					borrar.setEnabled(false);
-					actualizar.setEnabled(false);
+				ocultarBarraInferior();
 				}
 		});
 		grid.addComponent(gridProgramacion);
@@ -222,6 +219,24 @@ public class VistaProgramacion extends VerticalLayout{
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
+	}
+
+	public void mostrarBarraInferior() {
+		crear.setEnabled(false);
+		borrar.setEnabled(true);
+		actualizar.setEnabled(true);
+		mostrar.setEnabled(true);
+		validar.setEnabled(true);
+		insertar.setEnabled(true);
+	}
+
+	public void ocultarBarraInferior() {
+		crear.setEnabled(true);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		insertar.setEnabled(false);
+		mostrar.setEnabled(false);
+		validar.setEnabled(false);
 	}
 	private void limpiarMenu() {
 

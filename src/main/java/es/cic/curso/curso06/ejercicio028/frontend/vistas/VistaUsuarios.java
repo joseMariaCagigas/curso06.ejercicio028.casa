@@ -27,6 +27,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
@@ -62,15 +63,15 @@ public class VistaUsuarios extends VerticalLayout {
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
 		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
-
-			for (int i = 1; i <= NUM_USUARIOS; i++) {
-				Usuario usuario = new Usuario();
-				usuario.setNombre("N_Usuario" + i);
-				usuario.setApellidos("A_ Usuario" + i);
-				servicioGestorPrograma.aniadirUsuario(usuario);
-			}
-			Notification.show("Cargados usuarios de DEMOSTRACIÓN");
-		}
+			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
+			servicioGestorPrograma.aniadirUsuario(usuario1);
+			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
+			servicioGestorPrograma.aniadirUsuario(usuario2);
+			Usuario usuario3 = new Usuario("Ana", "Caida del Árbol");
+			servicioGestorPrograma.aniadirUsuario(usuario3);
+			Usuario usuario4 = new Usuario("Gustavo", "Torre Mocho");
+			servicioGestorPrograma.aniadirUsuario(usuario4);
+	}
 		cargaGrid();
 	}
 

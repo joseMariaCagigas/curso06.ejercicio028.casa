@@ -28,6 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
+import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 public class VistaGeneros extends VerticalLayout {
@@ -62,15 +63,15 @@ public class VistaGeneros extends VerticalLayout {
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
 		if (servicioGestorPrograma.listarGenero().isEmpty()) {
-
-			for (int i = 1; i <= NUM_GENEROS; i++) {
-				Genero genero = new Genero();
-				genero.setNombre("N_Género" + i);
-				genero.setDescripcion("D_Género" + i);
-				servicioGestorPrograma.aniadirGenero(genero);
-			}
-			Notification.show("Cargados generos de DEMOSTRACIÓN");
-		}
+			Genero usuario1 = new Genero("Acción", "Entretente una tarde");
+			servicioGestorPrograma.aniadirGenero(usuario1);
+			Genero usuario2 = new Genero("Aventuras", "Locura Bendita");
+			servicioGestorPrograma.aniadirGenero(usuario2);
+			Genero usuario3 = new Genero("Político", "Mentiras Asociadas");
+			servicioGestorPrograma.aniadirGenero(usuario3);
+			Genero usuario4 = new Genero("Heroico", "Historia Moderna");
+			servicioGestorPrograma.aniadirGenero(usuario4);
+	}
 		cargaGrid();
 	}
 

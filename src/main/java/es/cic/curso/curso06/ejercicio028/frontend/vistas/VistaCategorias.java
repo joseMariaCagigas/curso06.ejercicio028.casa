@@ -60,14 +60,14 @@ public class VistaCategorias extends VerticalLayout {
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
 		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
-
-			for (int i = 1; i <= NUM_CATEGORIAS; i++) {
-				Categoria categoria = new Categoria();
-				categoria.setNombre("N_Categorias" + i);
-				categoria.setDescripcion("D_Categorias" + i);
-				servicioGestorPrograma.aniadirCategoria(categoria);
-			}
-			Notification.show("Cargados categorias de DEMOSTRACIÓN");
+				Categoria categoria1 = new Categoria("Deportes", "Todo tipo de deportes");
+				servicioGestorPrograma.aniadirCategoria(categoria1);
+				Categoria categoria2 = new Categoria("Musicales", "Pasatiempos");
+				servicioGestorPrograma.aniadirCategoria(categoria2);
+				Categoria categoria3 = new Categoria("Informaticos", "Analizando el futuro");
+				servicioGestorPrograma.aniadirCategoria(categoria3);
+				Categoria categoria4 = new Categoria("Documentales", "Animales, Tierra ...");
+				servicioGestorPrograma.aniadirCategoria(categoria4);
 		}
 		cargaGrid();
 	}
