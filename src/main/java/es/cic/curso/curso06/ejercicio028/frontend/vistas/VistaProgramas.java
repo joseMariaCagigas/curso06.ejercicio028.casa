@@ -57,7 +57,6 @@ public class VistaProgramas extends VerticalLayout {
 	private List<String> lisGeneros = new ArrayList<>();
 	private Programa programa, programaSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
-	private Collection<Programa> listaProgramas;
 	private Genero generoElegido;
 	private Categoria categoriaElegida;
 
@@ -107,7 +106,6 @@ public class VistaProgramas extends VerticalLayout {
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
 			crearPrograma();
-			
 		});
 		
 		borrar = new Button("Borrar");
@@ -122,11 +120,12 @@ public class VistaProgramas extends VerticalLayout {
 		actualizar.setEnabled(true);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
+				borrar_actualizar();
 				nombre.setValue(String.valueOf(programaSeleccionado.getNombre()));
 				duracion.setValue(String.valueOf(programaSeleccionado.getDuracion()));
 				anio.setValue(String.valueOf(programaSeleccionado.getAnio()));
-				genero.setValue(String.valueOf(programaSeleccionado.getGenero()));
-				categoria.setValue(String.valueOf(programaSeleccionado.getCategoria()));
+				genero.setValue(programaSeleccionado.getGenero().getId());
+				categoria.setValue(programaSeleccionado.getCategoria().getId());
 	
 		});
 		
@@ -141,7 +140,7 @@ public class VistaProgramas extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		gridProgramas = new Grid();
 		gridProgramas.setVisible(true);
-		gridProgramas.setColumns("nombre", "duracion", "anio", "genero", "categoria" );
+		gridProgramas.setColumns("nombre", "duracion", "anio", "categoria", "genero" );
 		gridProgramas.setSizeFull();
 		gridProgramas.setSelectionMode(SelectionMode.SINGLE);	
 		gridProgramas.addSelectionListener(e -> {
@@ -191,18 +190,19 @@ public class VistaProgramas extends VerticalLayout {
 				Notification.show("Debes rellenar todos los campos.");
 			} else {
 				try{
-					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
 					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)categoria.getValue());
+					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
+
 					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
 						Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
 					if (programaSeleccionado.getId() > 0) {
 						programaSeleccionado.setNombre(nombre.getValue());
 						programaSeleccionado.setDuracion(Integer.parseInt(duracion.getValue()));
 						programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
-						generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
-						programaSeleccionado.setGenero(generoElegido);
 						categoriaElegida = servicioGestorPrograma.obtenerCategoria(Long.parseLong(categoria.getValue().toString()));
 						programaSeleccionado.setCategoria(categoriaElegida);
+						generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
+						programaSeleccionado.setGenero(generoElegido);
 						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
 						limpiarMenu();
 						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
@@ -228,16 +228,17 @@ public class VistaProgramas extends VerticalLayout {
 			cargaGrid();	
 		});
 		
-		genero = new ComboBox();
-		genero.setWidth(250.0F, Unit.PIXELS);
-		Label label_genero = new Label("Género");
-		actualizarGenero();
 		categoria = new ComboBox();
 		categoria.setWidth(250.0F, Unit.PIXELS);
 		Label label_categoria = new Label("Categoría");;
 		actualizarCategoria();
+		genero = new ComboBox();
+		genero.setWidth(250.0F, Unit.PIXELS);
+		Label label_genero = new Label("Género");
+		actualizarGenero();
+
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, duracion, anio,label_genero, genero,label_categoria, categoria, ok);
+		menu.addComponents(nombre, duracion, anio,label_categoria, categoria,label_genero, genero, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
@@ -391,13 +392,19 @@ public class VistaProgramas extends VerticalLayout {
 		}
 			Categoria categoria1 = new Categoria("categoria1", "categoria1");
 			servicioGestorPrograma.aniadirCategoria(categoria1);
-			Genero genero2 = new Genero("genero22", "genero2");
+			Categoria categoria2 = new Categoria("categoria2", "categoria2");
+			servicioGestorPrograma.aniadirCategoria(categoria2);
+			Genero genero1 = new Genero("genero1", "genero1");
+			servicioGestorPrograma.aniadirGenero(genero1);
+			Genero genero2 = new Genero("genero2", "genero2");
 			servicioGestorPrograma.aniadirGenero(genero2);
 		
 			Programa programa1 = new Programa("Programa_1", 60, 2016, categoria1, genero2);
 			servicioGestorPrograma.aniadirPrograma(programa1);
-			Programa programa2 = new Programa("Programa_2", 60, 2015, categoria1, genero2);
+			Programa programa2 = new Programa("Programa_2", 60, 2015, categoria2, genero1);
 			servicioGestorPrograma.aniadirPrograma(programa2);
+			Programa programa3 = new Programa("Programa_2", 60, 2015, categoria2, genero1);
+			servicioGestorPrograma.aniadirPrograma(programa3);
 
 	}
 }

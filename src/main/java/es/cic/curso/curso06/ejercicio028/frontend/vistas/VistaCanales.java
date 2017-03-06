@@ -54,7 +54,7 @@ public class VistaCanales extends VerticalLayout {
 	private ComboBox usuario;
 	List <Usuario> listaUsuarios = new ArrayList<>();
 	private List<String> lisUsuarios = new ArrayList<>();
-	private Canal canal, canalSeleccionado;
+	private Canal canalSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Collection<Canal> listaCanales;
 	private Usuario usuarioElegido;
@@ -63,7 +63,7 @@ public class VistaCanales extends VerticalLayout {
 	@SuppressWarnings("serial")
 	public VistaCanales(){
 		
-		canal = new Canal();
+		new Canal();
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		
@@ -72,11 +72,8 @@ public class VistaCanales extends VerticalLayout {
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
-		
-;
 		cargaDatos();
 		cargaGrid();
-		
 	}
 
 	private HorizontalLayout inicializaLayoutEncabezado() {
@@ -308,8 +305,6 @@ public class VistaCanales extends VerticalLayout {
 	
 	public void setCanal(Canal canal) {
 		this.setVisible(canal != null);
-		this.canal = canal;
-
 		if (canal != null) {
 			BeanFieldGroup.bindFieldsUnbuffered(canal, this);
 		} else {
