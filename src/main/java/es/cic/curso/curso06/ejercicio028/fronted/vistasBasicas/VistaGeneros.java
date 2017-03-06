@@ -1,4 +1,4 @@
-package es.cic.curso.curso06.ejercicio028.frontend.vistas;
+package es.cic.curso.curso06.ejercicio028.fronted.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
@@ -38,7 +38,6 @@ public class VistaGeneros extends VerticalLayout {
 	 */
 	private static final long serialVersionUID = 5366004381410718812L;
 
-	private TextField buscador;
 	private TextField nombre, descripcion;
 	private Label label;
 	private Grid gridGeneros;
@@ -46,16 +45,13 @@ public class VistaGeneros extends VerticalLayout {
 	private Genero nuevoGenero, generoSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Collection<Genero> listaGeneros;
-	public static final int NUM_GENEROS = 5;
-	public static final int NUM_GENEROS_INICIAL = 5;
 
 	@SuppressWarnings("serial")
 	public VistaGeneros() {
 
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		nuevoGenero = new Genero();
-		// Layout Pantalla
-		//
+
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		HorizontalLayout layoutUno = label_buscador();
 		HorizontalLayout layoutDos = layoutDos();
@@ -246,12 +242,7 @@ public class VistaGeneros extends VerticalLayout {
 		label_buscador.setSpacing(true);
 		label = new Label("Lista de Generos");
 		label.setVisible(true);
-		buscador = new TextField();
-		buscador.setWidth(250.0F, Unit.PIXELS);
-		buscador.setInputPrompt("Buscador");
-		label_buscador.addComponents(label, buscador);
-		label_buscador.setWidth(100.0F, Unit.PERCENTAGE);
-		label_buscador.setComponentAlignment(buscador, Alignment.TOP_RIGHT);
+		label_buscador.addComponents(label);
 		return label_buscador;
 	}
 
@@ -292,6 +283,8 @@ public class VistaGeneros extends VerticalLayout {
 			servicioGestorPrograma.borrarGenero(generoSeleccionado.getId());
 			cargaGrid();
 			resultado.close();
+			borrar.setEnabled(false);
+			actualizar.setEnabled(false);
 		});
 
 		Button botonCancelar = new Button("Cancelar");
