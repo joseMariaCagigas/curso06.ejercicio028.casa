@@ -60,7 +60,7 @@ public class VistaCanales extends VerticalLayout {
 	@SuppressWarnings("serial")
 	public VistaCanales(){
 		
-		new Canal();
+		Canal canal = new Canal();
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		
