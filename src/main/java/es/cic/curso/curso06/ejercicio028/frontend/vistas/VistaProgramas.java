@@ -104,7 +104,7 @@ public class VistaProgramas extends VerticalLayout {
 		crear.setVisible(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
-			crear();
+			crearPrograma();
 		});
 		
 		borrar = new Button("Borrar");
@@ -345,8 +345,7 @@ public class VistaProgramas extends VerticalLayout {
 		
 		Collection<Programa> listaProgramas = servicioGestorPrograma.listarPrograma();
 		gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));
-		crear.setEnabled(true);
-
+		crear();
 	}
 	private HorizontalLayout label_buscador() {
 		HorizontalLayout label_buscador = new HorizontalLayout();
@@ -381,11 +380,16 @@ public class VistaProgramas extends VerticalLayout {
 		botonAceptar.addClickListener(e -> {
 			servicioGestorPrograma.borrarPrograma(programaSeleccionado.getId());
 			cargaGrid();
+			crear();
 			resultado.close();
 		});
 
 		Button botonCancelar = new Button("Cancelar");
-		botonCancelar.addClickListener(e -> resultado.close());
+		botonCancelar.addClickListener(e -> {
+			cargaGrid();
+			crear();
+			resultado.close();
+		});
 
 		HorizontalLayout layoutBotones = new HorizontalLayout();
 		layoutBotones.setMargin(true);
