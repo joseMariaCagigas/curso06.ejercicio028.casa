@@ -107,7 +107,7 @@ public class MyUI extends UI {
 			
 			Canal canal1 = new Canal("Cana1", 600, usuario1);
 			servicioGestorPrograma.aniadirCanal(canal1);
-			Canal canal2 = new Canal("Cana2", 500, usuario2);
+			Canal canal2 = new Canal("Cana2", 100, usuario2);
 			servicioGestorPrograma.aniadirCanal(canal2);
 			Canal canal3 = new Canal("Cana3", 300, usuario1);
 			servicioGestorPrograma.aniadirCanal(canal3);
