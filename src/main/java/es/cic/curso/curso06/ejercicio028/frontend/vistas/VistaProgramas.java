@@ -75,7 +75,7 @@ public class VistaProgramas extends VerticalLayout {
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);	
-		cargaDatos();
+
 		cargaGrid();	
 	}
 
@@ -385,26 +385,5 @@ public class VistaProgramas extends VerticalLayout {
 	public void setProgramaSeleccionado(Programa programaSeleccionado) {
 		this.programaSeleccionado = programaSeleccionado;
 	}
-	
-	private void cargaDatos() {
-		if (servicioGestorPrograma.listarPrograma().isEmpty()) {
-			
-		}
-			Categoria categoria1 = new Categoria("categoria1", "categoria1");
-			servicioGestorPrograma.aniadirCategoria(categoria1);
-			Categoria categoria2 = new Categoria("categoria2", "categoria2");
-			servicioGestorPrograma.aniadirCategoria(categoria2);
-			Genero genero1 = new Genero("genero1", "genero1");
-			servicioGestorPrograma.aniadirGenero(genero1);
-			Genero genero2 = new Genero("genero2", "genero2");
-			servicioGestorPrograma.aniadirGenero(genero2);
-		
-			Programa programa1 = new Programa("Programa_1", 60, 2016, categoria1, genero2);
-			servicioGestorPrograma.aniadirPrograma(programa1);
-			Programa programa2 = new Programa("Programa_2", 60, 2015, categoria2, genero1);
-			servicioGestorPrograma.aniadirPrograma(programa2);
-			Programa programa3 = new Programa("Programa_2", 60, 2015, categoria2, genero1);
-			servicioGestorPrograma.aniadirPrograma(programa3);
 
-	}
 }

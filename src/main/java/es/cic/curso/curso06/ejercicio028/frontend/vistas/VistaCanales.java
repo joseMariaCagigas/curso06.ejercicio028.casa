@@ -73,7 +73,7 @@ public class VistaCanales extends VerticalLayout {
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
-		cargaDatos();
+
 		cargaGrid();
 	}
 
@@ -370,20 +370,4 @@ public class VistaCanales extends VerticalLayout {
 		this.canalSeleccionado = canalSeleccionado;
 	}
 	
-	private void cargaDatos() {
-		if (servicioGestorPrograma.listarCanal().isEmpty()) {
-			
-		}
-			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
-			servicioGestorPrograma.aniadirUsuario(usuario1);
-			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
-			servicioGestorPrograma.aniadirUsuario(usuario2);
-			
-			Canal canal1 = new Canal("Cana1", 600, usuario1);
-			servicioGestorPrograma.aniadirCanal(canal1);
-			Canal canal2 = new Canal("Cana2", 500, usuario2);
-			servicioGestorPrograma.aniadirCanal(canal2);
-			Canal canal3 = new Canal("Cana3", 300, usuario1);
-			servicioGestorPrograma.aniadirCanal(canal3);
-	}
 }

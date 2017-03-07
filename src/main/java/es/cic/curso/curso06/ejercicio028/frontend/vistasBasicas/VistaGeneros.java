@@ -58,16 +58,6 @@ public class VistaGeneros extends VerticalLayout {
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		if (servicioGestorPrograma.listarGenero().isEmpty()) {
-			Genero usuario1 = new Genero("Acción", "Entretente una tarde");
-			servicioGestorPrograma.aniadirGenero(usuario1);
-			Genero usuario2 = new Genero("Aventuras", "Locura Bendita");
-			servicioGestorPrograma.aniadirGenero(usuario2);
-			Genero usuario3 = new Genero("Político", "Mentiras Asociadas");
-			servicioGestorPrograma.aniadirGenero(usuario3);
-			Genero usuario4 = new Genero("Heroico", "Historia Moderna");
-			servicioGestorPrograma.aniadirGenero(usuario4);
-	}
 		cargaGrid();
 	}
 
@@ -82,7 +72,6 @@ public class VistaGeneros extends VerticalLayout {
 
 		HorizontalLayout layoutEncabezado = new HorizontalLayout();
 		layoutEncabezado.setMargin(new MarginInfo(true, true, false, true));
-		layoutEncabezado.setSpacing(false);
 		layoutEncabezado.addComponents(imagen, titulo);
 		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
 		return layoutEncabezado;
@@ -168,6 +157,7 @@ public class VistaGeneros extends VerticalLayout {
 		descripcion.setEnabled(false);
 
 		HorizontalLayout ok = new HorizontalLayout();
+		ok.setMargin(true);
 		ok.setSpacing(true);
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);

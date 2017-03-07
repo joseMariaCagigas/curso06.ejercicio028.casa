@@ -32,7 +32,6 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 public class VistaUsuarios extends VerticalLayout {
-
 	/**
 	 * 
 	 */
@@ -58,7 +57,6 @@ public class VistaUsuarios extends VerticalLayout {
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		cargaDatos();
 		cargaGrid();
 	}
 
@@ -295,16 +293,4 @@ public class VistaUsuarios extends VerticalLayout {
 		this.usuarioSeleccionado = usuarioSeleccionado;
 	}
 	
-	private void cargaDatos() {
-		if (servicioGestorPrograma.listarUsuario().isEmpty()) {
-			Usuario usuario1 = new Usuario("Héctor", "Cifuentes Pérez");
-			servicioGestorPrograma.aniadirUsuario(usuario1);
-			Usuario usuario2 = new Usuario("Manuel", "Hacha Bendita");
-			servicioGestorPrograma.aniadirUsuario(usuario2);
-			Usuario usuario3 = new Usuario("Ana", "Caida del Árbol");
-			servicioGestorPrograma.aniadirUsuario(usuario3);
-			Usuario usuario4 = new Usuario("Gustavo", "Torre Mocho");
-			servicioGestorPrograma.aniadirUsuario(usuario4);
-	}
-	}
 }

@@ -49,24 +49,13 @@ public class VistaCategorias extends VerticalLayout {
 
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		nuevoCategoria = new Categoria();
-		// Layout Pantalla
-		//
+
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		HorizontalLayout layoutUno = label_buscador();
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
 
-		if (servicioGestorPrograma.listarCategoria().isEmpty()) {
-				Categoria categoria1 = new Categoria("Deportes", "Todo tipo de deportes");
-				servicioGestorPrograma.aniadirCategoria(categoria1);
-				Categoria categoria2 = new Categoria("Musicales", "Pasatiempos");
-				servicioGestorPrograma.aniadirCategoria(categoria2);
-				Categoria categoria3 = new Categoria("Informaticos", "Analizando el futuro");
-				servicioGestorPrograma.aniadirCategoria(categoria3);
-				Categoria categoria4 = new Categoria("Documentales", "Animales, Tierra ...");
-				servicioGestorPrograma.aniadirCategoria(categoria4);
-		}
 		cargaGrid();
 	}
 
