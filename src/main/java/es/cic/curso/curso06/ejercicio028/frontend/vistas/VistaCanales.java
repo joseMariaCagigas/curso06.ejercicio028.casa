@@ -29,7 +29,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import aj.org.objectweb.asm.Type;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
@@ -50,7 +49,6 @@ public class VistaCanales extends VerticalLayout {
 	private Grid gridCanales;
 	private Button crear, borrar,borrarProgramacion, actualizar, aceptar, cancelar;
 	private ComboBox usuario;
-	private List<String> lisUsuarios = new ArrayList<>();
 	private Canal canalSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Usuario usuarioElegido;

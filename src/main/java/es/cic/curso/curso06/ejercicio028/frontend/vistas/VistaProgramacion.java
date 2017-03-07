@@ -364,7 +364,7 @@ public class VistaProgramacion extends VerticalLayout{
 	private HorizontalLayout label_buscador() {
 		HorizontalLayout label_buscador = new HorizontalLayout();
 		label_buscador.setMargin(true);
-		label = new Label("Lista de Programas");
+		label = new Label("Lista Programación");
 		label.setVisible(true);
 		label_buscador.addComponents(label);
 		return label_buscador;
