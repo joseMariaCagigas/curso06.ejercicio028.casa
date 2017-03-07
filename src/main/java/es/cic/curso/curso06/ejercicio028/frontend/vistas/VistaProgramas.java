@@ -102,22 +102,19 @@ public class VistaProgramas extends VerticalLayout {
 		layoutTres.setSpacing(true);
 		crear = new Button("Crear");
 		crear.setVisible(true);
-		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
-			crearPrograma();
+			crear();
 		});
 		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
-		borrar.setEnabled(true);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(b -> this.getUI().getUI()
 				.addWindow(creaVentanaConfirmacionBorradoProgramas(programaSeleccionado.getNombre())));
 		
 		actualizar = new Button("Actualizar");
 		actualizar.setVisible(true);
-		actualizar.setEnabled(true);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
 				borrar_actualizar();
@@ -147,13 +144,10 @@ public class VistaProgramas extends VerticalLayout {
 			programaSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
 				programaSeleccionado = (Programa) e.getSelected().iterator().next();
-				crear.setEnabled(true);
-				borrar.setEnabled(true);
-				actualizar.setEnabled(true);
+				clickGrid();
 				} else {
-					crear.setEnabled(true);
-					borrar.setEnabled(true);
-					actualizar.setEnabled(true);
+					crear();
+					limpiarMenu();
 				}
 		});
 		grid.addComponent(gridProgramas);
@@ -166,24 +160,20 @@ public class VistaProgramas extends VerticalLayout {
 			nombre.setInputPrompt("Nombre");
 			nombre.setWidth(250.0F, Unit.PIXELS);
 			nombre.setVisible(true);
-			nombre.setEnabled(true);
 			duracion = new TextField("Duración");
 			duracion.setInputPrompt("Duración");
 			duracion.setWidth(250.0F, Unit.PIXELS);
 			duracion.setVisible(true);
-			duracion.setEnabled(true);
 			anio = new TextField("Año");
 			anio.setInputPrompt("Año");
 			anio.setWidth(250.0F, Unit.PIXELS);
 			anio.setVisible(true);
-			anio.setEnabled(true);
 			
 		HorizontalLayout ok = new HorizontalLayout();
 		ok.setSpacing(true);
 		
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
-		aceptar.setEnabled(true);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(duracion.getValue()) || "".equals(anio.getValue())|| "".equals(categoria.getValue()) || "".equals(genero.getValue())) {
@@ -212,18 +202,16 @@ public class VistaProgramas extends VerticalLayout {
 						limpiarMenu();
 					}
 					cargaGrid();
-					menu.setEnabled(true);
-					crear.setEnabled(true);
-					
+					crear();
 				}catch(NumberFormatException ex){
-					Notification.show("En numeros pon numeros");
+					Notification.show("En numeros pon numeros.");
 				}	
 			}
 		});
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
-		cancelar.setEnabled(true);
 		cancelar.addClickListener(e-> {
+			crear();
 			limpiarMenu();
 			cargaGrid();	
 		});
@@ -291,30 +279,65 @@ public class VistaProgramas extends VerticalLayout {
 		nombre.setEnabled(true);
 		duracion.setEnabled(true);
 		anio.setEnabled(true);
+		categoria.setEnabled(true);
+		genero.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
 		crear.setEnabled(false);
 		borrar.setEnabled(false);
 		actualizar.setEnabled(false);
-		actualizarGenero();
 		actualizarCategoria();
+		actualizarGenero();
 	}
 	public void crearPrograma() {
+
 		nombre.setEnabled(true);
 		duracion.setEnabled(true);
 		anio.setEnabled(true);
-		genero.setEnabled(true);
 		categoria.setEnabled(true);
+		genero.setEnabled(true);
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
-		crear.setEnabled(true);
-		borrar.setEnabled(true);
-		actualizar.setEnabled(true);
-		actualizarGenero();
+		crear.setEnabled(false);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
 		actualizarCategoria();
+		actualizarGenero();
 		programaSeleccionado = new Programa();
 		programaSeleccionado.setId((long) 0);
 	}
+	
+	public void clickGrid() {
+
+		nombre.setEnabled(false);
+		duracion.setEnabled(false);
+		anio.setEnabled(false);
+		categoria.setEnabled(false);
+		genero.setEnabled(false);
+		aceptar.setEnabled(false);
+		cancelar.setEnabled(false);
+		crear.setEnabled(false);
+		borrar.setEnabled(true);
+		actualizar.setEnabled(true);
+		actualizarCategoria();
+		actualizarGenero();
+	}
+
+	
+	public void crear() {
+
+		nombre.setEnabled(false);
+		duracion.setEnabled(false);
+		anio.setEnabled(false);
+		categoria.setEnabled(false);
+		genero.setEnabled(false);
+		aceptar.setEnabled(false);
+		cancelar.setEnabled(false);
+		crear.setEnabled(true);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+	}
+	
 	public void enter(ViewChangeEvent event) {
 		cargaGrid();
 	}

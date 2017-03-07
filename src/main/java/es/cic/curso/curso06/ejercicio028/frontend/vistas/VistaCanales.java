@@ -117,12 +117,6 @@ public class VistaCanales extends VerticalLayout {
 			borrar_actualizar();
 			this.getUI().getUI()
 			.addWindow(creaVentanaConfirmacionVaciadoCanales(canalSeleccionado.getNombre()));
-//			List<Programacion> programas = servicioGestorPrograma.listarProgramacion();
-//			for (int i = 0; i< programas.size(); i++){
-//				if(programas.get(i).getCanal().getId() == canalSeleccionado.getId()){
-//					servicioGestorPrograma.borrarProgramacion(programas.get(i).getId());;
-//				}
-//			}
 		});
 		
 		actualizar = new Button("Actualizar");
@@ -207,8 +201,6 @@ public class VistaCanales extends VerticalLayout {
 				}
 				cargaGrid();
 				crear();
-				crear();
-				cargaGrid();
 			}catch(NumberFormatException ex){
 				Notification.show("En numeros pon numeros");
 			}	
@@ -234,11 +226,7 @@ public class VistaCanales extends VerticalLayout {
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
 	}
-	private void limpiarMenu() {
-		nombre.clear();
-		tiempo.clear();
-		usuario.clear();
-	}
+
 
 	private void actualizarUsuario() {
 		
@@ -299,7 +287,11 @@ public class VistaCanales extends VerticalLayout {
 		actualizarUsuario();
 	}
 	
-	
+	private void limpiarMenu() {
+		nombre.clear();
+		tiempo.clear();
+		usuario.clear();
+	}
 	
 	public void crear() {
 
