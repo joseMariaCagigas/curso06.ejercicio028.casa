@@ -22,6 +22,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -146,11 +147,19 @@ public class VistaCategorias extends VerticalLayout {
 		menu.setSpacing(true);
 		nombre = new TextField("Nombre");
 		nombre.setInputPrompt("Nombre");
+		nombre.setNullRepresentation("");
+		nombre.setNullSettingAllowed(false);
+		nombre.setRequired(true);
+		nombre.setRequiredError("Debes introducir un nombre.");
 		nombre.setWidth(250.0F, Unit.PIXELS);
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
 		descripcion = new TextField("Descripción");
 		descripcion.setInputPrompt("Descripción");
+		descripcion.setNullRepresentation("");
+		descripcion.setNullSettingAllowed(false);
+		descripcion.setRequired(true);
+		descripcion.setRequiredError("Debes introducir una descripción.");
 		descripcion.setWidth(250.0F, Unit.PIXELS);
 		descripcion.setVisible(true);
 		descripcion.setEnabled(false);
@@ -163,7 +172,7 @@ public class VistaCategorias extends VerticalLayout {
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(descripcion.getValue())) {
-				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.");
+				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.",Type.WARNING_MESSAGE);
 			} else {
 				Categoria nuevoCategoria = new Categoria(nombre.getValue(), descripcion.getValue());
 				if (categoriaSeleccionado.getId() > 0) {

@@ -2,7 +2,6 @@ package es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
@@ -11,7 +10,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -23,12 +21,12 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 public class VistaGeneros extends VerticalLayout {
@@ -72,6 +70,7 @@ public class VistaGeneros extends VerticalLayout {
 
 		HorizontalLayout layoutEncabezado = new HorizontalLayout();
 		layoutEncabezado.setMargin(new MarginInfo(true, true, false, true));
+		layoutEncabezado.setSpacing(false);
 		layoutEncabezado.addComponents(imagen, titulo);
 		layoutEncabezado.setComponentAlignment(titulo, Alignment.MIDDLE_LEFT);
 		return layoutEncabezado;
@@ -147,17 +146,24 @@ public class VistaGeneros extends VerticalLayout {
 		menu.setSpacing(true);
 		nombre = new TextField("Nombre");
 		nombre.setInputPrompt("Nombre");
+		nombre.setNullRepresentation("");
+		nombre.setNullSettingAllowed(false);
+		nombre.setRequired(true);
+		nombre.setRequiredError("Debes introducir un nombre.");
 		nombre.setWidth(250.0F, Unit.PIXELS);
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
 		descripcion = new TextField("Descripción");
 		descripcion.setInputPrompt("Descripción");
+		descripcion.setNullRepresentation("");
+		descripcion.setNullSettingAllowed(false);
+		descripcion.setRequired(true);
+		descripcion.setRequiredError("Debes introducir una descripción.");
 		descripcion.setWidth(250.0F, Unit.PIXELS);
 		descripcion.setVisible(true);
 		descripcion.setEnabled(false);
 
 		HorizontalLayout ok = new HorizontalLayout();
-		ok.setMargin(true);
 		ok.setSpacing(true);
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
@@ -165,7 +171,7 @@ public class VistaGeneros extends VerticalLayout {
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(descripcion.getValue())) {
-				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.");
+				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.",Type.WARNING_MESSAGE);
 			} else {
 				Genero nuevoGenero = new Genero(nombre.getValue(), descripcion.getValue());
 				if (generoSeleccionado.getId() > 0) {

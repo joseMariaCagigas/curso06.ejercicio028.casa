@@ -21,6 +21,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -158,14 +159,20 @@ public class VistaProgramas extends VerticalLayout {
 		
 			nombre = new TextField("Nombre");
 			nombre.setInputPrompt("Nombre");
+			nombre.setRequired(true);
+			nombre.setRequiredError("Debes introducir un Nombre.");;
 			nombre.setWidth(250.0F, Unit.PIXELS);
 			nombre.setVisible(true);
 			duracion = new TextField("Duración");
 			duracion.setInputPrompt("Duración");
+			duracion.setRequired(true);
+			duracion.setRequiredError("Debes introducir un Programa.");
 			duracion.setWidth(250.0F, Unit.PIXELS);
 			duracion.setVisible(true);
 			anio = new TextField("Año");
 			anio.setInputPrompt("Año");
+			anio.setRequired(true);
+			anio.setRequiredError("Debes introducir un Programa.");
 			anio.setWidth(250.0F, Unit.PIXELS);
 			anio.setVisible(true);
 			
@@ -177,7 +184,7 @@ public class VistaProgramas extends VerticalLayout {
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(duracion.getValue()) || "".equals(anio.getValue())|| "".equals(categoria.getValue()) || "".equals(genero.getValue())) {
-				Notification.show("Debes rellenar todos los campos.");
+				Notification.show("Debes rellenar todos los campos.", Type.WARNING_MESSAGE);
 			} else {
 				try{
 					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)categoria.getValue());
@@ -204,7 +211,7 @@ public class VistaProgramas extends VerticalLayout {
 					cargaGrid();
 					crear();
 				}catch(NumberFormatException ex){
-					Notification.show("En numeros pon numeros.");
+					Notification.show("Por favor introduce los datos correctamente.", Type.WARNING_MESSAGE);
 				}	
 			}
 		});
@@ -217,10 +224,16 @@ public class VistaProgramas extends VerticalLayout {
 		});
 		
 		categoria = new ComboBox();
+		categoria.setRequired(true);
+		categoria.setNullSelectionAllowed(true);
+		categoria.setRequiredError("Debes introducir una Categoría.");
 		categoria.setWidth(250.0F, Unit.PIXELS);
 		Label label_categoria = new Label("Categoría");;
 		actualizarCategoria();
 		genero = new ComboBox();
+		genero.setRequired(true);
+		genero.setNullSelectionAllowed(true);
+		genero.setRequiredError("Debes introducir un Canal.");
 		genero.setWidth(250.0F, Unit.PIXELS);
 		Label label_genero = new Label("Género");
 		actualizarGenero();

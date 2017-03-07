@@ -29,6 +29,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import aj.org.objectweb.asm.Type;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
@@ -160,10 +161,18 @@ public class VistaCanales extends VerticalLayout {
 		
 			nombre = new TextField("Nombre");
 			nombre.setInputPrompt("Nombre");
+			nombre.setNullRepresentation("");
+			nombre.setNullSettingAllowed(false);
+			nombre.setRequired(true);
+			nombre.setRequiredError("Debes introducir un nombre");
 			nombre.setVisible(true);
 			nombre.setWidth(250.0F, Unit.PIXELS);
 			tiempo = new TextField("Tiempo");
 			tiempo.setInputPrompt("Tiempo");
+			tiempo.setNullRepresentation("");
+			tiempo.setNullSettingAllowed(false);
+			tiempo.setRequired(true);
+			tiempo.setRequiredError("Debes introducir un tiempo");
 			tiempo.setVisible(true);
 			tiempo.setWidth(250.0F, Unit.PIXELS);
 			
@@ -176,7 +185,7 @@ public class VistaCanales extends VerticalLayout {
 		aceptar.setVisible(true);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
-			if ("".equals(nombre.getValue()) || "".equals(tiempo.getValue()) || "".equals(usuario.getValue())) {
+			if ("".equals(nombre.getValue()) || "".equals(tiempo.getValue()) || (usuario.getValue() == null)) {
 				Notification.show("Debes rellenar todos los campos, si no existe tu usuario debes crearlo primero.");
 			} else {
 				try{	
@@ -198,7 +207,7 @@ public class VistaCanales extends VerticalLayout {
 				cargaGrid();
 				crear();
 			}catch(NumberFormatException ex){
-				Notification.show("En numeros pon numeros");
+				Notification.show("Por favor introduce los campos correctamente.");
 			}	
 		}
 	});
@@ -214,6 +223,8 @@ public class VistaCanales extends VerticalLayout {
 		
 		usuario = new ComboBox();
 		usuario.setWidth(250.0F, Unit.PIXELS);
+		usuario.setRequired(true);
+		usuario.setRequiredError("Debes introducir un nombre");
 		Label labelUsuario = new Label("Usuario");
 		actualizarUsuario();
 		ok.addComponents(aceptar, cancelar);

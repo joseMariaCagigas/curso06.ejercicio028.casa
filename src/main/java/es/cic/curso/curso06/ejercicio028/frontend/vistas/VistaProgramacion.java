@@ -27,6 +27,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.Notification.Type;
@@ -37,6 +38,7 @@ import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
+
 
 public class VistaProgramacion extends VerticalLayout{
 
@@ -57,6 +59,7 @@ public class VistaProgramacion extends VerticalLayout{
 	private Collection<Programacion> listaProgramaciones;
 	private Programa programaElegido;
 	private Canal canalElegido;
+	private List<Programa> listaProgramas;
 
 	
 	
@@ -108,7 +111,7 @@ public class VistaProgramacion extends VerticalLayout{
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(b -> 
 		this.getUI().getUI()
-				.addWindow(creaVentanaConfirmacionBorradoProgramacion(programacionSeleccionado.getId())));
+				.addWindow(creaVentanaConfirmacionBorradoProgramacion(programacionSeleccionado.getCanal().getNombre())));
 		
 		actualizar = new Button("Actualizar Programa");
 		actualizar.setVisible(true);
@@ -127,6 +130,7 @@ public class VistaProgramacion extends VerticalLayout{
 			Notification.show("El tiempo restante para este Canal es "+ tiempoRestante);
 		});
 		mostrar = new Button ("Mostrar Programas");
+		mostrar.addClickListener(listener -> this.getUI().getUI().addWindow(creaVentanaProgramacionDelCanal()));
 		
 		layoutTres.addComponents(crear, borrar, actualizar, validar, mostrar);
 		return layoutTres;
@@ -194,7 +198,7 @@ public class VistaProgramacion extends VerticalLayout{
 					cargaGrid();
 					
 				}catch(NumberFormatException ex){
-					Notification.show("En numeros pon numeros");
+					Notification.show("Por favor coloque en cada campo los datos correspondientes", Type.WARNING_MESSAGE);
 				}	
 			}
 		});
@@ -208,17 +212,24 @@ public class VistaProgramacion extends VerticalLayout{
 		});
 
 		canal = new ComboBox();
+		Label escogeCanal = new Label("Escoge un Canal");
+		canal.setRequired(true);
 		canal.setNullSelectionAllowed(true);
+		canal.setRequiredError("Debes introducir un Programa.");
 		canal.setNullSelectionItemId(-1);
 		canal.setWidth(250.0F, Unit.PIXELS);
 		actualizarCanal();
 		programa = new ComboBox();
+		Label escogePrograma = new Label("Escoge un Programa");
+		programa.setRequired(true);
+		programa.setNullSelectionAllowed(true);
+		programa.setRequiredError("Debes introducir un Programa.");
 		programa.setNullSelectionAllowed(true);
 		programa.setNullSelectionItemId(-1);
 		programa.setWidth(250.0F, Unit.PIXELS);
 		actualizarPrograma();
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents( canal, programa, ok);
+		menu.addComponents(escogeCanal, canal, escogePrograma, programa, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
@@ -370,7 +381,7 @@ public class VistaProgramacion extends VerticalLayout{
 		}
 	}
 
-	private Window creaVentanaConfirmacionBorradoProgramacion(long idSeleccionado) {
+	private Window creaVentanaConfirmacionBorradoProgramacion(String canal) {
 		Window resultado = new Window();
 		resultado.setWidth(350.0F, Unit.PIXELS);
 		resultado.setModal(true);
@@ -378,7 +389,7 @@ public class VistaProgramacion extends VerticalLayout{
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Programa de la Programación: <strong>\"" + idSeleccionado + "\"</strong>?");
+		Label label = new Label("¿Está seguro de que desea borrar este Programa de Canal: <strong>\"" + canal + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -412,6 +423,60 @@ public class VistaProgramacion extends VerticalLayout{
 		}
 		content.addComponents(label, layoutBotones);
 		resultado.setContent(content);
+		resultado.center();
+		return resultado;
+	}
+	
+	private Window creaVentanaProgramacionDelCanal() {
+		Window resultado = new Window();
+		String titulo = "Programas Incluidos en este Canal";
+		resultado.setCaption(programacionSeleccionado == null ? titulo
+				: String.format("%s: <strong>\"%s\"</strong>", titulo, programacionSeleccionado.getPrograma()));
+		resultado.setCaptionAsHtml(true);
+		resultado.setModal(true);
+		resultado.setClosable(true);
+		resultado.setResizable(true);
+		resultado.setDraggable(true);
+		resultado.setHeight(400.0F, Unit.PIXELS);
+		resultado.setWidth(600.0F, Unit.PIXELS);
+
+		Grid gridProgramacion = new Grid();
+		
+		gridProgramacion.setColumns("programa");
+		gridProgramacion.setSizeFull();
+		List<Programacion> programas = servicioGestorPrograma.listarProgramacion();
+		for (int i = 0; i< programas.size(); i++){
+			if(programas.get(i).getCanal().getId() == canalElegido.getId()){
+				gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, programas));
+			}
+		}
+
+		VerticalLayout layoutGrid = new VerticalLayout();
+		layoutGrid.setMargin(new MarginInfo(false, true, false, true));
+		layoutGrid.setSpacing(false);
+		layoutGrid.setSizeFull();
+		layoutGrid.addComponent(gridProgramacion);
+
+		Button siguiente = new Button("Siguiente");
+		siguiente.addClickListener(e -> {
+			cargaGrid();
+			resultado.close();
+		});
+
+		HorizontalLayout layoutBotones = new HorizontalLayout();
+		layoutBotones.setMargin(new MarginInfo(false, true, false, true));
+		layoutBotones.setSpacing(true);
+		layoutBotones.setHeight(100.0F, Unit.PERCENTAGE);
+		layoutBotones.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+		layoutBotones.addComponents(siguiente);
+
+		VerticalSplitPanel layoutPrincipal = new VerticalSplitPanel();
+		layoutPrincipal.setSplitPosition(90.0F, Unit.PIXELS, true);
+		layoutPrincipal.setLocked(true);
+		layoutPrincipal.setFirstComponent(layoutGrid);
+		layoutPrincipal.setSecondComponent(layoutBotones);
+
+		resultado.setContent(layoutPrincipal);
 		resultado.center();
 		return resultado;
 	}

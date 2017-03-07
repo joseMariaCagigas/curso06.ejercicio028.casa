@@ -2,7 +2,6 @@ package es.cic.curso.curso06.ejercicio028.frontend.vistasBasicas;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.web.context.ContextLoader;
 
@@ -11,7 +10,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -23,11 +21,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
@@ -147,11 +145,19 @@ public class VistaUsuarios extends VerticalLayout {
 		menu.setSpacing(true);
 		nombre = new TextField("Nombre");
 		nombre.setInputPrompt("Nombre");
+		nombre.setNullRepresentation("");
+		nombre.setNullSettingAllowed(false);
+		nombre.setRequired(true);
+		nombre.setRequiredError("Debes introducir un nombre.");
 		nombre.setVisible(true);
 		nombre.setEnabled(false);
 		nombre.setWidth(250.0F, Unit.PIXELS);
 		apellidos = new TextField("Apellidos");
 		apellidos.setInputPrompt("Apellidos");
+		apellidos.setNullRepresentation("");
+		apellidos.setNullSettingAllowed(false);
+		apellidos.setRequired(true);
+		apellidos.setRequiredError("Debes introducir un Apellido al menos.");
 		apellidos.setVisible(true);
 		apellidos.setEnabled(false);
 		apellidos.setWidth(250.0F, Unit.PIXELS);
@@ -164,7 +170,7 @@ public class VistaUsuarios extends VerticalLayout {
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
 			if ("".equals(nombre.getValue()) || "".equals(apellidos.getValue())) {
-				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.");
+				Notification.show("Debes indicar un nombre y una descripción para crear un Género nuevo.",Type.WARNING_MESSAGE);
 			} else {
 				Usuario nuevoUsuario = new Usuario(nombre.getValue(), apellidos.getValue());
 				if (usuarioSeleccionado.getId() > 0) {
