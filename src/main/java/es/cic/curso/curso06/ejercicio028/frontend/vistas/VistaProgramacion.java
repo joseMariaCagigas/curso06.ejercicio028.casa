@@ -29,6 +29,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.Notification.Type;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
@@ -97,16 +98,13 @@ public class VistaProgramacion extends VerticalLayout{
 		layoutTres.setSpacing(true);
 		crear = new Button("Crear");
 		crear.setVisible(true);
-		crear.setEnabled(true);
 		crear.setIcon(FontAwesome.PLUS);
 		crear.addClickListener(c-> {
 			crearProgramacion();
-			
 		});
 		
 		borrar = new Button("Borrar Programa");
 		borrar.setVisible(true);
-		borrar.setEnabled(true);
 		borrar.setIcon(FontAwesome.ERASER);
 		borrar.addClickListener(b -> 
 		this.getUI().getUI()
@@ -114,15 +112,16 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		actualizar = new Button("Actualizar Programa");
 		actualizar.setVisible(true);
-		actualizar.setEnabled(true);
 		actualizar.setIcon(FontAwesome.REFRESH);
 		actualizar.addClickListener(a -> {
+			borrar_actualizar();
 			canal.setValue(programacionSeleccionado.getCanal().getId());
 			programa.setValue(programacionSeleccionado.getPrograma().getId());
 		});
 
 		validar = new Button ("Validar Tiempo");
 		validar.addClickListener(e -> {
+			cargaGrid();
 			int tiempoRestante;
 			tiempoRestante = canalElegido.getTiempo_maximo() - contarTiempo(canalElegido);
 			Notification.show("El tiempo restante para este Canal es "+ tiempoRestante);
@@ -147,9 +146,11 @@ public class VistaProgramacion extends VerticalLayout{
 			programacionSeleccionado = null;
 			if (!e.getSelected().isEmpty()) {
 				programacionSeleccionado = (Programacion) e.getSelected().iterator().next();
-				
+				clickGrid();
+				limpiarMenu();
 				} else {
-				
+				cargaGrid();
+				limpiarMenu();
 				}
 		});
 		grid.addComponent(gridProgramacion);
@@ -164,11 +165,10 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		aceptar = new Button("Aceptar");
 		aceptar.setVisible(true);
-		aceptar.setEnabled(true);
 		aceptar.setIcon(FontAwesome.CHECK);
 		aceptar.addClickListener(e -> {
-			if ("".equals(canal.getValue()) || "".equals(programa.getValue())) {
-				Notification.show("Debes rellenar todos los campos.");
+			if ((canal.getValue() == null) || (programa.getValue() == null)) {
+				Notification.show("Debes rellenar todos los campos.", Type.WARNING_MESSAGE);
 			} else {
 				try{
 					canalElegido = servicioGestorPrograma.obtenerCanal((Long)canal.getValue());
@@ -187,13 +187,11 @@ public class VistaProgramacion extends VerticalLayout{
 						servicioGestorPrograma.aniadirProgramacion(nuevoProgramacion);
 						Notification.show("Programación \"" + nuevoProgramacion.getId() + "\" añadido con éxito.");
 						}else{
-							Notification.show("No hay tiempo suficiente para añadir este Programa");
+							Notification.show("No hay tiempo suficiente para añadir este Programa", Type.WARNING_MESSAGE);
 						}
 						limpiarMenu();
 					}
 					cargaGrid();
-					menu.setEnabled(true);
-					crear.setEnabled(true);
 					
 				}catch(NumberFormatException ex){
 					Notification.show("En numeros pon numeros");
@@ -203,18 +201,20 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		cancelar = new Button("Cancelar");
 		cancelar.setIcon(FontAwesome.CLOSE);
-		cancelar.setEnabled(true);
 		cancelar.addClickListener(e-> {
-			menu.setEnabled(true);
 			limpiarMenu();
 			cargaGrid();
 			
 		});
 
 		canal = new ComboBox();
+		canal.setNullSelectionAllowed(true);
+		canal.setNullSelectionItemId(-1);
 		canal.setWidth(250.0F, Unit.PIXELS);
 		actualizarCanal();
 		programa = new ComboBox();
+		programa.setNullSelectionAllowed(true);
+		programa.setNullSelectionItemId(-1);
 		programa.setWidth(250.0F, Unit.PIXELS);
 		actualizarPrograma();
 		ok.addComponents(aceptar, cancelar);
@@ -244,14 +244,38 @@ public class VistaProgramacion extends VerticalLayout{
 				tiempo = tiempo + programas.get(i).getPrograma().getDuracion();
 			}
 		}
-		
-		
 		return tiempo;
 	}
 	
 	private void limpiarMenu() {
 		canal.clear();
 		programa.clear();
+	}
+	
+	public void borrar_actualizar(){
+		canal.setEnabled(true);
+		programa.setEnabled(true);
+		aceptar.setEnabled(true);
+		cancelar.setEnabled(true);
+		crear.setEnabled(false);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		validar.setEnabled(false);
+		mostrar.setEnabled(false);
+		actualizarPrograma();
+		actualizarCanal();
+	}
+	public void crear() {
+
+		canal.setEnabled(false);
+		programa.setEnabled(false);
+		aceptar.setEnabled(false);
+		cancelar.setEnabled(false);
+		crear.setEnabled(true);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
+		validar.setEnabled(false);
+		mostrar.setEnabled(false);
 	}
 	
 	private void actualizarPrograma() {
@@ -293,8 +317,8 @@ public class VistaProgramacion extends VerticalLayout{
 		aceptar.setEnabled(true);
 		cancelar.setEnabled(true);
 		crear.setEnabled(true);
-		borrar.setEnabled(true);
-		actualizar.setEnabled(true);
+		borrar.setEnabled(false);
+		actualizar.setEnabled(false);
 		actualizarCanal();
 		actualizarPrograma();
 		programacionSeleccionado = new Programacion();
@@ -302,6 +326,20 @@ public class VistaProgramacion extends VerticalLayout{
 
 	}
 	
+	public void clickGrid() {
+
+		canal.setEnabled(false);
+		programa.setEnabled(false);
+		aceptar.setEnabled(false);
+		cancelar.setEnabled(false);
+		crear.setEnabled(false);
+		borrar.setEnabled(true);
+		actualizar.setEnabled(true);
+		validar.setEnabled(true);
+		mostrar.setEnabled(true);
+		actualizarCanal();
+		actualizarPrograma();
+	}
 	public void enter(ViewChangeEvent event) {
 		cargaGrid();
 	}
@@ -309,7 +347,7 @@ public class VistaProgramacion extends VerticalLayout{
 	public void cargaGrid() {	
 		Collection<Programacion> listaProgramacion = servicioGestorPrograma.listarProgramacion();
 		gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, listaProgramacion));
-		crear.setEnabled(true);
+		crear();
 	}
 	
 	private HorizontalLayout label_buscador() {
@@ -340,7 +378,7 @@ public class VistaProgramacion extends VerticalLayout{
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar esta Programación: <strong>\"" + idSeleccionado + "\"</strong>?");
+		Label label = new Label("¿Está seguro de que desea borrar este Programa de la Programación: <strong>\"" + idSeleccionado + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -352,7 +390,10 @@ public class VistaProgramacion extends VerticalLayout{
 		});
 
 		Button botonCancelar = new Button("Cancelar");
-		botonCancelar.addClickListener(e -> resultado.close());
+		botonCancelar.addClickListener(e -> {
+			cargaGrid();
+			resultado.close();
+		});
 
 		HorizontalLayout layoutBotones = new HorizontalLayout();
 		layoutBotones.setMargin(true);
