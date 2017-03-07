@@ -33,7 +33,6 @@ public class Programacion implements Identificable<Long> {
 
 	public Programacion() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 

@@ -49,11 +49,9 @@ public class VistaCanales extends VerticalLayout {
 	private Grid gridCanales;
 	private Button crear, borrar,borrarProgramacion, actualizar, aceptar, cancelar;
 	private ComboBox usuario;
-	List <Usuario> listaUsuarios = new ArrayList<>();
 	private List<String> lisUsuarios = new ArrayList<>();
 	private Canal canalSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
-	private Collection<Canal> listaCanales;
 	private Usuario usuarioElegido;
 	
 	
@@ -65,7 +63,7 @@ public class VistaCanales extends VerticalLayout {
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
-		HorizontalLayout layoutUno = label_buscador();
+		HorizontalLayout layoutUno = labelBuscador();
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
@@ -97,9 +95,7 @@ public class VistaCanales extends VerticalLayout {
 		crear = new Button("Crear");
 		crear.setVisible(true);
 		crear.setIcon(FontAwesome.PLUS);
-		crear.addClickListener(c-> {
-			crearCanal();			
-		});
+		crear.addClickListener(c-> 	crearCanal());
 		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
@@ -218,10 +214,10 @@ public class VistaCanales extends VerticalLayout {
 		
 		usuario = new ComboBox();
 		usuario.setWidth(250.0F, Unit.PIXELS);
-		Label label_usuario = new Label("Usuario");
+		Label labelUsuario = new Label("Usuario");
 		actualizarUsuario();
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, tiempo,label_usuario,  usuario, ok);
+		menu.addComponents(nombre, tiempo,labelUsuario,  usuario, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
@@ -317,13 +313,13 @@ public class VistaCanales extends VerticalLayout {
 		crear();
 	}
 	
-	private HorizontalLayout label_buscador() {
-		HorizontalLayout label_buscador = new HorizontalLayout();
-		label_buscador.setMargin(true);
+	private HorizontalLayout labelBuscador() {
+		HorizontalLayout labelBuscador = new HorizontalLayout();
+		labelBuscador.setMargin(true);
 		label = new Label("Lista de Canales");
 		label.setVisible(true);
-		label_buscador.addComponents(label);
-		return label_buscador;
+		labelBuscador.addComponents(label);
+		return labelBuscador;
 	}
 	
 	public void setCanal(Canal canal) {
@@ -343,7 +339,7 @@ public class VistaCanales extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Canal, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
+		Label labelBorrado = new Label("¿Está seguro de que desea borrar este Canal, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -369,7 +365,7 @@ public class VistaCanales extends VerticalLayout {
 
 		final FormLayout content = new FormLayout();
 		content.setMargin(true);
-		content.addComponents(label, layoutBotones);
+		content.addComponents(labelBorrado, layoutBotones);
 		resultado.setContent(content);
 		resultado.center();
 		return resultado;
@@ -384,7 +380,7 @@ public class VistaCanales extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea vaciar la lista de programas de este Canal, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
+		Label labelConfirmacion = new Label("¿Está seguro de que desea vaciar la lista de programas de este Canal, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -415,7 +411,7 @@ public class VistaCanales extends VerticalLayout {
 
 		final FormLayout content = new FormLayout();
 		content.setMargin(true);
-		content.addComponents(label, layoutBotones);
+		content.addComponents(labelConfirmacion, layoutBotones);
 		resultado.setContent(content);
 		resultado.center();
 		return resultado;

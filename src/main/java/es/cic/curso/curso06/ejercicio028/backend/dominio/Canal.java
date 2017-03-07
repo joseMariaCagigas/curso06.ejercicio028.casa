@@ -36,7 +36,6 @@ public class Canal implements Identificable<Long> {
 	
 	public Canal() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Canal(String nombre, int tiempo_maximo, Usuario usuario) {
