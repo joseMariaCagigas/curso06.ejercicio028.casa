@@ -13,7 +13,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -21,19 +20,17 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.Notification.Type;
 
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programacion;
@@ -52,25 +49,25 @@ public class VistaProgramacion extends VerticalLayout{
 	private Grid gridProgramacion;
 	private Button crear, borrar, actualizar, validar , aceptar, cancelar, mostrar;
 	private ComboBox canal, programa;
-	private List<String> lisProgramacion = new ArrayList<>();
 	List <Genero> listaProgramacion = new ArrayList<>();
-	private Programacion programacion, programacionSeleccionado;
+	private Programacion programacionSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Collection<Programacion> listaProgramaciones;
 	private Programa programaElegido;
 	private Canal canalElegido;
-	private List<Programa> listaProgramas;
+	private List<Programa> listaProgramas = new ArrayList<>();
+	private List<Canal> listaCanales = new ArrayList<>();
 
 	
 	
 	@SuppressWarnings("serial")
 	public VistaProgramacion(){
 		
-		programacion = new Programacion();
+		new Programacion();
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 	
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
-		HorizontalLayout layoutUno = label_buscador();
+		HorizontalLayout layoutUno = labelTitulo();
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);
@@ -102,9 +99,7 @@ public class VistaProgramacion extends VerticalLayout{
 		crear = new Button("Crear");
 		crear.setVisible(true);
 		crear.setIcon(FontAwesome.PLUS);
-		crear.addClickListener(c-> {
-			crearProgramacion();
-		});
+		crear.addClickListener(c->	crearProgramacion());
 		
 		borrar = new Button("Borrar Programa");
 		borrar.setVisible(true);
@@ -175,27 +170,7 @@ public class VistaProgramacion extends VerticalLayout{
 				Notification.show("Debes rellenar todos los campos.", Type.WARNING_MESSAGE);
 			} else {
 				try{
-					canalElegido = servicioGestorPrograma.obtenerCanal((Long)canal.getValue());
-					programaElegido = servicioGestorPrograma.obtenerPrograma((Long)programa.getValue());
-					Programacion nuevoProgramacion = new Programacion(canalElegido, programaElegido);
-					if (programacionSeleccionado.getId() > 0) {
-						canalElegido = servicioGestorPrograma.obtenerCanal(Long.parseLong(canal.getValue().toString()));
-						programacionSeleccionado.setCanal(canalElegido);
-						programaElegido = servicioGestorPrograma.obtenerPrograma((Long)programa.getValue());
-						programacionSeleccionado.setPrograma(programaElegido);
-						servicioGestorPrograma.modificarProgramacion(programacionSeleccionado);
-						limpiarMenu();
-						Notification.show("Programación \"" + nuevoProgramacion.getId() + "\" editado con éxito.");
-					} else {
-						if(verTiempo(canalElegido, programaElegido)){
-						servicioGestorPrograma.aniadirProgramacion(nuevoProgramacion);
-						Notification.show("Programación \"" + nuevoProgramacion.getId() + "\" añadido con éxito.");
-						}else{
-							Notification.show("No hay tiempo suficiente para añadir este Programa", Type.WARNING_MESSAGE);
-						}
-						limpiarMenu();
-					}
-					cargaGrid();
+					nuevoOactualizado();
 					
 				}catch(NumberFormatException ex){
 					Notification.show("Por favor coloque en cada campo los datos correspondientes", Type.WARNING_MESSAGE);
@@ -234,13 +209,39 @@ public class VistaProgramacion extends VerticalLayout{
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
 	}
+
+	public void nuevoOactualizado() {
+		canalElegido = servicioGestorPrograma.obtenerCanal((Long)canal.getValue());
+		programaElegido = servicioGestorPrograma.obtenerPrograma((Long)programa.getValue());
+		Programacion nuevoProgramacion = new Programacion(canalElegido, programaElegido);
+		if (programacionSeleccionado.getId() > 0) {
+			canalElegido = servicioGestorPrograma.obtenerCanal(Long.parseLong(canal.getValue().toString()));
+			programacionSeleccionado.setCanal(canalElegido);
+			programaElegido = servicioGestorPrograma.obtenerPrograma((Long)programa.getValue());
+			programacionSeleccionado.setPrograma(programaElegido);
+			servicioGestorPrograma.modificarProgramacion(programacionSeleccionado);
+			limpiarMenu();
+			Notification.show("Programación \"" + nuevoProgramacion.getId() + "\" editado con éxito.");
+		} else {
+			if(verTiempo(canalElegido, programaElegido)){
+			servicioGestorPrograma.aniadirProgramacion(nuevoProgramacion);
+			Notification.show("Programación \"" + nuevoProgramacion.getId() + "\" añadido con éxito.");
+			}else{
+				Notification.show("No hay tiempo suficiente para añadir este Programa", Type.WARNING_MESSAGE);
+			}
+			limpiarMenu();
+		}
+		cargaGrid();
+	}
 	
 	private boolean verTiempo(Canal canal, Programa programa){
 		
 		boolean siHayTiempo = false;
 		int tiempoRestante;
 		tiempoRestante = canal.getTiempo_maximo() - contarTiempo(canal);
-		if(tiempoRestante >= programa.getDuracion())siHayTiempo = true;
+		if(tiempoRestante >= programa.getDuracion()){
+			siHayTiempo = true;
+		}
 		
 		return siHayTiempo;
 	}
@@ -291,7 +292,7 @@ public class VistaProgramacion extends VerticalLayout{
 	
 	private void actualizarPrograma() {
 		
-		List <Programa> listaProgramas = new ArrayList<>();
+		listaProgramas = new ArrayList<>();
 		listaProgramas = servicioGestorPrograma.listarPrograma();
 		programa.setInputPrompt("Programa");
 		programa.setNullSelectionAllowed(false);
@@ -307,7 +308,7 @@ public class VistaProgramacion extends VerticalLayout{
 
 	private void actualizarCanal() {
 		
-		List <Canal> listaCanales = new ArrayList<>();
+		listaCanales = new ArrayList<>();
 		listaCanales = servicioGestorPrograma.listarCanal();
 		canal.setInputPrompt("Canal");
 		canal.setNullSelectionAllowed(false);
@@ -356,24 +357,22 @@ public class VistaProgramacion extends VerticalLayout{
 	}
 
 	public void cargaGrid() {	
-		Collection<Programacion> listaProgramacion = servicioGestorPrograma.listarProgramacion();
-		gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, listaProgramacion));
+		listaProgramaciones = servicioGestorPrograma.listarProgramacion();
+		gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, listaProgramaciones));
 		crear();
 	}
 	
-	private HorizontalLayout label_buscador() {
-		HorizontalLayout label_buscador = new HorizontalLayout();
-		label_buscador.setMargin(true);
+	private HorizontalLayout labelTitulo() {
+		HorizontalLayout labelTitulo = new HorizontalLayout();
+		labelTitulo.setMargin(true);
 		label = new Label("Lista Programación");
 		label.setVisible(true);
-		label_buscador.addComponents(label);
-		return label_buscador;
+		labelTitulo.addComponents(label);
+		return labelTitulo;
 	}
 	
 	public void setProgramacion(Programacion programacion) {
 		this.setVisible(programacion != null);
-		this.programacion = programacion;
-
 		if (programacion != null) {
 			BeanFieldGroup.bindFieldsUnbuffered(programacion, this);
 		} else {
@@ -389,7 +388,7 @@ public class VistaProgramacion extends VerticalLayout{
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Programa de Canal: <strong>\"" + canal + "\"</strong>?");
+		label = new Label("¿Está seguro de que desea borrar este Programa de Canal: <strong>\"" + canal + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
@@ -440,7 +439,7 @@ public class VistaProgramacion extends VerticalLayout{
 		resultado.setHeight(400.0F, Unit.PIXELS);
 		resultado.setWidth(600.0F, Unit.PIXELS);
 
-		Grid gridProgramacion = new Grid();
+		gridProgramacion = new Grid();
 		
 		gridProgramacion.setColumns("programa");
 		gridProgramacion.setSizeFull();
