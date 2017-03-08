@@ -445,11 +445,16 @@ public class VistaProgramacion extends VerticalLayout{
 		gridProgramacion.setColumns("programa");
 		gridProgramacion.setSizeFull();
 		List<Programacion> programas = servicioGestorPrograma.listarProgramacion();
-		for (int i = 0; i< programas.size(); i++){
-			if(programas.get(i).getCanal().getId() == canalElegido.getId()){
-				gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, programas));
+		List<Programacion> p = new ArrayList<>();
+		for (Programacion programacion : programas) {
+			if(programacion.getCanal().getId().equals(canalElegido.getId())){
+				p.add(programacion);
+				
 			}
+			
 		}
+		gridProgramacion.setContainerDataSource(new BeanItemContainer<>(Programacion.class, p));
+
 
 		VerticalLayout layoutGrid = new VerticalLayout();
 		layoutGrid.setMargin(new MarginInfo(false, true, false, true));
