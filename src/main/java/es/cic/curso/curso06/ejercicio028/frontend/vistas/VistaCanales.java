@@ -136,7 +136,7 @@ public class VistaCanales extends VerticalLayout {
 		VerticalLayout grid = new VerticalLayout();
 		gridCanales = new Grid();
 		gridCanales.setVisible(true);
-		gridCanales.setColumns("nombre", "usuario", "tiempo_maximo");
+		gridCanales.setColumns("nombre", "usuario", "tiempoMaximo");
 		gridCanales.setSizeFull();
 		gridCanales.setSelectionMode(SelectionMode.SINGLE);	
 		gridCanales.addSelectionListener(e -> {
