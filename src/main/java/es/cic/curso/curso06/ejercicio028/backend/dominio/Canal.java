@@ -26,7 +26,7 @@ public class Canal implements Identificable<Long> {
 	private String nombre;
 	
 	@Column(name = "tiempo_maximo")
-	private int tiempo_maximo;
+	private int tiempoMaximo;
 	
 	@JoinColumn(name = "id_usuario")
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -41,7 +41,7 @@ public class Canal implements Identificable<Long> {
 	public Canal(String nombre, int tiempo_maximo, Usuario usuario) {
 		super();
 		this.nombre = nombre;
-		this.tiempo_maximo = tiempo_maximo;
+		this.tiempoMaximo = tiempo_maximo;
 		this.usuario = usuario;
 	}
 
@@ -49,7 +49,7 @@ public class Canal implements Identificable<Long> {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-		this.tiempo_maximo = tiempo_maximo;
+		this.tiempoMaximo = tiempo_maximo;
 		this.usuario = usuario;
 	}
 
@@ -78,11 +78,11 @@ public class Canal implements Identificable<Long> {
 	}
 
 	public int getTiempo_maximo() {
-		return tiempo_maximo;
+		return tiempoMaximo;
 	}
 
 	public void setTiempo_maximo(int tiempo_maximo) {
-		this.tiempo_maximo = tiempo_maximo;
+		this.tiempoMaximo = tiempo_maximo;
 	}
 
 	public Usuario getUsuario() {
