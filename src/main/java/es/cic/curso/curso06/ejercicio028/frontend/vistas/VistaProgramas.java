@@ -21,20 +21,18 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Canal;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Categoria;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Genero;
 import es.cic.curso.curso06.ejercicio028.backend.dominio.Programa;
-import es.cic.curso.curso06.ejercicio028.backend.dominio.Usuario;
 import es.cic.curso.curso06.ejercicio028.backend.service.ServicioGestorPrograma;
 
 
@@ -52,27 +50,21 @@ public class VistaProgramas extends VerticalLayout {
 	private Grid gridProgramas;
 	private Button crear, borrar, actualizar, aceptar, cancelar;
 	private ComboBox genero, categoria;
-	private List<String> lisCategorias = new ArrayList<>();
 	List <Genero> listaGeneros = new ArrayList<>();
 	List <Categoria> listaCategorias = new ArrayList<>();
-	private List<String> lisGeneros = new ArrayList<>();
-	private Programa programa, programaSeleccionado;
+	private Programa programaSeleccionado;
 	private ServicioGestorPrograma servicioGestorPrograma;
 	private Genero generoElegido;
 	private Categoria categoriaElegida;
 
-	private Label label_genero;
-	private Label label_categoria;
-	
-	
 	@SuppressWarnings("serial")
 	public VistaProgramas(){
 		
-		programa = new Programa();
+		new Programa();
 		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
-		HorizontalLayout layoutUno = label_buscador();
+		HorizontalLayout layoutUno = labelTitulo();
 		HorizontalLayout layoutDos = layoutDos();
 		HorizontalLayout layoutTres = layoutTres();
 		addComponents(layoutEncabezado, layoutUno, layoutDos, layoutTres);	
@@ -104,9 +96,7 @@ public class VistaProgramas extends VerticalLayout {
 		crear = new Button("Crear");
 		crear.setVisible(true);
 		crear.setIcon(FontAwesome.PLUS);
-		crear.addClickListener(c-> {
-			crearPrograma();
-		});
+		crear.addClickListener(c-> 	crearPrograma());
 		
 		borrar = new Button("Borrar");
 		borrar.setVisible(true);
@@ -187,29 +177,7 @@ public class VistaProgramas extends VerticalLayout {
 				Notification.show("Debes rellenar todos los campos.", Type.WARNING_MESSAGE);
 			} else {
 				try{
-					categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)categoria.getValue());
-					generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
-
-					Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
-						Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
-					if (programaSeleccionado.getId() > 0) {
-						programaSeleccionado.setNombre(nombre.getValue());
-						programaSeleccionado.setDuracion(Integer.parseInt(duracion.getValue()));
-						programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
-						categoriaElegida = servicioGestorPrograma.obtenerCategoria(Long.parseLong(categoria.getValue().toString()));
-						programaSeleccionado.setCategoria(categoriaElegida);
-						generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
-						programaSeleccionado.setGenero(generoElegido);
-						servicioGestorPrograma.modificarPrograma(programaSeleccionado);
-						limpiarMenu();
-						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
-					} else {
-						servicioGestorPrograma.aniadirPrograma(nuevoPrograma);
-						Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
-						limpiarMenu();
-					}
-					cargaGrid();
-					crear();
+					nuevoOactualizar();
 				}catch(NumberFormatException ex){
 					Notification.show("Por favor introduce los datos correctamente.", Type.WARNING_MESSAGE);
 				}	
@@ -228,21 +196,47 @@ public class VistaProgramas extends VerticalLayout {
 		categoria.setNullSelectionAllowed(true);
 		categoria.setRequiredError("Debes introducir una Categoría.");
 		categoria.setWidth(250.0F, Unit.PIXELS);
-		Label label_categoria = new Label("Categoría");;
+		Label labelCategoria = new Label("Categoría");;
 		actualizarCategoria();
 		genero = new ComboBox();
 		genero.setRequired(true);
 		genero.setNullSelectionAllowed(true);
 		genero.setRequiredError("Debes introducir un Canal.");
 		genero.setWidth(250.0F, Unit.PIXELS);
-		Label label_genero = new Label("Género");
+		Label labelGenero = new Label("Género");
 		actualizarGenero();
 
 		ok.addComponents(aceptar, cancelar);
-		menu.addComponents(nombre, duracion, anio,label_categoria, categoria,label_genero, genero, ok);
+		menu.addComponents(nombre, duracion, anio,labelCategoria, categoria,labelGenero, genero, ok);
 
 		layoutDos.addComponents(grid, menu);
 		return layoutDos;
+	}
+
+	public void nuevoOactualizar() {
+		categoriaElegida = servicioGestorPrograma.obtenerCategoria((Long)categoria.getValue());
+		generoElegido = servicioGestorPrograma.obtenerGenero((Long)genero.getValue());
+
+		Programa nuevoPrograma = new Programa(nombre.getValue(), Integer.parseInt(duracion.getValue()), 
+			Integer.parseInt(anio.getValue()), categoriaElegida, generoElegido);
+		if (programaSeleccionado.getId() > 0) {
+			programaSeleccionado.setNombre(nombre.getValue());
+			programaSeleccionado.setDuracion(Integer.parseInt(duracion.getValue()));
+			programaSeleccionado.setAnio(Integer.parseInt(anio.getValue()));
+			categoriaElegida = servicioGestorPrograma.obtenerCategoria(Long.parseLong(categoria.getValue().toString()));
+			programaSeleccionado.setCategoria(categoriaElegida);
+			generoElegido = servicioGestorPrograma.obtenerGenero(Long.parseLong(genero.getValue().toString()));
+			programaSeleccionado.setGenero(generoElegido);
+			servicioGestorPrograma.modificarPrograma(programaSeleccionado);
+			limpiarMenu();
+			Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" editado con éxito.");
+		} else {
+			servicioGestorPrograma.aniadirPrograma(nuevoPrograma);
+			Notification.show("Programa \"" + nuevoPrograma.getNombre() + "\" añadido con éxito.");
+			limpiarMenu();
+		}
+		cargaGrid();
+		crear();
 	}
 	private void limpiarMenu() {
 		duracion.clear();
@@ -255,7 +249,7 @@ public class VistaProgramas extends VerticalLayout {
 	
 	private void actualizarCategoria() {
 		
-		List <Categoria> listaCategorias = new ArrayList<>();
+		listaCategorias = new ArrayList<>();
 		
 		listaCategorias = servicioGestorPrograma.listarCategoria();
 
@@ -272,7 +266,7 @@ public class VistaProgramas extends VerticalLayout {
 	}
 	private void actualizarGenero() {
 		
-		List <Genero> listaGeneros = new ArrayList<>();
+		listaGeneros = new ArrayList<>();
 		
 		listaGeneros = servicioGestorPrograma.listarGenero();
 
@@ -360,18 +354,16 @@ public class VistaProgramas extends VerticalLayout {
 		gridProgramas.setContainerDataSource(new BeanItemContainer<>(Programa.class, listaProgramas));
 		crear();
 	}
-	private HorizontalLayout label_buscador() {
-		HorizontalLayout label_buscador = new HorizontalLayout();
-		label_buscador.setMargin(true);
+	private HorizontalLayout labelTitulo() {
+		HorizontalLayout labelTitulo = new HorizontalLayout();
+		labelTitulo.setMargin(true);
 		label = new Label("Lista de Programas");
 		label.setVisible(true);
-		label_buscador.addComponents(label);
-		return label_buscador;
+		labelTitulo.addComponents(label);
+		return labelTitulo;
 	}
 	public void setPrograma(Programa programa) {
 		this.setVisible(programa != null);
-		this.programa = programa;
-
 		if (programa != null) {
 			BeanFieldGroup.bindFieldsUnbuffered(programa, this);
 		} else {
@@ -386,7 +378,7 @@ public class VistaProgramas extends VerticalLayout {
 		resultado.setResizable(false);
 		resultado.setDraggable(false);
 
-		Label label = new Label("¿Está seguro de que desea borrar este Programa, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
+		label = new Label("¿Está seguro de que desea borrar este Programa, perderá todo lo guardado en él: <strong>\"" + nombre + "\"</strong>?");
 		label.setContentMode(ContentMode.HTML);
 
 		Button botonAceptar = new Button("Aceptar");
