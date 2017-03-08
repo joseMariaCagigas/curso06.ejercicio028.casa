@@ -60,8 +60,6 @@ public class VistaProgramas extends VerticalLayout {
 	@SuppressWarnings("serial")
 	public VistaProgramas(){
 		
-		new Programa();
-		
 		servicioGestorPrograma = ContextLoader.getCurrentWebApplicationContext().getBean(ServicioGestorPrograma.class);
 		HorizontalLayout layoutEncabezado = inicializaLayoutEncabezado();
 		HorizontalLayout layoutUno = labelTitulo();
