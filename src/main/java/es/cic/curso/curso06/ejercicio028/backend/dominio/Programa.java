@@ -52,15 +52,7 @@ public class Programa implements Identificable<Long> {
 		this.genero = genero;
 	}
 
-	public Programa(Long id, String nombre, int duracion, int anio, Categoria categoria, Genero genero) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.duracion = duracion;
-		this.anio = anio;
-		this.categoria = categoria;
-		this.genero = genero;
-	}
+
 
 	
 	/**
@@ -119,30 +111,6 @@ public class Programa implements Identificable<Long> {
 		this.genero = genero;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Programa other = (Programa) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
 
 	@Override
 	public String toString() {

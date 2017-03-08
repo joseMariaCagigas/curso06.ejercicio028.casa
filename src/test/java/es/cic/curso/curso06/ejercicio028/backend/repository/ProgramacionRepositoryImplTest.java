@@ -77,7 +77,7 @@ public class ProgramacionRepositoryImplTest {
 	private Canal generaCanalPrueba() {
 		Canal elemento = new Canal();
 		elemento.setNombre("tipo de medicamento");
-		elemento.setTiempo_maximo(100);
+		elemento.setTiempoMaximo(100);
 		elemento.setUsuario(generaUsuarioPrueba());
 		em.persist(elemento);
 		em.flush();

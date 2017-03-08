@@ -120,7 +120,7 @@ public class VistaCanales extends VerticalLayout {
 		actualizar.addClickListener(a -> {
 			borrar_actualizar();
 			nombre.setValue(canalSeleccionado.getNombre());
-			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempo_maximo()));
+			tiempo.setValue(String.valueOf(canalSeleccionado.getTiempoMaximo()));
 			usuario.setValue(canalSeleccionado.getUsuario().getId());
 			
 		});
@@ -191,7 +191,7 @@ public class VistaCanales extends VerticalLayout {
 					Canal nuevoCanal = new Canal(nombre.getValue(), Integer.parseInt(tiempo.getValue()), usuarioElegido);
 				if (canalSeleccionado.getId() > 0) {
 					canalSeleccionado.setNombre(nombre.getValue());
-					canalSeleccionado.setTiempo_maximo(Integer.parseInt(tiempo.getValue()));
+					canalSeleccionado.setTiempoMaximo(Integer.parseInt(tiempo.getValue()));
 					usuarioElegido = servicioGestorPrograma.obtenerUsuario(Long.parseLong(usuario.getValue().toString()));
 					canalSeleccionado.setUsuario(usuarioElegido);
 					servicioGestorPrograma.modificarCanal(canalSeleccionado);

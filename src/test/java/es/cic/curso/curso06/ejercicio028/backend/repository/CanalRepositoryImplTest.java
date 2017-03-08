@@ -44,7 +44,7 @@ public class CanalRepositoryImplTest {
 		
 		Canal elemento = new Canal();
 		elemento.setNombre("Inicial");
-		elemento.setTiempo_maximo(100);
+		elemento.setTiempoMaximo(100);
 		elemento.setUsuario(usuario);
 		
 		canalRepository. add(elemento);
@@ -82,16 +82,16 @@ public class CanalRepositoryImplTest {
 		Canal clon = new Canal();
 		clon.setId(original.getId());
 		clon.setNombre(original.getNombre());
-		clon.setTiempo_maximo(original.getTiempo_maximo());
+		clon.setTiempoMaximo(original.getTiempoMaximo());
 		clon.setUsuario(original.getUsuario());
 
 		original.setNombre("No Principal");
-		original.setTiempo_maximo(65);
+		original.setTiempoMaximo(65);
 		canalRepository.update(original);
 
 		Canal modificado = canalRepository.read(original.getId());
 		assertEquals(original.getNombre(), modificado.getNombre());
-		assertNotEquals(clon.getTiempo_maximo(), modificado.getTiempo_maximo());
+		assertNotEquals(clon.getTiempoMaximo(), modificado.getTiempoMaximo());
 	}
 
 	@Test

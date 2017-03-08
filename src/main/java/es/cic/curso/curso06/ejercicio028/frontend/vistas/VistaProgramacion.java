@@ -120,7 +120,7 @@ public class VistaProgramacion extends VerticalLayout{
 		validar.addClickListener(e -> {
 			cargaGrid();
 			int tiempoRestante;
-			tiempoRestante = canalElegido.getTiempo_maximo() - contarTiempo(canalElegido);
+			tiempoRestante = canalElegido.getTiempoMaximo() - contarTiempo(canalElegido);
 			Notification.show("El tiempo restante para este Canal es "+ tiempoRestante);
 		});
 		mostrar = new Button ("Mostrar Programas");
@@ -237,7 +237,7 @@ public class VistaProgramacion extends VerticalLayout{
 		
 		boolean siHayTiempo = false;
 		int tiempoRestante;
-		tiempoRestante = canal.getTiempo_maximo() - contarTiempo(canal);
+		tiempoRestante = canal.getTiempoMaximo() - contarTiempo(canal);
 		if(tiempoRestante >= programa.getDuracion()){
 			siHayTiempo = true;
 		}
